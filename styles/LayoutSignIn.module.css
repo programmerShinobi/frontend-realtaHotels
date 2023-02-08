@@ -78,7 +78,7 @@
 
 .textTitlaInCardLogin2 {
     padding-left: 45px;
-    padding-top: 20px;
+    padding-top: 25px;
     padding-right: 45px;
     font-family: 'Poppins';
     font-weight: 900;
@@ -92,7 +92,7 @@
 
 .textTitlaInCardLogin3 {
     padding-left: 45px;
-    padding-top: 20px;
+    padding-top: 25px;
     padding-right: 45px;
     font-family: 'Poppins';
     font-weight: 900;
@@ -105,7 +105,7 @@
 }
 
 .textSubtitleInCardLogin {
-    margin-top: 20px;
+    margin-top: 30px;
     padding-left: 45px;
     margin-bottom: 45px;
     padding-right: 50px;
@@ -121,7 +121,7 @@
     flex-grow: 0;
 }
 
-.bgImg {
+/* .bgImg {
     background: url('/assets/bg-login.png') no-repeat;
     position: fixed;
     left: 900px;
@@ -131,6 +131,21 @@
     background-size: contain;
     transform: scaleX(1.4);
     z-index: 0;
+} */
+
+.bgImg {
+    background: url('/assets/bg-login.png') no-repeat right fixed;
+    -webkit-background-size: contain;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-size:contain;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    transform: scaleX(1.5);
+    top: 0;
+    right: 230px;
+    z-index: -1;
 }
 
 .textTitleInCardFormLogin {
