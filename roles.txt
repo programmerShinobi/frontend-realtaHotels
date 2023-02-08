@@ -1,0 +1,32 @@
+Roles :
+1 : guest --------> landing page (
+                    home, 
+                    about,
+                    facility, 
+                    hotels
+                  )
+
+2 manager ------> dashboard
+
+3 office boy  --> task module (
+                    hotel,
+                    resto
+                  )
+  
+4 admin --------> main module (
+                  users, 
+                  human resources, 
+                  hotel, 
+                  booking, 
+                  resto, 
+                  payment, 
+                  purchasing
+                ) 
+
+5 user  --------> landing page with transaction (
+                  home, 
+                  about,
+                  facility, 
+                  hotels
+                )
+

@@ -1,0 +1,93 @@
+
+.imgStyle{
+    @apply bg-gradient-to-r from-gray-700 to-orange-500  rounded-l-md;
+    position: relative;
+    overflow: hidden;
+}
+
+/* .imgStyle {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(to right,
+    #374151 0%,
+    #f97316 33%,
+    #f97316 33%,
+    #f97316 66%,
+    #f97316 66%,
+    #374151 100%);
+  background-size: 300% auto;
+  animation: gradient 5s ease-in 1s infinite;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+} */
+
+/* @keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}  */
+
+
+.cartoonImg{
+    background: url('/assets/logo-shinobi-.png') no-repeat;
+    position:static;
+    bottom: 0;left: 60;top:0;
+    width: 98%;
+    height: 98%;
+    background-size:contain;
+    background-position: 50% 100px;
+    z-index: 0;
+}
+
+.shuriken_one{
+    background: url('/assets/shuriken_1.png') no-repeat;
+    position: absolute;
+    top: 55%; right: -30%;
+    width: 30px;
+    height: 80px;
+    background-size: contain;
+    z-index: 2;
+    transform: translateX(100%);
+    animation: shuriken_one 1.5s ease-in 1s infinite ;
+}
+
+/* .shuriken_two{
+    background: url('/assets/shuriken_2.png') no-repeat;
+    position: absolute;
+    top: 10%;left: 100%;
+    width: 50px;
+    height: 50px;
+    background-size: contain;
+    z-index: 0;
+    transform: translateX(290%);
+    animation: shuriken_two 1s ease-in .9s infinite;
+} */
+
+/* css keyframes */
+@keyframes shuriken_one {
+    0% {
+        transform: translateX(0%) rotate(360deg);
+    }
+
+    100% {
+        transform: translateX(-2000%) rotate(720deg);
+    }
+}
+
+/* @keyframes shuriken_two {
+    0% {
+        transform: translateX(0%) rotate(0deg);
+    }
+
+    100% {
+        transform: translateX(-999%) rotate(360deg);
+    }
+} */

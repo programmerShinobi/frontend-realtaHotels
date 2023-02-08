@@ -1,0 +1,78 @@
+.textTitleInFormLogin {
+    
+    width: 281px;
+    height: 36px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 36px;
+    color: #131828;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.textLabelInFormLogin {
+    width: 177px;
+    height: 24px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 24px;
+    color: #717171;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.formIntputLogin {
+    padding-left: 21px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 24px;
+}
+
+
+/*-------------------------------------------*/
+
+
+.input_group{
+    @apply flex border rounded-xl;
+    position: relative;
+}
+
+.input_text{
+    @apply w-full py-4 px-6 border rounded-xl bg-slate-50;
+    @apply focus:outline-none border-none
+}
+
+.button{
+    @apply w-full bg-gradient-to-r from-red-500 to-orange-500 rounded-xl;
+    @apply py-3 text-gray-50 text-lg border border-slate-50
+}
+
+.button:hover{
+    @apply w-full border-slate-50 rounded-xl;
+    @apply py-3 text-gray-700 text-lg border border-orange-500;
+}
+
+.button_custom{
+ @apply w-full border py-3 flex justify-center gap-2 hover:bg-gray-200 rounded-xl;
+}
+
+.input_text + *{
+    color: #CBD5E1;
+}
+
+.input_text:focus + *{
+    color: #fc9732;
+}
+
+.input_text:not([type=email]) ~ span:hover *{
+    color: #fc9732;
+    cursor: pointer;
+}
