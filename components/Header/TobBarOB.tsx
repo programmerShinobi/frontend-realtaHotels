@@ -12,32 +12,17 @@ import { Button } from "@mui/material";
 import { doLogin } from "@/redux/Actions/Users/reduceActions";
 import { useDispatch } from "react-redux";
 
-export default function TopBarAdmin({ showNav, setShowNav }:any) {
+export default function TopBarOB({ showNav, setShowNav }:any) {
   const router = useRouter();
   const userFullName: any = localStorage.getItem("userFullName");
-  const profilePhotoMe: any = localStorage.getItem("profilePhotoMe");
-  
-  let myPhoto: any; 
-  if (profilePhotoMe) {
-    myPhoto = profilePhotoMe;
-  } else {
-    myPhoto = "user.png"
-  }
+
   // useDispatch
   const dispatch:any = useDispatch();
 
   const handleLogout = () => {
     dispatch(doLogin());
     localStorage.removeItem('token');
-    localStorage.removeItem('roleId');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('userFullName');
-    localStorage.removeItem('profilePhotoMe');
     router.push('/auth/signin');
-  };
-
-  const handleEditProfile = () => {
-    router.push('/admin/editProfile');
   };
 
   return (
@@ -136,7 +121,7 @@ export default function TopBarAdmin({ showNav, setShowNav }:any) {
             <Menu.Button className="inline-flex w-full justify-center items-center">
               <picture>
                 <img
-                  src={"/images/"+myPhoto}
+                  src="/images/user.png"
                   className="rounded-full h-8 md:mr-4 border-2 border-white shadow-sm"
                   alt="profile picture"
                 />
@@ -158,16 +143,9 @@ export default function TopBarAdmin({ showNav, setShowNav }:any) {
           >
             <Menu.Items className="absolute right-0 w-auto z-50 mt-2 origin-top-right bg-white rounded-md shadow-2xl">
               <div className="p-1 flex flex-col-left">
-                <Menu.Item>
-                  <Button
-                    className="shadow-lg pl-3 px-4 py-2 mx-auto rounded-md items-center bg-orange-100 text-left text-sm font-medium normal-case text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
-                    onClick={handleEditProfile}>
-                    <PencilIcon className="h-4 w-4 mr-2" />{"Profile"}
-                  </Button>
-                </Menu.Item>
                 <Menu.Item >
                   <Button
-                    className="shadow-lg pl-3 px-4 py-2 ml-1 mx-auto rounded-md items-center bg-orange-100 text-left text-sm font-medium normal-case text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                    className="shadow-lg pl-3 px-4 py-2 mx-auto rounded-md items-center bg-orange-100 text-left text-sm font-medium normal-case text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
                     onClick={handleLogout}>
                     <LogoutIcon className="h-4 w-4 mr-2" />{"Logout"}
                   </Button>
