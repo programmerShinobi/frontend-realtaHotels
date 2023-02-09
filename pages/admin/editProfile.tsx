@@ -3,38 +3,44 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import fs from "fs/promises";
 import path from "path";
-import { doUpdatePhotoUsers } from "@/redux/Actions/Users/reduceActions";
+import { doUpdatePhotoUsers, doUserRequest } from "@/redux/Actions/Users/reduceActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import LayoutAdmin from "@/components/Layout/LayoutAdmin";
+import { Box } from "@mui/material";
 
 interface Props {
   dirs: string[];
 }
 
-const EditUserPhoto: NextPage<Props> = ({ dirs })=> {
+const EditProfile: NextPage<Props> = ({ dirs }) => {
   const router = useRouter();
   const [uploading, setUploading] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedFile, setSelectedFile] = useState<File>();
-  // // useDispatch API POST users
+  const [profilePhoto, setProfilePhoto] = useState("");
+  const user:any = useSelector((state: any) => state.usersReducers.user);
   const dispatchEditPhoto = useDispatch();
 
+
   const handleUpload = async () => {
+    const userId: any = localStorage.getItem("userId");
     setUploading(true);
     try {
-       
+
       if (!selectedFile) return;
       const formData = new FormData();
       formData.append("myImage", selectedFile);
       const { data } = await axios.post("/api/image", formData);
 
       const isDataUpload = {
-        usproId:24,
-        usproPhoto: selectedFile.name
+        usproId:userId,
+        usproPhoto: "Admin_" + selectedFile.name
       }
       console.info(isDataUpload)
-      dispatchEditPhoto(doUpdatePhotoUsers(24, isDataUpload));
+      
+      dispatchEditPhoto(doUpdatePhotoUsers(userId, isDataUpload));
+      localStorage.setItem('profilePhotoMe', isDataUpload.usproPhoto);
       router.reload()      
     } catch (error: any) {
       console.log(error.message);
@@ -45,9 +51,11 @@ const EditUserPhoto: NextPage<Props> = ({ dirs })=> {
     return (
       <>
         <LayoutAdmin>
-          <p className="text-gray-700 text-3xl mb-16 font-bold">Edit Profile</p>
-          <div className="grid col-1 bg-white shadow-sm">
-            <div className="max-w-4xl mx-auto p-20 space-y-6">
+          <p className="text-gray-700 text-3xl mb-16 font-bold">Profile</p>
+          <Box className="grid col-1 bg-white h-50 shadow-xl rounded-md">
+            <label className="pt-3 text-center font-bold">Profile Photo</label>  
+            <hr className="mt-3"/>
+            <Box className="max-w-4xl mx-auto pt-3 space-y-3 pb-3">
               <label>
                 <input
                   type="file"
@@ -60,31 +68,28 @@ const EditUserPhoto: NextPage<Props> = ({ dirs })=> {
                     }
                   }}
                 />
-                <div className="w-40 aspect-video rounded flex items-center justify-center border-2 border-dashed cursor-pointer">
+                <Box className="w-40 aspect-video rounded flex items-center justify-center border-2 border-dashed cursor-pointer">
                   {selectedImage ? (
                     <img src={selectedImage} alt="" />
                   ) : (
                     <span>Select Photo</span>
                   )}
-                </div>
+                </Box>
               </label>
               <button
+                className="shadow-lg w-40 px-4 py-2 mx-auto rounded-md items-center bg-orange-100 text-center text-sm font-medium normal-case text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
                 onClick={handleUpload}
                 disabled={uploading}
-                style={{ opacity: uploading ? ".5" : "1" }}
-                className="bg-red-600 p-3 w-32 text-center rounded text-white"
-              >
-                {uploading ? "Uploading.." : "Upload"}
+                style={{ opacity: uploading ? ".5" : "1" }}>
+                  <p>{uploading ? "Uploading.." : "Upload"}</p>
               </button>
-              {/* <div className="mt-20 flex flex-col space-y-3">
-                {dirs.map((item) => (
-                  <Link key={item} href={"/images/" + item}>
-                    <label className="text-blue-500 hover:underline">{item}</label>
-                  </Link>
-                ))}
-              </div> */}
-            </div>
-          </div>
+            </Box>
+          </Box>
+          <Box className="grid mt-3 col-1 bg-white h-50 shadow-xl rounded-md">
+            <label className="pt-3 text-center font-bold">Profile Me</label>
+            <hr className="mt-3" />
+            <label className="text-center mt-3 mb-3 text-gray-400">On progress...</label>
+          </Box>
         </LayoutAdmin>
         </>
     )
@@ -103,4 +108,4 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
 };
 
-export default EditUserPhoto;
+export default EditProfile;

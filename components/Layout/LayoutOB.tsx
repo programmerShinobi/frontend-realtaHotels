@@ -1,10 +1,10 @@
 import { useState, useEffect, Fragment } from "react";
-import TopBar from '../Header/TobBarAdmin';
 import SideBarOB from "../Sidebar/SideBarOB";
 import { Transition } from "@headlessui/react";
 import { useRouter } from "next/router";
 import Custom401 from "@/pages/401";
 import WithAuth from "../Private/withAuth";
+import TopBarOB from "../Header/TobBarOB";
 
 const LayoutOB = ({ children }:any) => {
   const [showNav, setShowNav] = useState(true);
@@ -39,7 +39,7 @@ const LayoutOB = ({ children }:any) => {
 
   return (
     <>
-      <TopBar showNav={showNav} setShowNav={setShowNav} />
+      <TopBarOB showNav={showNav} setShowNav={setShowNav} />
       <Transition
         as={Fragment}
         show={showNav}
