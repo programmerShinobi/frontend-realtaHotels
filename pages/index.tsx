@@ -1,5 +1,6 @@
 import Head from 'next/head';
-import { Box, InputLabel, Link } from "@mui/material";
+import { Box, InputLabel } from "@mui/material";
+import Link from "next/link";
 import { useRouter } from 'next/router';
 import LayoutGuest from '@/components/Layout/LayoutGuest';
 
@@ -20,7 +21,7 @@ const router = useRouter();
                   className='text-center text-gray-400 text-sm'
                   sx={{ gridColumn: "span 4" }}
                 >
-          <Link href={'/auth/signin'} className='text-orange-500'>Sign In</Link> | <Link href={'/auth/signup'} className='text-orange-500'> Sign Up</Link>
+          <Link prefetch href={'/auth/signin'} className='text-orange-500'>Sign In</Link> | <Link prefetch href={'/auth/signup'} className='text-orange-500'> Sign Up</Link>
         </InputLabel>
         
       </section>
