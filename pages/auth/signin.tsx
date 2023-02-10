@@ -45,6 +45,7 @@ export default function SignIn() {
       localStorage.setItem('token', isLogin.token);
       localStorage.setItem('roleId', isLogin.userdata[0].usro_role_id);
       localStorage.setItem('userId', isLogin.userdata[0].user_id);
+      localStorage.setItem('userPhoto', isLogin.userdata[0].uspro_photo);
       localStorage.setItem('userFullName', isLogin.userdata[0].user_full_name);
       console.info(isLogin);
       if (isLogin.userdata[0].usro_role_id == 1) {        // Guest

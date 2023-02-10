@@ -15,11 +15,14 @@ import { useDispatch } from "react-redux";
 export default function TopBarAdmin({ showNav, setShowNav }:any) {
   const router = useRouter();
   const userFullName: any = localStorage.getItem("userFullName");
+  const userPhoto: any = localStorage.getItem("userPhoto");
   const profilePhotoMe: any = localStorage.getItem("profilePhotoMe");
   
   let myPhoto: any; 
   if (profilePhotoMe) {
     myPhoto = profilePhotoMe;
+  } else if (userPhoto) { 
+    myPhoto = userPhoto;
   } else {
     myPhoto = "user.png"
   }

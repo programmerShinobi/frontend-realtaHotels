@@ -116,18 +116,18 @@
 }
 
 .bgImg {
-    background: url('/assets/bg-register.png') no-repeat right center fixed;
-    -webkit-background-size: contain;
-    -moz-background-size: contain;
-    -o-background-size: contain;
-    background-size: contain;
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    transform: scaleX(1.5);
-    top: 0;
-    right: 15rem;
-    z-index: -1;
+    background: url('/assets/bg-register-full.png') no-repeat center fixed;
+        -webkit-background-size: contain;
+        -moz-background-size: contain;
+        -o-background-size: contain;
+        background-size: contain;
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        transform: scaleX(1.15);
+        top: 0;
+        left: 0;
+        z-index: -1;
 }
 
 .textTitleInCardFormLogin {
