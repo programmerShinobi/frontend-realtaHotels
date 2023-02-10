@@ -48,7 +48,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     />
                   </Disclosure.Button>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="/admin">
+                    <Link prefetch href="/admin">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "/admin"
                           ? "bg-orange-100 text-orange-500"
@@ -66,7 +66,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -84,7 +84,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -102,7 +102,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -120,7 +120,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -138,7 +138,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -156,7 +156,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -174,7 +174,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -192,7 +192,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -210,7 +210,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -252,7 +252,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     />
                   </Disclosure.Button>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="/admin/master">
+                    <Link prefetch href="/admin/master">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "/admin/master"
                           ? "bg-orange-100 text-orange-500"
@@ -270,7 +270,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -288,7 +288,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -306,7 +306,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -324,7 +324,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -342,7 +342,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -360,7 +360,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -378,7 +378,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -396,7 +396,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -438,7 +438,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     />
                   </Disclosure.Button>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="/admin/hr">
+                    <Link prefetch href="/admin/hr">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "/admin/hr"
                           ? "bg-orange-100 text-orange-500"
@@ -456,7 +456,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -474,7 +474,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -492,7 +492,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -510,7 +510,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -552,7 +552,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     />
                   </Disclosure.Button>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="/admin/users">
+                    <Link prefetch href="/admin/users">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "/admin/users"
                           ? "bg-orange-100 text-orange-500"
@@ -570,7 +570,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -612,7 +612,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     />
                   </Disclosure.Button>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="/admin/booking">
+                    <Link prefetch href="/admin/booking">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "/admin/booking"
                           ? "bg-orange-100 text-orange-500"
@@ -630,7 +630,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -648,7 +648,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -689,7 +689,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     />
                   </Disclosure.Button>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="/admin/hotels">
+                    <Link prefetch href="/admin/hotels">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "/admin/hotels"
                           ? "bg-orange-100 text-orange-500"
@@ -707,7 +707,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -725,7 +725,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -766,7 +766,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     />
                   </Disclosure.Button>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="/admin/resto">
+                    <Link prefetch href="/admin/resto">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "/admin/resto"
                           ? "bg-orange-100 text-orange-500"
@@ -784,7 +784,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -802,7 +802,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -820,7 +820,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -861,7 +861,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     />
                   </Disclosure.Button>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="/admin/payment">
+                    <Link prefetch href="/admin/payment">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "/admin/payment"
                           ? "bg-orange-100 text-orange-500"
@@ -879,7 +879,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -897,7 +897,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -915,7 +915,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -933,7 +933,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -974,7 +974,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     />
                   </Disclosure.Button>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="/admin/purchasing">
+                    <Link prefetch href="/admin/purchasing">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "/admin/purchasing"
                           ? "bg-orange-100 text-orange-500"
@@ -992,7 +992,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
@@ -1010,7 +1010,7 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link href="#">
+                    <Link prefetch href="#">
                       <div
                         className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
                           ? "bg-orange-100 text-orange-500"
