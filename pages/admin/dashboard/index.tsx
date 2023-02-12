@@ -9,7 +9,7 @@ export default function DashboardAll() {
         <title>Dashboard</title>
       </Head>
       <LayoutAdmin>
-        <p className="text-gray-700 text-3xl mb-16 font-bold">Dashboard / All</p>
+        <p className="text-gray-700 text-3xl mb-8 font-bold">Dashboard / All</p>
         <Box className="grid lg:grid-cols-3 gap-5 mb-16">
           <Box className="rounded bg-white h-40 shadow-sm"></Box>
           <Box className="rounded bg-white h-40 shadow-sm"></Box>

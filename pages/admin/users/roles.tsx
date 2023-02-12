@@ -214,7 +214,7 @@ export default function UsersRoles() {
       </Head>
       <LayoutAdmin>
 
-      <p className="text-gray-700 text-3xl mb-16 font-bold">Users / Roles</p>
+      <p className="text-gray-700 text-3xl mb-8 font-bold">Users / Roles</p>
       <ButtonGroup className="align-middle bg-gray">
         <Button
             type="button"
