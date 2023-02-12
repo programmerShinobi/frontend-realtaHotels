@@ -38,7 +38,6 @@ export default function SignUp() {
 
   // function handle submit form add new users (API POST users)
   const handleFormSubmit = (values: any, { setSubmitting }: any) => {
-    console.info(isRegister);
     dispatch(doRegister(values));
 
     // Memeriksa apakah user sudah login

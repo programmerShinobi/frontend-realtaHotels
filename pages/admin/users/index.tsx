@@ -19,6 +19,7 @@ import LayoutAdmin from '@/components/Layout/LayoutAdmin';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
 import moment from "moment";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function UsersUsers() {
   // defaine themes
@@ -54,12 +55,12 @@ export default function UsersUsers() {
         <GridActionsCellItem
           icon={<EditIcon color='warning' />}
           label="Edit"
-          onClick={() => handleEdit(row.id)}
+          onClick={() => handleEdit(row.row.userId)}
         />,
         <GridActionsCellItem
           icon={<DeleteIcon color='warning' />}
           label="Delete"
-          onClick={() => handleDelete(row.id)}
+          onClick={() => handleDelete(row.row.userId)}
         />,
       ],
     },
@@ -311,6 +312,12 @@ export default function UsersUsers() {
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
+
+  const DataWithId = Data.map((row:any) => ({
+    ...row,
+    id: uuidv4(),
+    userId: row.userId
+  }));
 
   return (
     <Box>
@@ -1269,9 +1276,9 @@ export default function UsersUsers() {
             autoHeight
             pageSize={5}
             rowsPerPageOptions={[5, 10, 15, 20]}
-            rows={Data}
+            rows={DataWithId}
             columns={columns}
-            getRowId={(row: any) => row.userId}
+            getRowId={(rows:any) => rows.id}
             components={{ Toolbar: GridToolbar }} 
           />
         }

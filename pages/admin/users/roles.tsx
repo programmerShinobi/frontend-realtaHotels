@@ -16,15 +16,16 @@ import SaveIcon from '@mui/icons-material/Save';
 import Input from '@mui/material/Input';
 import Head from 'next/head';
 import LayoutAdmin from '@/components/Layout/LayoutAdmin';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function UsersRoles() {
   // defaine themes
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  // define API GET users
-  const [Data_Roles, setData]:any = useState([]);  
-  const users = useSelector((state: any) => state.usersReducers.users);
+  // define API GET roles
+  const [Data, setData]:any = useState([]);  
+  const roles = useSelector((state: any) => state.usersReducers.users);
   const dispatch = useDispatch();
 
   //  dispatch API GET users
@@ -34,36 +35,36 @@ export default function UsersRoles() {
   
   // setData API GET users
   useEffect(() => {
-    if (users && users.results){
-      setData(users.results)
+    if (roles && roles.results){
+      setData(roles.results)
     }
   });
 
   // column API GET users
-  const columns_roles = [
+  const columns = [
     {
       field: 'actions',
       headerName:'Actions',
       type: 'actions',
       flex: 0.2,
 
-      getActions: (row_roles:any) => [
+      getActions: (row:any) => [
         <GridActionsCellItem
           icon={<EditIcon color='warning' />}
           label="Edit"
-          onClick={() => handleEdit(row_roles.id)}
+          onClick={() => handleEdit(row.row.roleId)}
         />,
         <GridActionsCellItem
           icon={<DeleteIcon color='warning' />}
           label="Delete"
-          onClick={() => handleDelete(row_roles.id)}
+          onClick={() => handleDelete(row.row.roleId)}
         />,
       ],
     },
     {
       field: 'roleId',
-      headerName: 'Role ID',
-      // type:'number',
+      headerName: 'ID',
+      type:'number',
       flex: 0.2,
     },
     {
@@ -199,6 +200,12 @@ export default function UsersRoles() {
       dispatch(doRolesRequest());
     }, 500);
   }
+
+  const DataWithId = Data.map((row:any) => ({
+    ...row,
+    id: uuidv4(),
+    roleId: row.roleId
+  }));
 
   return (
     <Box>
@@ -469,9 +476,9 @@ export default function UsersRoles() {
             autoHeight
             pageSize={5}
             rowsPerPageOptions={[5, 10, 15, 20]}
-            rows={Data_Roles}
-            columns={columns_roles}
-            getRowId={(row_roles: any) => row_roles.roleId}
+            rows={DataWithId}
+            columns={columns}
+            getRowId={(rows:any) => rows.id}
             components={{ Toolbar: GridToolbar }} 
           />
         }

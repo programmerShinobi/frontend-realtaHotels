@@ -143,7 +143,6 @@ const updateRole = async (data:any) => {
         }
         return result;
     } catch (error:any) {
-        console.info(error)
         return error.message;
     }
 }
