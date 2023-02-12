@@ -32,7 +32,7 @@ export default function UsersUsers() {
 
   //  dispatch API GET users
   useEffect(() => {
-    dispatch(doUsersRequest())
+    dispatch(doUsersRequest());
   },[]); 
   
   // setData API GET users
@@ -105,6 +105,7 @@ export default function UsersUsers() {
     setIsOpenAdd(true)
   }
 
+
   // useDispatch API POST users
   const dispatchAdd = useDispatch();
 
@@ -133,15 +134,16 @@ export default function UsersUsers() {
   // function handler API POST users
   const eventHandlerAdd = (data:any) => (event:any) => {
     setDataUser({ ...DataUser, [data]: event.target.value });
-    dispatch(doUsersRequest());
   }
   
   // function handle submit form add new users (API POST users)
   const handleFormSubmit = (values: any, { setSubmitting }: any) => {
     setSubmitting(true);
     dispatchAdd(doUsersCreate(values));
-    dispatch(doUsersRequest());
-    setIsOpenAdd(false);
+    setTimeout(() => {
+      dispatch(doUsersRequest());
+      setIsOpenAdd(false);
+    }, 500)
     setSubmitting(false);
   };
 
@@ -287,8 +289,10 @@ export default function UsersUsers() {
   const handleFormSubmitEdit = (values: any, { setSubmitting }: any) => {
     setSubmitting(true);
     dispatchEdit(doUpdateUsers(DataUserEdit.userId, values));
-    dispatch(doUsersRequest());
-    setIsOpenEdit(false);
+    setTimeout(() => {
+      dispatch(doUsersRequest());
+      setIsOpenEdit(false);
+    }, 500);
     setSubmitting(false);
   };
 
@@ -298,7 +302,9 @@ export default function UsersUsers() {
   const handleDelete = (id: number) => {
     //  dispatch API DELETE users
     dispatchDelete(doDeleteUsers(id)); 
-    dispatch(doUsersRequest())
+    setTimeout(() => {
+      dispatch(doUsersRequest());
+    }, 500);
   }
   
   const [showPassword, setShowPassword] = useState(false);
