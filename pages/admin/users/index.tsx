@@ -830,7 +830,7 @@ export default function UsersUsers() {
                               fullWidth
                               variant="filled"
                               type="text"
-                              label="First Name"
+                              label="Full Name"
                               onBlur={handleBlur}
                               onChange={(event) => {eventHandlerEdit('userFullName')(event); handleChange(event)}}
                               value={values.userFullName?values.userFullName:values.userFullName=DataUserEdit.userFullName}                            

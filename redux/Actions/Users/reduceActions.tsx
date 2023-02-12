@@ -172,3 +172,111 @@ export const doRegisterFailed:any = (payload:any):any => {
         payload
     }
 }
+
+export const doRolesRequest:any = ():any => {
+    return {
+        type: ActionType.GET_ROLES
+    }
+}
+
+export const doRolesRequestSucceed:any = (payload:any):any => {
+    return {
+        type: ActionType.GET_ROLES_SUCCEED,
+        payload
+    }
+}
+
+export const doRolesRequestFailed:any = (payload:any):any => {
+    return {
+        type: ActionType.GET_ROLES_SUCCEED,
+        payload
+    }
+}
+
+export const doRoleRequest:any = (payload:any):any => {
+    return {
+        type: ActionType.GET_ROLE,
+        payload
+    }
+}
+
+export const doRoleRequestSucceed:any = (roleId:number):any => {
+    return {
+        type: ActionType.GET_ROLE_SUCCEED,
+        payload: roleId
+    }
+}
+
+export const doRoleRequestFailed:any = (payload:any):any => {
+    return {
+        type: ActionType.GET_ROLE_SUCCEED,
+        payload
+    }
+}
+
+export const doRolesCreate:any = (payload:any):any => {
+    return {
+        type: ActionType.ADD_ROLES,
+        payload
+    }
+}
+
+export const doAddRolesSucceed:any = (payload:any):any => {
+    return {
+        type: ActionType.ADD_ROLES_SUCCEED,
+        payload
+    }
+
+}
+
+export const doAddRolesFailed:any = (payload:any):any => {
+    return {
+        type: ActionType.ADD_ROLES_FAILED,
+        payload
+    }
+}
+
+export const doUpdateRoles:any = (id:number, payload:any):any => {
+    return {
+        type: ActionType.UPDATE_ROLES,
+        id,
+        payload
+    }
+}
+
+export const doUpdateRolesSucceed:any = (payload:any):any => {
+    return {
+        type: ActionType.UPDATE_ROLES_SUCCEED,
+        payload
+    }
+}
+
+
+export const doUpdateRolesFailed:any = (payload:any):any => {
+    return {
+        type: ActionType.UPDATE_ROLES_FAILED,
+        payload
+    }
+}
+
+export const doDeleteRoles:any = (payload:any):any => {
+    return {
+        type: ActionType.DEL_ROLES,
+        payload
+    }
+}
+
+export const doDeleteRolesSucceed:any = (payload:any):any => {
+    console.info(payload)
+    return {
+        type: ActionType.DEL_ROLES_SUCCEED,
+        payload
+    }
+}
+
+export const doDeleteRolesFailed:any = (payload:any):any => {
+    return {
+        type: ActionType.DEL_ROLES_FAILED,
+        payload
+    }
+}
