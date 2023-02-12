@@ -1,6 +1,6 @@
 import { call, put } from "redux-saga/effects";
 import ReduceService from "@/redux/Services/Users/reduceService";
-import { doAddUsersFailed, doAddUsersSucceed, doDeleteUsersFailed, doDeleteUsersSucceed, doLoginFailed, doLoginSucceed, doRegisterFailed, doRegisterSucceed, doUpdatePhotoUsersFailed, doUpdatePhotoUsersSucceed, doUpdateUsersFailed, doUpdateUsersSucceed, doUserRequestFailed, doUserRequestSucceed, doUsersRequestFailed, doUsersRequestSucceed } from '../../Actions/Users/reduceActions';
+import { doAddRolesFailed, doAddRolesSucceed, doAddUsersFailed, doAddUsersSucceed, doDeleteRolesFailed, doDeleteRolesSucceed, doDeleteUsersFailed, doDeleteUsersSucceed, doLoginFailed, doLoginSucceed, doRegisterFailed, doRegisterSucceed, doRoleRequestFailed, doRoleRequestSucceed, doRolesRequestFailed, doRolesRequestSucceed, doUpdatePhotoUsersFailed, doUpdatePhotoUsersSucceed, doUpdateRolesFailed, doUpdateRolesSucceed, doUpdateUsersFailed, doUpdateUsersSucceed, doUserRequestFailed, doUserRequestSucceed, doUsersRequestFailed, doUsersRequestSucceed } from '../../Actions/Users/reduceActions';
 
 function* handleUsers():any  {
     try {
@@ -82,4 +82,55 @@ function* handleRegisterUsers(action:any):any {
     }
 }
 
-export { handleUsers, handleUser, handleAddUsers, handleDelUsers, handleUpdateUsers, handleUpdatePhotoUsers, handleLoginUsers, handleRegisterUsers }
+function* handleRoles():any  {
+    try {
+        const result:any = yield call(ReduceService.getAllRoles);
+        yield put(doRolesRequestSucceed(result.data));
+    }
+    catch (error:any) {
+        yield put(doRolesRequestFailed(error));
+    }
+}
+
+function* handleRole(action:any):any  {
+    try {
+        const result = yield call(ReduceService.getIdRole, action.payload);
+        yield put(doRoleRequestSucceed(result.data));
+    }
+    catch (error:any) {
+        yield put(doRoleRequestFailed(error));
+    }
+}
+
+function* handleAddRoles(action:any):any  {
+    try {
+        const result = yield call(ReduceService.createRole, action.payload);
+        yield put(doAddRolesSucceed(result.data));
+    }
+    catch (error:any) {
+        yield put(doAddRolesFailed(error));
+    }
+}
+
+function* handleUpdateRoles(action: any): any  {
+    try {
+        const result = yield call(ReduceService.updateRole, action.payload);
+        yield put(doUpdateRolesSucceed(result));
+    }
+    catch (error:any) {
+        yield put(doUpdateRolesFailed(error));
+    }
+}
+
+
+function* handleDelRoles(action:any):any  {
+    try {
+        const result = yield call(ReduceService.removeRole, action.payload);
+        yield put(doDeleteRolesSucceed(action.payload));
+    }
+    catch (error:any) {
+        yield put(doDeleteRolesFailed(error));
+    }
+}
+
+export { handleUsers, handleUser, handleAddUsers, handleDelUsers, handleUpdateUsers, handleUpdatePhotoUsers, handleLoginUsers, handleRegisterUsers, handleRoles, handleRole, handleAddRoles, handleUpdateRoles, handleDelRoles }

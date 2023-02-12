@@ -570,9 +570,9 @@ const SideBarAdmin = forwardRef(({ showNav }:any, ref:any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link prefetch href="#">
+                    <Link prefetch href="/admin/users/roles">
                       <div
-                        className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
+                        className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "/admin/users/roles"
                           ? "bg-orange-100 text-orange-500"
                           : "text-orange-900 hover:bg-orange-100 hover:text-orange-500"
                           }`}
