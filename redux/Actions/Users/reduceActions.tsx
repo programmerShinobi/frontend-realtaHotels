@@ -117,7 +117,6 @@ export const doDeleteUsers:any = (payload:any):any => {
 }
 
 export const doDeleteUsersSucceed:any = (payload:any):any => {
-    console.info(payload)
     return {
         type: ActionType.DEL_USERS_SUCCEED,
         payload
@@ -267,7 +266,6 @@ export const doDeleteRoles:any = (payload:any):any => {
 }
 
 export const doDeleteRolesSucceed:any = (payload:any):any => {
-    console.info(payload)
     return {
         type: ActionType.DEL_ROLES_SUCCEED,
         payload

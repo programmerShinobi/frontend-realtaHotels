@@ -18,8 +18,6 @@ const EditProfile: NextPage<Props> = ({ dirs }) => {
   const [uploading, setUploading] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedFile, setSelectedFile] = useState<File>();
-  const [profilePhoto, setProfilePhoto] = useState("");
-  const user:any = useSelector((state: any) => state.usersReducers.user);
   const dispatchEditPhoto = useDispatch();
 
 
@@ -37,7 +35,6 @@ const EditProfile: NextPage<Props> = ({ dirs }) => {
         usproId:userId,
         usproPhoto: "Admin_" + selectedFile.name
       }
-      console.info(isDataUpload)
       
       dispatchEditPhoto(doUpdatePhotoUsers(userId, isDataUpload));
       localStorage.setItem('profilePhotoMe', isDataUpload.usproPhoto);
