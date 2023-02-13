@@ -291,6 +291,7 @@ export default function UsersUsers() {
     setSubmitting(true);
     dispatchEdit(doUpdateUsers(DataUserEdit.userId, values));
     setTimeout(() => {
+      localStorage.setItem('userFullNameNew', values.userFullName);
       dispatch(doUsersRequest());
       setIsOpenEdit(false);
     }, 500);
