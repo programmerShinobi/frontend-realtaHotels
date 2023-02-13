@@ -13,6 +13,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import styles from '../../styles/FormSignIn.module.css';
 import LayoutSignIn from '@/components/Layout/LayoutSignIn';
 import { doLogin } from '@/redux/Actions/Users/reduceActions';
+import Cookies from 'js-cookie';
 
 export default function SignIn() {
   
@@ -39,14 +40,16 @@ export default function SignIn() {
   // function handle submit form add new users (API POST users)
   const handleFormSubmit = (values: any, { setSubmitting }: any) => {
     dispatch(doLogin(values));
-    
+  
     // Memeriksa apakah user sudah login
     if (isLogin.message == 'Login successfully') {
-      localStorage.setItem('token', isLogin.token);
+      localStorage.setItem('token', isLogin.userdata[0].user_id);
+      localStorage.setItem('userId', isLogin.userdata[0].user_id);
       localStorage.setItem('roleId', isLogin.userdata[0].usro_role_id);
       localStorage.setItem('userId', isLogin.userdata[0].user_id);
       localStorage.setItem('userPhoto', isLogin.userdata[0].uspro_photo);
       localStorage.setItem('userFullName', isLogin.userdata[0].user_full_name);
+      Cookies.set('userId', isLogin.userdata[0].user_id);
       if (isLogin.userdata[0].usro_role_id == 1) {        // Guest
         router.push('/');
       } else if (isLogin.userdata[0].usro_role_id == 2) { // Manager
@@ -60,6 +63,8 @@ export default function SignIn() {
       }
     }
   };
+
+  console.info()
 
   // getHelper for display in form
   const getHelperText = (touched:any, errors:any, field:any) => {

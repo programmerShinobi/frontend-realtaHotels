@@ -3,9 +3,8 @@ import React, { useState, useEffect, Fragment } from 'react'
 import axios from "axios";
 import fs from "fs/promises";
 import path from "path";
-import { doUpdatePhotoUsers, doUserRequest, doUpdateUsers, doUsersRequest } from "@/redux/Actions/Users/reduceActions";
+import { doUpdatePhotoUsers, doUserRequest, doUpdateUsers } from "@/redux/Actions/Users/reduceActions";
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/router";
 import LayoutAdmin from "@/components/Layout/LayoutAdmin";
 import { Box, Button, FormControl, IconButton, InputAdornment, InputLabel, MenuItem, Select } from "@mui/material"
 import { Dialog, Transition } from '@headlessui/react'
@@ -25,24 +24,82 @@ interface Props {
 }
 
 const EditProfile: NextPage<Props> = ({ dirs }) => {
-  const [userIDProfile, setUserIDProfile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedFile, setSelectedFile] = useState<File>();
   const dispatchEditPhoto = useDispatch();
-
+  const [profile, setProfile] = useState({
+    user_id: null,
+    user_full_name: null,
+    user_company_name: null,
+    user_type: null,
+    user_email: null,
+    user_phone_number: null,
+    uspa_passwordhash: null,
+    ubpo_total_points: null,
+    ubpo_bonus_type: null,
+    usme_memb_name: null,
+    usme_points: null,
+    usme_type: null,
+    usro_role: null,
+    uspro_national_id: null,
+    uspro_birth: "",
+    uspro_job_title: null,
+    uspro_marital_status: null,
+    uspro_gender: null,
+    uspro_addr: null,
+    uspro_photo:null
+  });
+  
+  const userMe = useSelector((state: any) => state.usersReducers.user);
+  
+  useEffect(() => {
+    const userId = localStorage.getItem('userId');
+    const displayedPayload: any = dispatchEdit(doUserRequest(userId));
+    if (displayedPayload.payload == userId) {
+      if (userMe) {
+        if (userMe.results) {
+          const displayedUser: any = userMe.results[0];
+          if (displayedUser) {
+            if (displayedUser.user_id == userId) {
+              setProfile({
+                ...profile,
+                user_id: displayedUser.user_id,
+                user_full_name: displayedUser.user_full_name,
+                user_company_name: displayedUser.user_company_name,
+                user_type: displayedUser.user_type,
+                user_email: displayedUser.user_email,
+                user_phone_number: displayedUser.user_phone_number,
+                uspa_passwordhash: displayedUser.uspa_passwordhash,
+                ubpo_total_points: displayedUser.ubpo_total_points,
+                ubpo_bonus_type: displayedUser.ubpo_bonus_type,
+                usme_memb_name: displayedUser.usme_memb_name,
+                usme_points: displayedUser.usme_points,
+                usme_type: displayedUser.usme_type,
+                usro_role: displayedUser.usro_role,
+                uspro_national_id: displayedUser.uspro_national_id,
+                uspro_birth: moment(displayedUser.uspro_birth).format("DD MMMM YYYY"),
+                uspro_job_title: displayedUser.uspro_job_title,
+                uspro_marital_status: displayedUser.uspro_marital_status,
+                uspro_gender: displayedUser.uspro_gender,
+                uspro_addr: displayedUser.uspro_addr,
+                uspro_photo:displayedUser.uspro_photo
+              });
+            }
+          }
+        }
+      }
+    }
+  },[userMe]);
 
   const handleUpload = async () => {
-    const userId: any = localStorage.getItem("userId");
-    setUserIDProfile(userId)
     setUploading(true);
     try {
-
       if (!selectedFile) return;
       const formData = new FormData();
       formData.append("myImage", selectedFile);
       const { data } = await axios.post("/api/image", formData);
-
+      const userId = localStorage.getItem('userId');
       const isDataUpload = {
         usproId:userId,
         usproPhoto: "Admin_" + selectedFile.name
@@ -154,15 +211,14 @@ const EditProfile: NextPage<Props> = ({ dirs }) => {
 
   // function handler API PUT user
   const handleEdit = () => {
-    const id: any = localStorage.getItem("userId");
-    setUserIDProfile(id);
-    const displayedPayload:any = dispatchEdit(doUserRequest(id));
-    if (displayedPayload.payload == id) {
+    const userId = localStorage.getItem('userId');
+    const displayedPayload:any = dispatchEdit(doUserRequest(userId));
+    if (displayedPayload.payload == userId) {
       if (user) {
         if (user.results) {
           const displayedUser:any = user.results[0];
           if (displayedUser) {
-            if (displayedUser.user_id == id) {
+            if (displayedUser.user_id == userId) {
               openModalEdit();
               const dateBirth = moment(displayedUser.uspro_birth).format("YYYY-MM-DD");
               setDataUserEdit({
@@ -198,14 +254,44 @@ const EditProfile: NextPage<Props> = ({ dirs }) => {
       setDataUserEdit({...DataUserEdit, [data] : event.target.value});
   }
 
+  const dispatch = useDispatch();
+
   // function handle submit form edit users (API POST users)
   const handleFormSubmitEdit = (values: any, { setSubmitting }: any) => {
+    const userId = localStorage.getItem('userId');
     setSubmitting(true);
-    dispatchEdit(doUpdateUsers(DataUserEdit.userId, values));
+    dispatchEdit(doUpdateUsers(userId, values));
     setTimeout(() => {
       setIsOpenEdit(false);
-      dispatchEdit(doUserRequest(DataUserEdit.userId));
-      setUserIDProfile(DataUserEdit.userId);
+      localStorage.setItem('userFullNameNew', values.userFullName);
+      dispatch(doUserRequest(userId));
+      if (values) {
+        if (values.userId == userId) {
+          setProfile({
+            ...profile,
+            user_id: values.userId,
+            user_full_name: values.userFullName,
+            user_company_name: values.userCompanyName,
+            user_type: values.userType,
+            user_email: values.userEmail,
+            user_phone_number: values.userPhoneNumber,
+            uspa_passwordhash: values.uspaPasswordhash,
+            ubpo_total_points: values.ubpoTotalPoints,
+            ubpo_bonus_type: values.ubpoBonusType,
+            usme_memb_name: values.usmeMembName,
+            usme_points: values.usmePoints,
+            usme_type: values.usmeType,
+            usro_role: values.usroRole,
+            uspro_national_id: values.usproNationalId,
+            uspro_birth: moment(values.usproBirth).format("DD MMMM YYYY"),
+            uspro_job_title: values.usproJobTitle,
+            uspro_marital_status: values.usproMaritalStatus,
+            uspro_gender: values.usproGender,
+            uspro_addr: values.usproAddr,
+            uspro_photo:values.usproPhoto
+          });
+        }
+      }
     }, 500);
     setSubmitting(false);
   };
@@ -214,49 +300,6 @@ const EditProfile: NextPage<Props> = ({ dirs }) => {
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
-
-  let [profile, setProfile] = useState({
-    user_id: null,
-    user_full_name: null,
-    user_company_name: null,
-    user_type: null,
-    user_email: null,
-    user_phone_number: null,
-    uspa_passwordhash: null,
-    ubpo_total_points: null,
-    ubpo_bonus_type: null,
-    usme_memb_name: null,
-    usme_points: null,
-    usme_type: null,
-    usro_role: null,
-    uspro_national_id: null,
-    uspro_birth: "",
-    uspro_job_title: null,
-    uspro_marital_status: null,
-    uspro_gender: null,
-    uspro_addr: null,
-    uspro_photo:null
-  });
-
-  useEffect(() => {
-    const id: any = localStorage.getItem("userId");
-    setUserIDProfile(id);
-    const displayedPayload: any = dispatchEdit(doUserRequest(userIDProfile?userIDProfile:id));
-    if (displayedPayload.payload == userIDProfile?userIDProfile:id) {
-      if (user) {
-        if (user.results) {
-          const displayedUser: any = user.results[0];
-          if (displayedUser) {
-            if (displayedUser.user_id == userIDProfile?userIDProfile:id) {
-              setProfile(displayedUser);
-            }
-          }
-        }
-      }
-    }
-  }, []);
-
-  console.info(profile);
   
     return (
       <>
@@ -287,14 +330,24 @@ const EditProfile: NextPage<Props> = ({ dirs }) => {
                       <img src={"/images/"+profile.uspro_photo}/>
                     )}
                   </Box>
-                </label>
-                <button
-                  className="shadow-lg w-40 px-4 py-2 mx-auto rounded-md items-center bg-orange-100 text-center text-sm font-medium normal-case text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
-                  onClick={handleUpload}
-                  disabled={uploading}
-                  style={{ opacity: uploading ? ".5" : "1" }}>
-                    <p>{uploading ? "Uploading.." : "Upload"}</p>
-                </button>
+                  </label>
+                  {selectedImage ? (
+                    <button
+                      className="shadow-lg w-40 px-4 py-2 mx-auto rounded-md items-center bg-orange-100 text-center text-sm font-medium normal-case text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                      onClick={handleUpload}
+                      disabled={uploading}
+                      style={{ opacity: uploading ? ".5" : "1" }}>
+                        <p>{uploading ? "Uploading.." : "Upload"}</p>
+                    </button>
+                  ) : (
+                    <button
+                      className="shadow-lg w-40 px-4 py-2 mx-auto rounded-md items-center bg-orange-100 text-center text-sm font-medium normal-case text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                      onClick={handleUpload}
+                      disabled={true}
+                      style={{ opacity: uploading ? ".5" : "1" }}>
+                        <p>{uploading ? "Uploading.." : "Upload"}</p>
+                    </button>
+                  )}
                 <hr className="mt-3" />
                 <button
                   className="shadow-lg w-40 px-4 py-2 mx-auto rounded-md items-center bg-orange-100 text-center text-sm font-medium normal-case text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
@@ -309,12 +362,12 @@ const EditProfile: NextPage<Props> = ({ dirs }) => {
                   <Box className="max-w-4xl pl-5 pr-5 pt-3 space-y-3 pb-3">
                     <div className="flex flex-wrap">
                       <span className="text-left w-50 font-bold">Full Name</span>
-                      <span className="pl-10 text-left w-50">{profile.user_full_name}</span>
+                      <span className="pl-10 text-left w-50">{profile.user_full_name?profile.user_full_name:"None"}</span>
                     </div>
                     <hr className="mt-3" />
                     <div className="flex flex-wrap">
                       <span className="text-left w-50 font-bold">Birth</span>
-                      <span className="pl-20 text-left w-50">{moment(profile.uspro_birth).format("DD MMMM YYYY")}</span>
+                      <span className="pl-20 text-left w-50">{profile.uspro_birth?profile.uspro_birth:"None"}</span>
                     </div>
                     <hr className="mt-3" />
                     <div className="flex flex-wrap">
@@ -341,18 +394,19 @@ const EditProfile: NextPage<Props> = ({ dirs }) => {
                     <hr className="mt-3" />
                     <div className="flex flex-wrap">
                       <span className="text-left w-50 font-bold">Email</span>
-                      <span className="pl-20 text-left w-50">{profile.user_email}</span>
+                      <span className="pl-20 text-left w-50">{profile.user_email?profile.user_email:"None"}</span>
                     </div>
                     <hr className="mt-3" />
                     <div className="flex flex-wrap">
                       <span className="text-left w-50 font-bold">Phone</span>
-                      <span className="pl-16 text-left w-50">&nbsp;&nbsp;{profile.user_phone_number}</span>
+                      <span className="pl-16 text-left w-50">&nbsp;&nbsp;{profile.user_phone_number?profile.user_phone_number:"None"}</span>
                     </div>
                     <hr className="mt-3" />
                     <div className="flex flex-wrap">
                       <span className="text-left w-50 font-bold">National ID</span>
-                      <span className="pl-8 text-left w-50">{profile.uspro_national_id}</span>
+                      <span className="pl-8 text-left w-50">{profile.uspro_national_id?profile.uspro_national_id:"None"}</span>
                     </div>
+                    <hr className="mt-3" />
                   </Box>
                 </Box>
               </div>
@@ -362,7 +416,7 @@ const EditProfile: NextPage<Props> = ({ dirs }) => {
                   <Box className="max-w-4xl pl-5 pr-5 pt-3 space-y-3 pb-3">
                     <div className="flex flex-wrap">
                       <span className="text-left w-50 font-bold">Company</span>
-                      <span className="pl-10 text-left w-50">&nbsp;&nbsp;{profile.user_company_name}</span>
+                      <span className="pl-10 text-left w-50">&nbsp;&nbsp;{profile.user_company_name?profile.user_company_name:"None"}</span>
                     </div>
                     <hr className="mt-3" />
                     <div className="flex flex-wrap">
@@ -403,7 +457,7 @@ const EditProfile: NextPage<Props> = ({ dirs }) => {
                     <hr className="mt-3" />
                     <div className="flex flex-wrap">
                       <span className="text-left w-50 font-bold">Memb. Points</span>
-                      <span className="pl-4 text-left w-50">&nbsp;{profile.usme_points}</span>
+                      <span className="pl-4 text-left w-50">&nbsp;{profile.usme_points?profile.usme_points:"None"}</span>
                     </div>
                     <hr className="mt-3" />
                     <div className="flex flex-wrap">
@@ -419,8 +473,9 @@ const EditProfile: NextPage<Props> = ({ dirs }) => {
                     <hr className="mt-3" />
                     <div className="flex flex-wrap">
                       <span className="text-left w-50 font-bold">Total Bonus</span>
-                      <span className="pl-8 text-left w-50">&nbsp;{profile.ubpo_total_points}</span>
+                      <span className="pl-8 text-left w-50">&nbsp;{profile.ubpo_total_points?profile.ubpo_total_points:"None"}</span>
                     </div>
+                    <hr className="mt-3" />
                   </Box>
                 </Box>
               </div>            
