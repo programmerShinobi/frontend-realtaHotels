@@ -199,7 +199,7 @@ const EditProfile: NextPage<Props> = ({ dirs }) => {
     usproJobTitle: null,
     usproMaritalStatus: null,
     usproGender: null,
-    usproAddr: null
+    usproAddr: 1
   })
 
   //  function : open modals Edit user
@@ -267,6 +267,7 @@ const EditProfile: NextPage<Props> = ({ dirs }) => {
       dispatch(doUserRequest(userId));
       if (values) {
         if (values.userId == userId) {
+          const dateBirth = moment(values.usproBirth).format("YYYY-MM-DD");
           setProfile({
             ...profile,
             user_id: values.userId,
@@ -289,6 +290,27 @@ const EditProfile: NextPage<Props> = ({ dirs }) => {
             uspro_gender: values.usproGender,
             uspro_addr: values.usproAddr,
             uspro_photo:values.usproPhoto
+          });
+          setDataUserEdit({
+            ...DataUserEdit,
+            userId: values.userId,
+            userFullName: values.userFullName,
+            userCompanyName: values.userCompanyName,
+            userType: values.userType,
+            userEmail: values.userEmail,
+            userPhoneNumber: values.userPhoneNumber,
+            ubpoTotalPoints: values.ubpoTotalPoints,
+            ubpoBonusType: values.ubpoBonusType,
+            usmeMembName: values.usmeMembName,
+            usmePoints: values.usmePoints,
+            usmeType: values.usmeType,
+            usroRole: values.roleId,
+            usproNationalId: values.usproNationalId,
+            usproBirth: dateBirth,
+            usproJobTitle: values.usproJobTitle,
+            usproMaritalStatus: values.usproMaritalStatus,
+            usproGender: values.usproGender,
+            usproAddr: 1
           });
         }
       }
@@ -385,8 +407,8 @@ const EditProfile: NextPage<Props> = ({ dirs }) => {
                       <span className="text-left w-50 font-bold">Status</span>
                       <span className="pl-16 text-left w-50">&nbsp;&nbsp;
                         {
-                          profile.uspro_gender === "S" ? "Single" :
-                          profile.uspro_gender === "M" ? "Marrige" :
+                          profile.uspro_marital_status === "S" ? "Single" :
+                          profile.uspro_marital_status === "M" ? "Marrige" :
                           "None"
                         }
                       </span>
