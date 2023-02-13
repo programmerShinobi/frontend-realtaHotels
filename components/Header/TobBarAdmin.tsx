@@ -11,13 +11,15 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { Button } from "@mui/material";
 import { doLogin } from "@/redux/Actions/Users/reduceActions";
 import { useDispatch } from "react-redux";
+import Cookies from "js-cookie";
 
 export default function TopBarAdmin({ showNav, setShowNav }:any) {
   const router = useRouter();
-  const userFullName: any = localStorage.getItem("userFullName");
-  const userPhoto: any = localStorage.getItem("userPhoto");
-  const profilePhotoMe: any = localStorage.getItem("profilePhotoMe");
-  
+  const userFullName: any = localStorage.getItem('userFullName');
+  const userPhoto: any = localStorage.getItem('userPhoto');
+  const profilePhotoMe: any = localStorage.getItem('profilePhotoMe');
+  const profileNameMe: any = localStorage.getItem('userFullNameNew');
+
   let myPhoto: any; 
   if (profilePhotoMe) {
     myPhoto = profilePhotoMe;
@@ -26,6 +28,16 @@ export default function TopBarAdmin({ showNav, setShowNav }:any) {
   } else {
     myPhoto = "user.png"
   }
+
+  let myName: any; 
+  if (profileNameMe) {
+    myName = profileNameMe;
+  } else if (userFullName) { 
+    myName = userFullName;
+  } else {
+    myName = "";
+  }
+
   // useDispatch
   const dispatch:any = useDispatch();
 
@@ -36,6 +48,8 @@ export default function TopBarAdmin({ showNav, setShowNav }:any) {
     localStorage.removeItem('userId');
     localStorage.removeItem('userFullName');
     localStorage.removeItem('profilePhotoMe');
+    localStorage.removeItem('userFullNameNew');
+    Cookies.remove('userId');
     router.push('/auth/signin');
   };
 
@@ -145,7 +159,7 @@ export default function TopBarAdmin({ showNav, setShowNav }:any) {
                 />
               </picture>
               <span className="hidden md:block font-medium text-gray-700">
-                {userFullName}
+                {myName}
               </span>
               <ChevronDownIcon className="ml-2 h-4 w-4 text-gray-700" />
             </Menu.Button>
