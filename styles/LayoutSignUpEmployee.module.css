@@ -1,0 +1,24 @@
+.bgLayout {
+    background-color: #797979;
+}
+
+.logoLayout {
+    background: url('/assets/logo-realtaHotel.png') no-repeat;
+    background-size: contain;
+    position: fixed;
+    height: 15rem;
+    width: 15rem;
+    left: 50%;
+    top: 25%;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+}
+
+.cardLogin {
+    position: fixed;
+    width: auto;
+    height: auto;
+    left: 50%;
+    top: 55%;
+    transform: translate(-50%, -50%);  
+}
