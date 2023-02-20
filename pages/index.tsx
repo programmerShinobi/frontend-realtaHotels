@@ -21,7 +21,7 @@ const router = useRouter();
           className='text-center text-gray-400 text-sm'
           sx={{ gridColumn: "span 4" }}
         >
-          <Link prefetch={true} suppressHydrationWarning={true} href={'/auth/signin'} className='text-orange-500'>Sign In</Link> | <Link prefetch={true} suppressHydrationWarning={true} href={'/auth/signup'} className='text-orange-500'> Sign Up</Link>
+          <Link prefetch={true} suppressHydrationWarning={true} href={'/auth/signin'} className='text-orange-500'>Sign In</Link> | <Link prefetch={true} suppressHydrationWarning={true} href={'/auth/signupEmployee'} className='text-orange-500'> Sign Up</Link>
         </InputLabel>
         
       </section>

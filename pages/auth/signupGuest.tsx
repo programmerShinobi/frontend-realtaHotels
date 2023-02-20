@@ -213,7 +213,7 @@ export default function SignUpGuest() {
         <section className='w-3/4 mx-auto my-auto flex flex-col gap-7' >
           <center>
           <Typography className={styles.textTitleInFormLogin}>
-              Guest SignUp
+              Guest Sign Up
             </Typography>
           </center>  
           <Formik
