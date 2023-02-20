@@ -12,6 +12,8 @@ import * as yup from "yup";
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import TextField from '@mui/material/TextField';
 import { Form, Formik } from 'formik';
+
+import styles from '../../styles/ContentProfile.module.css';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import SaveIcon from '@mui/icons-material/Save';
 import Input from '@mui/material/Input';
@@ -336,18 +338,22 @@ const Profile: NextPage<Props> = ({ dirs }) => {
           <div className="w-full md:w-full p-3">
 
         <Box className="grid shadow-md rounded-xl bg-white">
-          <label className="mt-8 pl-8 font-bold shadow-md w-full py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
-            General
-          </label> 
-          <label className="pt-5 pl-8 text-left font-normal">
-            This information will be display, so be careful what you share
-          </label>
-          <div className="flex flex-wrap">
-            <div className="w-full md:w-48 p-3">
-              <Box className="pl-5 pr-5 pt-3 space-y-3 pb-3 ">
+          <div className="mt-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+            <label className={styles.textTitleInProfile}>
+              General
+            </label> 
+            </div>    
+            <div className="pt-5 pl-8 text-left font-normal text-orange-900">
+              <label className={styles.textLabelInProfile}>
+                This information will be display, so be careful what you share
+              </label>
+            </div>
+          <div className="flex items-stretch mb-8">
+            <Box className="w-full md:w-1/4 pl-16">
+              <Box className="flex items-stretch pt-5">
                 <label>
+                  <center>
                   <input
-                    className="w-40"  
                     type="file"
                     hidden
                     onChange={({ target }) => {
@@ -358,7 +364,8 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                       }
                     }}
                   />
-                  <Box className="w-40 border-radius aspect-video rounded-2xl items-center justify-center border-2 border-dashed cursor-pointer">
+                  </center>    
+                  <Box className="flex items-stretch h-28 w-28 pl-4 cursor-pointer">
                     {selectedImage ? (
                       <img src={selectedImage} alt="" />
                     ) : (
@@ -366,49 +373,43 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                     )}
                   </Box>
                 </label>
-                <Box display="flex" className="pt-3">
-                  {selectedImage ? (
-                    <Box display="flex" justifyContent="flex-start" alignItems="flex-start">
+                </Box>
+                {selectedImage ? (
+                  <Box className="flex items-center">
+                    <Tooltip title="Upload">
                       <Button
-                        className="shadow-lg w-40 py-2 px-2 mx-auto rounded-md items-center bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                        className="shadow-lg w-28 py-2 px-2 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
                         onClick={handleUpload}
                         disabled={uploading}
                         style={{ opacity: uploading ? ".5" : "1" }}>
-                          <p>{uploading ? <CloudSyncIcon/> : <Tooltip title="Upload"><CloudUploadIcon className="h-6 w-6"/></Tooltip>}</p>
+                          <p className="normal-case font-normal">{uploading ? <CloudSyncIcon/> : <CloudUploadIcon className="h-5 w-5  "/>}&nbsp;{"Upload"}</p>
                       </Button>
-                    </Box>
+                    </Tooltip>
+                  </Box>
                   ) : (
-                    <Box display="flex" justifyContent="flex-start" alignItems="flex-start">   
+                  <Box>
+                    <Tooltip title="Upload">
                       <Button
-                        className="shadow-lg w-40 py-2 px-2 mx-auto rounded-md items-center bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                        className="shadow-lg w-28 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
                         onClick={handleUpload}
                         disabled={true}
                         style={{ opacity: uploading ? ".5" : "1" }}>
-                          <p>{uploading ? <CloudSyncIcon/> : <Tooltip title="Upload"><CloudUploadIcon className="h-6 w-6"/></Tooltip>}</p>
+                          <p className="normal-case font-normal">{uploading ? <CloudSyncIcon/> : <CloudUploadIcon className="h-5 w-5  "/>}&nbsp;{"Upload"}</p>
                       </Button>
-                    </Box>    
+                    </Tooltip>      
+                  </Box>    
                   )}
-                  <Box display="flex" justifyContent="flex-end" alignItems="flex-end">
-                    <Button
-                      className="shadow-lg w-40 px-4 py-2 mx-auto rounded-md items-center bg-orange-100 text-center text-sm font-medium normal-case text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
-                      onClick={() => handleEdit()}
-                      >
-                        <p>{<EditIcon className="h-6 w-6"/>}</p>
-                    </Button>
-                  </Box>
-                </Box>
-              </Box>
-            </div>
-            <div className="w-full md:w-1/3 p-3">
+            </Box>
+            <div className="w-full md:w-1/4">
               <Box className="grid col-1 bg-white h-50"> 
-                <Box className="max-w-4xl pl-5 pr-5 pt-3 space-y-3 pb-3">
+                <Box className="max-w-4xl pt-3 space-y-3 pb-3">
                   {/* Full Name */}
                   <div className="flex flex-wrap">
-                    <span className=" text-left w-50">{profile.user_full_name?profile.user_full_name:"None"}</span>
+                    <span className={styles.formProfile+"text-left w-50"}>{profile.user_full_name?profile.user_full_name:"None"}</span>
                   </div>
                   {/* Memb. Name */}
                   <div className="flex flex-wrap">
-                    <span className="text-left w-50">
+                    <span className={styles.formProfile+"text-left w-50"}>
                       {
                         profile.usme_memb_name === "SILVER" ? "Silver Member" :
                         profile.usme_memb_name === "GOLD" ? "Gold Member" :
@@ -420,7 +421,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                   </div>
                   {/* Type Agency */}
                   <div className="flex flex-wrap">
-                    <span className="text-left w-50">
+                    <span className={styles.formProfile+"text-left w-50"}>
                       {
                         profile.user_type === "T" ? "Travel Agency" :
                         profile.user_type === "C" ? "Company Agency" :
@@ -433,20 +434,32 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                 </Box>
               </Box>
             </div>                
-            <div className="w-full md:w-1/3 p-3">
-              <Box className="grid col-1 bg-white h-50"> 
-                <Box className="max-w-4xl pl-5 pr-5 pt-3 space-y-3 pb-3">
+            <div className="w-full md:w-1/4">
+              <Box className="grid col-1 bg-white"> 
+                <Box className="max-w-4xl pr-5 pt-3 space-y-3 pb-3">
                   {/* Email */}
                   <div className="flex flex-wrap">
-                    <span className="text-left w-50">{profile.user_email?profile.user_email+" (default)":"None"}</span>
+                    <span className={styles.formProfile+"text-left w-50"}>{profile.user_email?profile.user_email+" (default)":"None"}</span>
                   </div>
                   {/* Phone Number */}
                   <div className="flex flex-wrap">
-                    <span className="text-left w-50">{profile.user_phone_number?profile.user_phone_number+" (active)":"None"}</span>
+                    <span className={styles.formProfile+"text-left w-50"}>{profile.user_phone_number?profile.user_phone_number+" (active)":"None"}</span>
                   </div>
                 </Box>
               </Box>
-            </div>            
+            </div>
+            <div className="w-full md:w-1/4">
+              <Box className="flex items-stretch pt-32">
+                <Tooltip title="Edit">
+                  <Button
+                    className="shadow-lg w-28 py-2 px-2 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                    onClick={() => handleEdit()}
+                    >
+                      <p className="normal-case font-normal">{<EditIcon className="h-5 w-5   "/>}&nbsp;{"Edit"}</p>
+                  </Button>
+                </Tooltip>
+              </Box>
+            </div>    
           </div>
         </Box>
           

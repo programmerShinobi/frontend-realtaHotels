@@ -1,0 +1,36 @@
+.textTitleInProfile {
+    display: flex;
+    width: 281px;
+    height: 36px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 36px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    align-items: center;
+    justify-content: left;
+    text-justify: left;
+    margin-top: 8;
+}
+
+.textLabelInProfile {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 35px;
+    text-align: left;
+}
+
+.formProfile {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 100;
+    font-size: 14px;
+    line-height: 12px;
+    border: gray;
+    width: auto;
+}

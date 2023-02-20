@@ -13,7 +13,7 @@ import { doLogin } from "@/redux/Actions/Users/reduceActions";
 import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
 
-export default function TopBarManager({ showNav, setShowNav }:any) {
+export default function TopBarGuest({ showNav, setShowNav }:any) {
   const router = useRouter();
   const userFullName: any = localStorage.getItem("userFullName");
 
@@ -38,10 +38,13 @@ export default function TopBarManager({ showNav, setShowNav }:any) {
         }`}
     >
       <div className="pl-4 md:pl-16">
-        <Bars3CenterLeftIcon
-          className="h-8 w-8 text-gray-700 cursor-pointer"
-          onClick={() => setShowNav(!showNav)}
-        />
+        <picture>
+          <img
+            className="w-40 h-auto"
+            src="/assets/logo-realtaHotel.png"
+            alt="logo"
+          />
+        </picture>
       </div>
       <div className="flex items-center pr-4 md:pr-16">
         <Popover className="relative">
