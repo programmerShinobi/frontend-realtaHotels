@@ -20,7 +20,8 @@ const WithAuth = <P extends object>(WrappedComponent: NextPage<P>) => {
     }, []);
     if (isToken) {
       return <WrappedComponent {...props} />;
-    } else {
+    }
+    else {
       return (<Custom401/>);
     }
   }

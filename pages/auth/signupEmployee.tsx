@@ -222,7 +222,7 @@ export default function SignUpEmployee() {
         <section className='w-3/4 mx-auto my-auto flex flex-col gap-7' >
           <center>
           <Typography className={styles.textTitleInFormLogin}>
-              Employee SignUp
+              Employee Sign Up
             </Typography>
           </center>  
           <Formik

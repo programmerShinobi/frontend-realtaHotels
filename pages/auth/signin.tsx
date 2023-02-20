@@ -69,7 +69,7 @@ export default function SignIn() {
   // getHelper for display in form
   const getHelperText = (touched:any, errors:any, field:any) => {
     if (field == "email") {
-      return (touched && errors ? errors : "enter your email");
+      return (touched && errors ? errors : "enter your phone/email");
     } else if(field == "password") {
       return (touched && errors ? errors : "enter your password");
     }  
@@ -77,7 +77,7 @@ export default function SignIn() {
 
   // check all validasi required & etc
   const checkoutSchema:any = yup.object().shape({
-    userEmail: yup.string().email("invalid email").required("required"),
+    userEmail: yup.string().required("required"),
     userPassword: yup.string().required("required")
   });
 
@@ -93,7 +93,7 @@ export default function SignIn() {
   };
 
   const handletoRegister = () => {
-    router.push('/auth/signup');
+    router.push('/auth/signupEmployee');
   };
 
   return (
@@ -102,10 +102,12 @@ export default function SignIn() {
         <title>Sign In</title>
       </Head>
       <LayoutSignIn>
-        <section className='w-3/4 mx-auto my-auto flex flex-col gap-3' >
+        <section className='w-3/4 mx-auto my-auto flex flex-col gap-7' >
+          <center>
             <Typography className={styles.textTitleInFormLogin}>
-              Sign In to your account
+              Sign In
             </Typography>
+          </center>
           <Formik
             onSubmit={handleFormSubmit}
             initialValues={initialValues}
@@ -123,29 +125,40 @@ export default function SignIn() {
                 <Box
                   display="grid"
                   gap="8px"
-                  gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+                  gridTemplateColumns="repeat(15, minmax(0, 1fr))"
                 >
+                  <InputLabel
+                    className={styles.textLabelInFormLogin}
+                    sx={{ gridColumn: "span 6" }}
+                  >Phone/Email
+                  </InputLabel>
                   <TextField
                     size="small"
                     fullWidth
                     className="border border-gray-700"
-                    variant="filled"
-                    type="email"
-                    label="Email"
+                    variant="outlined"
+                    type="text"
+                    placeholder='Phone or Email'
                     onBlur={handleBlur}
                     onChange={(event) => {eventHandlerAdd('userEmail')(event); handleChange(event)}}
                     value={values.userEmail}
                     name="userEmail"
                     error={!!touched.userEmail && !!errors.userEmail}
                     helperText={getHelperText(touched.userEmail, errors.userEmail, "email")}
-                    sx={{ gridColumn: "span 4" }}
+                    sx={{ gridColumn: "span 9" }}
                   />
+                  <InputLabel
+                    className={styles.textLabelInFormLogin}
+                    sx={{ gridColumn: "span 6" }}
+                  >Password
+                  </InputLabel>
                   <TextField
                     size="small"
                     fullWidth
                     className="border border-gray-700"
-                    variant="filled"
+                    variant="outlined"
                     type={showPassword ? 'text' : 'password'}
+                    placeholder='Password'
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
@@ -159,26 +172,25 @@ export default function SignIn() {
                         </InputAdornment>
                       ),
                     }}
-                    label="Password"
                     onBlur={handleBlur}
                     onChange={(event) => { eventHandlerAdd('userPassword')(event); handleChange(event) }}
                     value={values.userPassword}
                     name="userPassword"
                     error={!!touched.userPassword && !!errors.userPassword}
                     helperText={getHelperText(touched.userPassword, errors.userPassword, "password")}
-                    sx={{ gridColumn: "span 4" }}
+                    sx={{ gridColumn: "span 9" }}
                   />
                   <Button
                       type="submit"
                       color="warning"
                       className="rounded-md bg-gray-700 text-white hover:bg-gray-400 hover:text-gray-700 border-warning-500 first-line:bg-opacity-20 px-4 text-sm normal-case font-normal  hover:bg-opacity-30 focus:outline-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-                      sx={{ gridColumn: "span 4" }}
+                      sx={{ gridColumn: "span 15" }}
                     >
                       <LoginIcon width={5} height={5} /><span className='text-transparent'>-</span>{"Sign In"}
                   </Button>
                   <InputLabel
-                    className='text-center text-gray-700 normal-case font-normal'
-                    sx={{ gridColumn: "span 4" }}
+                    className={'text-center text-gray-700 normal-case font-normal'}
+                    sx={{ gridColumn: "span 15" }}
                   >
                     don't have an account yet?<Button
                       className="bg-transparent text-blue-400 hover:text-blue-500 normal-case font-normal hover:bg-transparent"
