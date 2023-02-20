@@ -115,7 +115,6 @@ const EditProfile: NextPage<Props> = ({ dirs }) => {
     setUploading(false);
   };
 
-  
   // getHelper for display in form
   const getHelperText = (touched:any, errors:any) => {
     return (touched && errors ? errors : false)
@@ -966,6 +965,8 @@ export const getServerSideProps: GetServerSideProps = async () => {
   } catch (error) {
     return { props };
   }
+
+
 };
 
 export default EditProfile;

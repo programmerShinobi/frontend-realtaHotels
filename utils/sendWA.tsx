@@ -1,33 +1,45 @@
-import dotenv from 'dotenv';
-dotenv.config();
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
-const sendWADefault = (): void => {
-  const apiKey = process.env.API_KEY; // API KEY Anda
-  const idDevice = process.env.ID_DEVICE; // ID DEVICE yang di SCAN (Sebagai pengirim)
-  const url = 'https://api.watsap.id/send-message'; // URL API
-  const noHp = '+6282121991992'; // No.HP yang dikirim (No.HP Penerima)
-  const pesan = 'Assalamualaikum.. '; // Pesan yang dikirim
+const sendWA = () => {
+  // const fullPhoneNumber = '+6282121991992';
+  // const password = 'GuesT!2023021982121991992';
 
-  const dataPost = {
-    'id_device': idDevice,
-    'api-key': apiKey,
-    'no_hp': noHp,
-    'pesan': pesan
-  };
+  const [fullPhoneNumber, setFullPhoneNumber]:any = useState(null);
+  const [password, setPassword]:any = useState(null);
 
-  const requestOptions = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(dataPost),
-  };
+  useEffect(() => {
+    setFullPhoneNumber(localStorage.getItem('isPhoneNumber'));
+    setPassword(localStorage.getItem('isPassword'));
+  });
+    console.info(fullPhoneNumber + ' & ' + password);
 
-  fetch(url, requestOptions)
-    .then(response => response.text())
-    .then(result => console.info(result))
-    .catch(error => console.info('error', error));
+    const apiKey = '9699c055d1ea2d9ce1ca02e22adf36ef69f6fc2a'; // API KEY Anda
+    const idDevice = '5580'; // ID DEVICE yang di SCAN (Sebagai pengirim)
+    const url = 'https://api.watsap.id/send-message'; // URL API
+    const noHp = fullPhoneNumber; // No.HP yang dikirim (No.HP Penerima)
+    const pesan = `Welcome to Realta Hotels. For login access, your password is : 
+    ${password}`; // Pesan yang dikirim
+    
+    const dataPost = {
+      'id_device': idDevice,
+      'api-key': apiKey,
+      'no_hp': noHp,
+      'pesan': pesan
+    };
+
+    axios.post(url, dataPost, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then((response:any) => {
+      console.info(response.data);
+    })
+    .catch((error:any) => {
+      console.info(error);
+    });
+  
 };
 
-export default sendWADefault;
-
+export default sendWA;

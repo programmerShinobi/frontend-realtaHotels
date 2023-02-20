@@ -1,0 +1,39 @@
+.textTitleInFormLogin {
+    display: flex;
+    width: 281px;
+    height: 36px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 36px;
+    color: #131828;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    align-items: center;
+    justify-content: center;
+    place-items: center;
+    justify-self: center;
+    text-justify:auto;
+}
+
+.textLabelInFormLogin {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 35px;
+    text-align: left;
+}
+
+.formIntputLogin {
+    font-family: 'Poppins';
+    font-style:normal;
+    font-weight: 100;
+    font-size: 14px;
+    line-height: 12px;
+    border: gray;
+    width: auto;
+}
+

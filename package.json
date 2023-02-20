@@ -1,5 +1,5 @@
 {
-  "name": "admin-dashboard",
+  "name": "realta-hotel",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -34,9 +34,11 @@
     "js-cookie": "^3.0.1",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
-    "next": "13.1.4",
+    "next": "^13.1.4",
     "next-auth": "^4.19.0",
     "node-fetch": "^3.3.0",
+    "node-libcurl": "^3.0.0",
+    "qrcode-terminal": "^0.12.0",
     "react": "18.2.0",
     "react-data-grid": "^7.0.0-beta.22",
     "react-dom": "18.2.0",
@@ -51,6 +53,7 @@
     "twilio": "^4.7.2",
     "typescript": "4.9.4",
     "uuid": "^9.0.0",
+    "whatsapp-web.js": "^1.19.4",
     "yup": "^0.32.11"
   },
   "devDependencies": {

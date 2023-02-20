@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import * as yup from "yup";
-import { Box, Button, InputLabel, InputAdornment, IconButton, Typography, FormControl, FormControlLabel  } from "@mui/material";
+import { Box, Button, InputLabel, InputAdornment, IconButton, Typography, FormControl, Select, MenuItem  } from "@mui/material";
 import TextField from '@mui/material/TextField';
 import { Form, Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,16 +10,12 @@ import { useRouter } from 'next/router';
 import usersReducers from '@/redux/Reducers/Users/usersReducer';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import styles from '../../styles/FormSignUpGuest.module.css'
+import styles from '../../styles/FormSignUpEmployee.module.css'
 import { KeyIcon } from '@heroicons/react/24/solid';
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
-import LayoutSignUpGuest from '@/components/Layout/LayoutSignUpGuest';
-import 'react-phone-number-input/style.css'
-import PhoneInput, { formatPhoneNumber, formatPhoneNumberIntl, isPossiblePhoneNumber, isValidPhoneNumber } from 'react-phone-number-input'
-import PhoneInputWithCountrySelect from 'react-phone-number-input';
-// import sendSMS from '@/utils/sendSMS';
+import LayoutSignUpEmployee from '@/components/Layout/LayoutSignUpEmployee';
 
-export default function SignUpGuestNew() {
+export default function SignUpEmployee() {
   // use Router
   const router = useRouter();
   
@@ -31,69 +27,46 @@ export default function SignUpGuestNew() {
     userFullName:null,
     userEmail: null,
     uspaPasswordhash: null,
-    userPhoneNumber: null
+    userPhoneNumber: null,
+    countryCode:null
   });
 
-  console.info(DataUser)
-  // function handler API POST users
-  const eventHandlerAdd = (data: any) => (event: any) => {
-    if (event && event.target) {
-      setDataUser({ ...DataUser, [data]: event.target.value });
+  const eventHandlerAdd = (fieldName: string) => (event: any) => {
+    if (fieldName === 'countryCode') {
+      setDataUser((prevState: any) => ({
+        ...prevState,
+        countryCode: event.target.value,
+        userPhoneNumber: {
+          ...prevState.userPhoneNumber,
+          countryCode: event.target.value,
+        },
+      }));
+    } else if (fieldName === 'userPhoneNumber') {
+      setDataUser((prevState: any) => ({
+        ...prevState,
+        userPhoneNumber: {
+          ...prevState.userPhoneNumber,
+          number: event.target.value,
+        },
+      }));
     }
-  }
+  };
 
+  
   // Mengambil state usersReducers dari store redux
   const isRegister = useSelector((state: any) => state.usersReducers.users);
 
-  // const { Vonage } = require('@vonage/server-sdk')
-  // const vonage = new Vonage({
-  //   apiKey: "fbb9af44",
-  //   apiSecret: "Bf3v66eLQ2sMDNSG"
-  // })
-  // const from = "Vonage APIs"
-  // const to = "6281212499837"
-  // // const to = "6282215122542"
-  // const text = `By FaQih bootcamp-codeXacademy. 
-  // Saat ini sedang mencoba verifikasi nomor handphone melalui web, jika pesan ini terkirim ke nomor Anda.
-  // Maaf, tolong screenshot pesan ini ke nomor whatsApp saya yaa.. --> https://wa.me/6281212499837 
-  // Terimakasih`
-  // async function sendSMS() {
-  //   await vonage.sms.send({to, from, text})
-  //     .then((resp: any) => {
-  //       console.log('Message sent successfully');
-  //       console.log(resp);
-  //     })
-  //     .catch((err: any) => {
-  //       console.log('Message sent error');
-  //       console.error(err.toString());
-  //     });
-  // }
-  // sendSMS();
-
-  // const [verificationCode, setVerificationCode] = useState('');
-  // sendSMS('+6282215122542', 'By FaQih UBP-SI18 | bootcamp-codeXacademy ... Sekarang lagi coba Twilio untuk verifikasi nomor handphone, btw kalau terkirim pesan ini, minta tolong coba screenshot ke nomor whatsApp saya yaa.. --> +6281212499837');
-  
   // function handle submit form add new users (API POST users)
-  const handleFormSubmit = async (values: any, { setSubmitting }: any) => {
+  const handleFormSubmit = (values: any, { setSubmitting }: any) => {
     console.info(values);
-    try {
-    await checkoutSchema.validate(values, { abortEarly: false });
-      // Validation passed
-    } catch (errors) {
-      console.error(errors);
-      // Validation failed
-    }
+    // dispatch(doRegister(values));
+    const fullPhoneNumber = `${values.countryCode}${values.userPhoneNumber}`;
+    console.info(fullPhoneNumber);
+    dispatch(doRegister({ ...values, userPhoneNumber: fullPhoneNumber }));
 
-    await dispatch(doRegister(values));
-    
-    // const code = await Math.floor(1000 + Math.random() * 9000);
-    // await setVerificationCode(code.toString());
-    // send verification code via SMS
-    // await sendSMS(fullPhoneNumber, `Your code : ${code} ... By FaQih UBP-SI18 | bootcamp-codeXacademy ... Sekarang lagi coba Twilo untuk verifikasi nomor handphone, btw kalau terkirim pesan ini, minta tolong coba screenshot ke nomor whatsApp saya yaa.. --> +6281212499837`);
-    
     // Memeriksa apakah user sudah login
     if (isRegister.message == 'Register Successfully') {
-      await router.push('/auth/signin');
+      router.push('/auth/signin');
     }
   };
 
@@ -111,7 +84,99 @@ export default function SignUpGuestNew() {
       return (touched && errors ? errors : "enter your full name");
     }
   }
+
+  // Phone Extension
+  const phoneExtension = [
+    { value: '+62', label: '+62', },
+    { value: '+1',  label: '+1',  },
+    { value: '+44', label: '+44', },
+    { value: '+81', label: '+81', },
+    { value: '+86', label: '+86', },
+    { value: '+91', label: '+91', },
+    { value: '+55', label: '+55', },
+    { value: '+33', label: '+33', },
+    { value: '+49', label: '+49', },
+    { value: '+234', label: '+234', },
+    { value: '+7',  label: '+7', },
+    { value: '+65', label: '+65', },
+    { value: '+34', label: '+34', },
+    { value: '+41', label: '+41', },
+    { value: '+971', label: '+971',},
+    { value: '+91', label: '+91', },
+    { value: '+351', label: '+351', },
+    { value: '+352', label: '+352', },
+    { value: '+353', label: '+353', },
+    { value: '+354', label: '+354', },
+    { value: '+355', label: '+355', },
+    { value: '+356', label: '+356', },
+    { value: '+357', label: '+357', },
+    { value: '+358', label: '+358', },
+    { value: '+359', label: '+359', },
+    { value: '+36', label: '+36', },
+    { value: '+370', label: '+370', },
+    { value: '+371', label: '+371', },
+    { value: '+372', label: '+372', },
+    { value: '+373', label: '+373', },
+    { value: '+374', label: '+374', },
+    { value: '+375', label: '+375', },
+    { value: '+376', label: '+376', },
+    { value: '+377', label: '+377', },
+    { value: '+378', label: '+378', },
+    { value: '+379', label: '+379', },
+    { value: '+380', label: '+380', },
+    { value: '+381', label: '+381', },
+    { value: '+382', label: '+382', },
+    { value: '+383', label: '+383', },
+    { value: '+385', label: '+385', },
+    { value: '+386', label: '+386', },
+    { value: '+387', label: '+387', },
+    { value: '+389', label: '+389', },
+    { value: '+39', label: '+39', },
+    { value: '+40', label: '+40', },
+    { value: '+41', label: '+41', },
+    { value: '+420', label: '+420', },
+    { value: '+421', label: '+421', },
+    { value: '+423', label: '+423', },
+    { value: '+43', label: '+43', },
+    { value: '+44', label: '+44', },
+    { value: '+45', label: '+45', },
+    { value: '+46', label: '+46', },
+    { value: '+47', label: '+47', },
+    { value: '+48', label: '+48', },
+    { value: '+49', label: '+49', },
+    { value: '+46', label: '+46', },
+    { value: '+39', label: '+39', },
+    { value: '+31', label: '+31', },
+    { value: '+852', label: '+852', },
+    { value: '+852', label: '+852', },
+    { value: '+81', label: '+81', },
+    { value: '+41', label: '+41', },
+    { value: '+82', label: '+82', },
+    { value: '+60', label: '+60', },
+    { value: '+63', label: '+63', },
+    { value: '+66', label: '+66', },
+    { value: '+84', label: '+84', },
+    { value: '+55', label: '+55', },
+    { value: '+54', label: '+54', },
+    { value: '+56', label: '+56', },
+    { value: '+57', label: '+57', },
+    { value: '+58', label: '+58', },
+    { value: '+591', label: '+591', },
+    { value: '+592', label: '+592', },
+    { value: '+593', label: '+593', },
+    { value: '+594', label: '+594', },
+    { value: '+595', label: '+595', },
+    { value: '+596', label: '+596', },
+    { value: '+597', label: '+597', },
+    { value: '+598', label: '+598', },
+    { value: '+599', label: '+599', },
+    { value: '+84', label: '+84', },
+    { value: '+678', label: '+678', },
+    { value: '+679', label: '+679', },
+    { value: '+680', label: '+680', },
+  ];
   
+ 
   const checkoutSchema = yup.object().shape({
     userFullName: yup.string().required("required"),
     userEmail: yup.string().email("invalid email").required("required"),
@@ -119,8 +184,10 @@ export default function SignUpGuestNew() {
     uspaConfirmPasswordhash: yup.string()
       .oneOf([yup.ref('uspaPasswordhash'), null], 'Passwords must match')
       .required('required'),
+    countryCode: yup.string().required("required"),
     userPhoneNumber: yup.number().required("required")
   });
+
 
   // function initialValue field from table users
   const initialValues: any = {
@@ -129,6 +196,7 @@ export default function SignUpGuestNew() {
     uspaPasswordhash: "",
     uspaConfirmPasswordhash: "",
     userPhoneNumber: "",
+    countryCode: "+62",
   };
 
   const [showPassword, setShowPassword] = useState(false);
@@ -148,13 +216,13 @@ export default function SignUpGuestNew() {
   return (
     <Box>
       <Head>
-        <title>Guest SignUp</title>
+        <title>Employee SignUp</title>
       </Head>
-      <LayoutSignUpGuest>
+      <LayoutSignUpEmployee>
         <section className='w-3/4 mx-auto my-auto flex flex-col gap-7' >
           <center>
           <Typography className={styles.textTitleInFormLogin}>
-              Guest SignUp
+              Employee SignUp
             </Typography>
           </center>  
           <Formik
@@ -191,7 +259,7 @@ export default function SignUpGuestNew() {
                     type="text"
                     placeholder="Full Name"
                     onBlur={handleBlur}
-                    onChange={(event) => { eventHandlerAdd('userFullName')(event);handleChange(event) }}
+                    onChange={(event) => { eventHandlerAdd('userFullName')(event); handleChange(event) }}
                     value={values.userFullName}
                     name="userFullName"
                     error={!!touched.userFullName && !!errors.userFullName}
@@ -289,32 +357,43 @@ export default function SignUpGuestNew() {
                     sx={{ gridColumn: "span 6" }}
                   >Phone Number
                   </InputLabel>
-                  <FormControl
-                    className="border border-gray-700"
-                    size="small"
-                    variant="outlined"
-                    sx={{ gridColumn: "span 9" }}
-                  >
-                    <PhoneInput
-                      name="userPhoneNumber"
-                      placeholder="Enter phone number"
-                      value={values.userPhoneNumber}
-                      onChange={(event) => { eventHandlerAdd('userPhoneNumber')(event); handleChange}}
+                  <FormControl size="small" variant="outlined" sx={{ gridColumn: "span 3" }}>
+                    <Select
+                      name="countryCode"
+                      value={values.countryCode}
+                      // onChange={handleChange}
+                      onChange={(event) => {eventHandlerAdd('countryCode')(event);handleChange(event)}}
                       onBlur={handleBlur}
-                      error={!!touched.userPhoneNumber && !!errors.userPhoneNumber}
-                      // error={values.userPhoneNumber ? (isValidPhoneNumber(values.userPhoneNumber) ? undefined : 'Invalid phone number') : 'Phone number required'}
-                      helperText={getHelperText(touched.userPhoneNumber, errors.userPhoneNumber, "phone")}
-                      />
+                      error={touched.countryCode && Boolean(errors.countryCode)}
+                      placeholder="Select country code..."
+                    >
+                      <MenuItem value="" disabled>
+                        Select extension...
+                      </MenuItem>
+                      {phoneExtension.map((code) => (
+                        <MenuItem key={code.value} value={code.value}>
+                          {code.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {!!touched.countryCode && !!errors.countryCode && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.countryCode, errors.countryCode, "countryCode")}</span>}
                   </FormControl>
-                  <FormControl
-                    
-                    sx={{ gridColumn: "span 15" }}
-                  >
-                  Is possible: {values.userPhoneNumber && isPossiblePhoneNumber(values.userPhoneNumber) ? 'true' : 'false'}
-                  Is valid: {values.userPhoneNumber && isValidPhoneNumber(values.userPhoneNumber) ? 'true' : 'false'}
-                  National: {values.userPhoneNumber && formatPhoneNumber(values.userPhoneNumber)}
-                  International: {values.userPhoneNumber && formatPhoneNumberIntl(values.userPhoneNumber)}
-                  </FormControl>
+
+                  <TextField
+                    size="small"
+                    fullWidth
+                    className="border border-gray-700"
+                    variant="outlined"
+                    type="number"
+                    placeholder="Phone Number"
+                    onBlur={handleBlur}
+                    onChange={(event) => {eventHandlerAdd('userPhoneNumber')(event); handleChange(event);}}
+                    value={values.userPhoneNumber}
+                    name="userPhoneNumber"
+                    error={!!touched.userPhoneNumber && !!errors.userPhoneNumber}
+                    helperText={getHelperText(touched.userPhoneNumber, errors.userPhoneNumber, "phone")}
+                    sx={{ gridColumn: "span 6" }}
+                  />
                   <Button
                       type="reset"
                       color="warning"
@@ -346,7 +425,7 @@ export default function SignUpGuestNew() {
             )}
           </Formik>
         </section>
-      </LayoutSignUpGuest>
+      </LayoutSignUpEmployee>
     </Box>
   );
 }

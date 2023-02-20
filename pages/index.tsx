@@ -18,10 +18,10 @@ const router = useRouter();
           <p className=' mx-auto my-auto text-gray-400 text-sm pb-3 '>HOME</p>
         </div>
         <InputLabel
-                  className='text-center text-gray-400 text-sm'
-                  sx={{ gridColumn: "span 4" }}
-                >
-          <Link prefetch href={'/auth/signin'} className='text-orange-500'>Sign In</Link> | <Link prefetch href={'/auth/signup'} className='text-orange-500'> Sign Up</Link>
+          className='text-center text-gray-400 text-sm'
+          sx={{ gridColumn: "span 4" }}
+        >
+          <Link prefetch={true} suppressHydrationWarning={true} href={'/auth/signin'} className='text-orange-500'>Sign In</Link> | <Link prefetch={true} suppressHydrationWarning={true} href={'/auth/signup'} className='text-orange-500'> Sign Up</Link>
         </InputLabel>
         
       </section>
