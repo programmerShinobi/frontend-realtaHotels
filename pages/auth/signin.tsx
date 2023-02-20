@@ -16,7 +16,6 @@ import { doLogin } from '@/redux/Actions/Users/reduceActions';
 import Cookies from 'js-cookie';
 
 export default function SignIn() {
-  
   // use Router
   const router = useRouter();
   
@@ -51,15 +50,15 @@ export default function SignIn() {
       localStorage.setItem('userFullName', isLogin.userdata[0].user_full_name);
       Cookies.set('userId', isLogin.userdata[0].user_id);
       if (isLogin.userdata[0].usro_role_id == 1) {        // Guest
-        router.push('/');
+        router.push('/guest');
       } else if (isLogin.userdata[0].usro_role_id == 2) { // Manager
         router.push('/manager');
       } else if (isLogin.userdata[0].usro_role_id == 3) { // Office Boy
         router.push('/ob');
       } else if (isLogin.userdata[0].usro_role_id == 4) { // Admin
         router.push('/admin');
-      } else if (isLogin.userdata[0].usro_role_id == 5) { // User
-        router.push('/users');
+      } else if (isLogin.userdata[0].usro_role_id == 5) { // Staff
+        router.push('/staff');
       }
     }
   };

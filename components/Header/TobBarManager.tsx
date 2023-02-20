@@ -11,6 +11,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { Button } from "@mui/material";
 import { doLogin } from "@/redux/Actions/Users/reduceActions";
 import { useDispatch } from "react-redux";
+import Cookies from "js-cookie";
 
 export default function TopBarManager({ showNav, setShowNav }:any) {
   const router = useRouter();
@@ -22,7 +23,15 @@ export default function TopBarManager({ showNav, setShowNav }:any) {
   const handleLogout = () => {
     dispatch(doLogin());
     localStorage.removeItem('token');
-    router.push('/auth/signin');
+    localStorage.removeItem('roleId');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userFullName');
+    localStorage.removeItem('profilePhotoMe');
+    localStorage.removeItem('userFullNameNew');
+    Cookies.remove('userId');
+    setTimeout(() => {
+      router.push('/auth/signin');
+    }, 500);
   };
 
   return (
