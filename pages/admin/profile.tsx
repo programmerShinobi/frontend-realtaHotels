@@ -6,7 +6,7 @@ import path from "path";
 import { doUpdatePhotoUsers, doUserRequest, doUpdateUsers } from "@/redux/Actions/Users/reduceActions";
 import { useDispatch, useSelector } from "react-redux";
 import LayoutAdmin from "@/components/Layout/LayoutAdmin";
-import { Box, Button, FormControl, IconButton, InputAdornment, InputLabel, MenuItem, Select } from "@mui/material"
+import { Box, Button, FormControl, IconButton, InputAdornment, InputLabel, MenuItem, Select, Tooltip } from "@mui/material"
 import { Dialog, Transition } from '@headlessui/react'
 import * as yup from "yup";
 import { XMarkIcon } from '@heroicons/react/24/solid';
@@ -17,6 +17,9 @@ import SaveIcon from '@mui/icons-material/Save';
 import Input from '@mui/material/Input';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import CloudSyncIcon from '@mui/icons-material/CloudSync';
+import EditIcon from '@mui/icons-material/Edit';
 import moment from "moment";
 import { Router, useRouter } from "next/router";
 
@@ -24,7 +27,7 @@ interface Props {
   dirs: string[];
 }
 
-const EditProfile: NextPage<Props> = ({ dirs }) => {
+const Profile: NextPage<Props> = ({ dirs }) => {
   const [uploading, setUploading] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedFile, setSelectedFile] = useState<File>();
@@ -331,180 +334,122 @@ const EditProfile: NextPage<Props> = ({ dirs }) => {
         <div className="overflow-y-auto">
           <p className="text-gray-700 text-3xl mb-6 font-bold">Profile</p>
           <div className="w-full md:w-full p-3">
-          <Box className="grid col-1 shadow-md rounded-md bg-white">
-            <label className="pt-3 text-center font-bold">Profile Me</label>  
-            <hr className="mt-3"/>
-            <Box className="max-w-4xl mx-auto pt-3 space-y-3 pb-3">
-              <label>
-                <input
-                  type="file"
-                  hidden
-                  onChange={({ target }) => {
-                    if (target.files) {
-                      const file = target.files[0];
-                      setSelectedImage(URL.createObjectURL(file));
-                      setSelectedFile(file);
-                    }
-                  }}
-                />
-                <Box className="w-40 aspect-video rounded flex items-center justify-center border-2 border-dashed cursor-pointer">
-                  {selectedImage ? (
-                    <img src={selectedImage} alt="" />
-                  ) : (
-                    <img src={"/images/"+profile.uspro_photo}/>
-                  )}
-                </Box>
+
+        <Box className="grid shadow-md rounded-xl bg-white">
+          <label className="mt-8 pl-8 font-bold shadow-md w-full py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+            General
+          </label> 
+          <label className="pt-5 pl-8 text-left font-normal">
+            This information will be display, so be careful what you share
+          </label>
+          <div className="flex flex-wrap">
+            <div className="w-full md:w-48 p-3">
+              <Box className="pl-5 pr-5 pt-3 space-y-3 pb-3 ">
+                <label>
+                  <input
+                    className="w-40"  
+                    type="file"
+                    hidden
+                    onChange={({ target }) => {
+                      if (target.files) {
+                        const file = target.files[0];
+                        setSelectedImage(URL.createObjectURL(file));
+                        setSelectedFile(file);
+                      }
+                    }}
+                  />
+                  <Box className="w-40 border-radius aspect-video rounded-2xl items-center justify-center border-2 border-dashed cursor-pointer">
+                    {selectedImage ? (
+                      <img src={selectedImage} alt="" />
+                    ) : (
+                      <img src={"/images/"+profile.uspro_photo}/>
+                    )}
+                  </Box>
                 </label>
-                {selectedImage ? (
-                  <button
-                    className="shadow-lg w-40 px-4 py-2 mx-auto rounded-md items-center bg-orange-100 text-center text-sm font-medium normal-case text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
-                    onClick={handleUpload}
-                    disabled={uploading}
-                    style={{ opacity: uploading ? ".5" : "1" }}>
-                      <p>{uploading ? "Uploading.." : "Upload"}</p>
-                  </button>
-                ) : (
-                  <button
-                    className="shadow-lg w-40 px-4 py-2 mx-auto rounded-md items-center bg-orange-100 text-center text-sm font-medium normal-case text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
-                    onClick={handleUpload}
-                    disabled={true}
-                    style={{ opacity: uploading ? ".5" : "1" }}>
-                      <p>{uploading ? "Uploading.." : "Upload"}</p>
-                  </button>
-                )}
-              <hr className="mt-3" />
-              <button
-                className="shadow-lg w-40 px-4 py-2 mx-auto rounded-md items-center bg-orange-100 text-center text-sm font-medium normal-case text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
-                onClick={() => handleEdit()}
-                >
-                  <p>{"Edit Profile"}</p>
-              </button>
-              </Box>
-              <div className="flex flex-wrap">
-            <div className="w-full md:w-1/2 p-3">
-              <Box className="grid col-1 bg-white h-50"> 
-                <Box className="max-w-4xl pl-5 pr-5 pt-3 space-y-3 pb-3">
-                  <div className="flex flex-wrap">
-                    <span className="text-left w-50 font-bold">Full Name</span>
-                    <span className="pl-10 text-left w-50">{profile.user_full_name?profile.user_full_name:"None"}</span>
-                  </div>
-                  <hr className="mt-3" />
-                  <div className="flex flex-wrap">
-                    <span className="text-left w-50 font-bold">Birth</span>
-                    <span className="pl-20 text-left w-50">{profile.uspro_birth?profile.uspro_birth:"None"}</span>
-                  </div>
-                  <hr className="mt-3" />
-                  <div className="flex flex-wrap">
-                    <span className="text-left w-50 font-bold">Gender</span>
-                    <span className="pl-16 text-left w-50">
-                      {
-                        profile.uspro_gender === "M" ? "Male" :
-                        profile.uspro_gender === "F" ? "Female" :
-                        "None"
-                      }
-                    </span>
-                  </div>
-                  <hr className="mt-3" />
-                  <div className="flex flex-wrap">
-                    <span className="text-left w-50 font-bold">Status</span>
-                    <span className="pl-16 text-left w-50">&nbsp;&nbsp;
-                      {
-                        profile.uspro_marital_status === "S" ? "Single" :
-                        profile.uspro_marital_status === "M" ? "Marrige" :
-                        "None"
-                      }
-                    </span>
-                  </div>
-                  <hr className="mt-3" />
-                  <div className="flex flex-wrap">
-                    <span className="text-left w-50 font-bold">Email</span>
-                    <span className="pl-20 text-left w-50">{profile.user_email?profile.user_email:"None"}</span>
-                  </div>
-                  <hr className="mt-3" />
-                  <div className="flex flex-wrap">
-                    <span className="text-left w-50 font-bold">Phone</span>
-                    <span className="pl-16 text-left w-50">&nbsp;&nbsp;{profile.user_phone_number?profile.user_phone_number:"None"}</span>
-                  </div>
-                  <hr className="mt-3" />
-                  <div className="flex flex-wrap">
-                    <span className="text-left w-50 font-bold">National ID</span>
-                    <span className="pl-8 text-left w-50">{profile.uspro_national_id?profile.uspro_national_id:"None"}</span>
-                  </div>
-                  <hr className="mt-3" />
+                <Box display="flex" className="pt-3">
+                  {selectedImage ? (
+                    <Box display="flex" justifyContent="flex-start" alignItems="flex-start">
+                      <Button
+                        className="shadow-lg w-40 py-2 px-2 mx-auto rounded-md items-center bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                        onClick={handleUpload}
+                        disabled={uploading}
+                        style={{ opacity: uploading ? ".5" : "1" }}>
+                          <p>{uploading ? <CloudSyncIcon/> : <Tooltip title="Upload"><CloudUploadIcon className="h-6 w-6"/></Tooltip>}</p>
+                      </Button>
+                    </Box>
+                  ) : (
+                    <Box display="flex" justifyContent="flex-start" alignItems="flex-start">   
+                      <Button
+                        className="shadow-lg w-40 py-2 px-2 mx-auto rounded-md items-center bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                        onClick={handleUpload}
+                        disabled={true}
+                        style={{ opacity: uploading ? ".5" : "1" }}>
+                          <p>{uploading ? <CloudSyncIcon/> : <Tooltip title="Upload"><CloudUploadIcon className="h-6 w-6"/></Tooltip>}</p>
+                      </Button>
+                    </Box>    
+                  )}
+                  <Box display="flex" justifyContent="flex-end" alignItems="flex-end">
+                    <Button
+                      className="shadow-lg w-40 px-4 py-2 mx-auto rounded-md items-center bg-orange-100 text-center text-sm font-medium normal-case text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                      onClick={() => handleEdit()}
+                      >
+                        <p>{<EditIcon className="h-6 w-6"/>}</p>
+                    </Button>
+                  </Box>
                 </Box>
               </Box>
             </div>
-
-            <div className="w-full md:w-1/2 p-3">
+            <div className="w-full md:w-1/3 p-3">
               <Box className="grid col-1 bg-white h-50"> 
                 <Box className="max-w-4xl pl-5 pr-5 pt-3 space-y-3 pb-3">
+                  {/* Full Name */}
                   <div className="flex flex-wrap">
-                    <span className="text-left w-50 font-bold">Company</span>
-                    <span className="pl-10 text-left w-50">&nbsp;&nbsp;{profile.user_company_name?profile.user_company_name:"None"}</span>
+                    <span className=" text-left w-50">{profile.user_full_name?profile.user_full_name:"None"}</span>
                   </div>
-                  <hr className="mt-3" />
+                  {/* Memb. Name */}
                   <div className="flex flex-wrap">
-                    <span className="text-left w-50 font-bold">Type</span>
-                    <span className="pl-20 text-left w-50">&nbsp;
+                    <span className="text-left w-50">
                       {
-                        profile.user_type === "T" ? "Travel" :
-                        profile.user_type === "C" ? "Company" :
-                        profile.user_type === "I" ? "Individual" :
+                        profile.usme_memb_name === "SILVER" ? "Silver Member" :
+                        profile.usme_memb_name === "GOLD" ? "Gold Member" :
+                        profile.usme_memb_name === "VIP" ? "VIP Member" :
+                        profile.usme_memb_name === "WIZARD" ? "Wizard Member" :
+                        "None"
+                      }
+                    </span>    
+                  </div>
+                  {/* Type Agency */}
+                  <div className="flex flex-wrap">
+                    <span className="text-left w-50">
+                      {
+                        profile.user_type === "T" ? "Travel Agency" :
+                        profile.user_type === "C" ? "Company Agency" :
+                        profile.user_type === "I" ? "Individual Agency" :
                         "None"
                       }
                     </span>
+                        
                   </div>
-                  <hr className="mt-3" />
+                </Box>
+              </Box>
+            </div>                
+            <div className="w-full md:w-1/3 p-3">
+              <Box className="grid col-1 bg-white h-50"> 
+                <Box className="max-w-4xl pl-5 pr-5 pt-3 space-y-3 pb-3">
+                  {/* Email */}
                   <div className="flex flex-wrap">
-                    <span className="text-left w-50 font-bold">Memb. Type</span>
-                    <span className="pl-6 text-left w-50">&nbsp;
-                      {
-                        profile.usme_type === "default" ? "Default" :
-                        profile.usme_type === "expired" ? "Expired" :
-                        "None"
-                      }
-                    </span>
+                    <span className="text-left w-50">{profile.user_email?profile.user_email+" (default)":"None"}</span>
                   </div>
-                  <hr className="mt-3" />
+                  {/* Phone Number */}
                   <div className="flex flex-wrap">
-                    <span className="text-left w-50 font-bold">Memb. Name</span>
-                    <span className="pl-4 text-left w-50">&nbsp;
-                      {
-                        profile.usme_memb_name === "SILVER" ? "SILVER" :
-                        profile.usme_memb_name === "GOLD" ? "GOLD" :
-                        profile.usme_memb_name === "VIP" ? "VIP" :
-                        profile.usme_memb_name === "WIZARD" ? "WIZARD" :
-                        "None"
-                      }
-                    </span>
+                    <span className="text-left w-50">{profile.user_phone_number?profile.user_phone_number+" (active)":"None"}</span>
                   </div>
-                  <hr className="mt-3" />
-                  <div className="flex flex-wrap">
-                    <span className="text-left w-50 font-bold">Memb. Points</span>
-                    <span className="pl-4 text-left w-50">&nbsp;{profile.usme_points?profile.usme_points:"None"}</span>
-                  </div>
-                  <hr className="mt-3" />
-                  <div className="flex flex-wrap">
-                    <span className="text-left w-50 font-bold">Bonus Type</span>
-                    <span className="pl-8 text-left w-50">&nbsp;
-                      {
-                        profile.ubpo_bonus_type === "R" ? "Rating" :
-                        profile.ubpo_bonus_type === "P" ? "Promote" :
-                        "None"
-                      }
-                    </span>
-                  </div>
-                  <hr className="mt-3" />
-                  <div className="flex flex-wrap">
-                    <span className="text-left w-50 font-bold">Total Bonus</span>
-                    <span className="pl-8 text-left w-50">&nbsp;{profile.ubpo_total_points?profile.ubpo_total_points:"None"}</span>
-                  </div>
-                  <hr className="mt-3" />
                 </Box>
               </Box>
             </div>            
           </div>
-          </Box>
+        </Box>
+          
         </div>
           
         </div>
@@ -969,4 +914,4 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
 };
 
-export default EditProfile;
+export default Profile;

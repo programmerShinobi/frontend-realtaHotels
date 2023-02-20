@@ -56,7 +56,7 @@ export default function TopBarAdmin({ showNav, setShowNav }:any) {
   };
 
   const handleEditProfile = () => {
-    router.push('/admin/editProfile');
+    router.push('/admin/profile');
   };
 
   return (
