@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { doRegister } from '@/redux/Actions/Users/reduceActions';
 import { useRouter } from 'next/router';
 import usersReducers from '@/redux/Reducers/Users/usersReducer';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import styles from '../../styles/FormSignUpGuest.module.css'
 import { KeyIcon } from '@heroicons/react/24/solid';
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
@@ -52,16 +54,16 @@ export default function SignUpGuest() {
   
   // Mengambil state usersReducers dari store redux
   const isRegister = useSelector((state: any) => state.usersReducers.users);
-  const [isSend, setIsSend] = useState<boolean>(false);
-  
+  const [send, setSend] = useState(false);
   // function handle submit form add new users (API POST users)
-  const handleFormSubmit = async (values: any, { setSubmitting }: any) => {
-    const now = await moment(new Date).format("YYYYMMDD");
-    const phoneNumber = await values.countryCode+values.userPhoneNumber;
-    const password = await 'GuesT!' + now + values.userPhoneNumber;
-    await localStorage.setItem('isPhoneNumber', phoneNumber);
-    await localStorage.setItem('isPassword', password);
-    await setIsSend(true);
+  const handleFormSubmit = (values: any, { setSubmitting }: any) => {
+    const now = moment(new Date).format("YYYYMMDD");
+    const phoneNumber = values.countryCode+values.userPhoneNumber;
+    const password = 'GuesT!' + now + values.userPhoneNumber;
+    sessionStorage.setItem('isPhoneNumber', phoneNumber);
+    sessionStorage.setItem('isPassword', password);
+    setSend(true);
+    // sendWA(phoneNumber, password);
     // await dispatch(doRegister({
     //   ...values,
     //   uspaPasswordhash: password,
@@ -74,13 +76,40 @@ export default function SignUpGuest() {
     // }
   };
 
-  if (isSend) {
-    setIsSend(false);
-    router.reload();
-    // window.location.reload();
+  const [isPhoneNumber, setIsPhoneNumber] = useState<string | null>(null);
+  const [isPassword, setIsPassword] = useState<string | null>(null);
+  const [isSend, setIsSend] = useState<string | null>(null);
+
+  useEffect(() => {
+    setIsPhoneNumber(sessionStorage.getItem('isPhoneNumber'));
+    setIsPassword(sessionStorage.getItem('isPassword'));
+    setIsSend(sessionStorage.getItem('isSend'));
+  });
+  
+  // useEffect(() => {
+    console.info(isPhoneNumber + ' & ' + isPassword);
+    if (isPhoneNumber && isPassword) {
+      // sendWA(isPhoneNumber, isPassword);
+      sendWA('+6282121991992', 'GuesT!2023021982121991992');
+    }
+  // }, [isPhoneNumber, isPassword]);
+
+  if (send) {
+    sessionStorage.setItem('isSend', 'send');
+    setSend(false);
+    // router.reload();
+     window.location.reload();
   }
 
-  sendWA();
+  if (isSend) {
+  }
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     sessionStorage.removeItem('isPhoneNumber');
+  //     sessionStorage.removeItem('isPassword');
+  //     sessionStorage.removeItem('isSend');
+  //   }, 5000);
+  // });
   
   // getHelper for display in form
   const getHelperText = (touched:any, errors:any, field:any) => {
