@@ -50,9 +50,7 @@ export default function TopBarAdmin({ showNav, setShowNav }:any) {
     localStorage.removeItem('profilePhotoMe');
     localStorage.removeItem('userFullNameNew');
     Cookies.remove('userId');
-    setTimeout(() => {
-      router.push('/auth/signin');
-    }, 500);
+    router.push('/auth/signin');
   };
 
   const handleEditProfile = () => {

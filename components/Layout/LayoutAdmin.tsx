@@ -2,9 +2,10 @@ import { useState, useEffect, Fragment } from "react";
 import TopBarAdmin from '../Header/TobBarAdmin';
 import SideBar from "../Sidebar/SideBarAdmin";
 import { Transition } from "@headlessui/react";
+import WithAuth from "../Private/withAuth";
+import Loading from "@/pages/loading";
 import { useRouter } from "next/router";
 import Custom401 from "@/pages/401";
-import WithAuth from "../Private/withAuth";
 
 const LayoutAdmin = ({ children }:any) => {
   const [showNav, setShowNav] = useState(true);
@@ -31,10 +32,13 @@ const LayoutAdmin = ({ children }:any) => {
   }, []);
 
   const router = useRouter();
+
   const roleId: any = localStorage.getItem("roleId");
-  if (roleId != 4) {
+  if (roleId && roleId != 4) {
     router.back();
     return Custom401();
+  } else if (!roleId) {
+    return Loading();
   }
 
   return (

@@ -1,10 +1,11 @@
 import { useState, useEffect, Fragment } from "react";
 import SideBarManager from "../Sidebar/SideBarManager";
 import { Transition } from "@headlessui/react";
-import { useRouter } from "next/router";
-import Custom401 from "@/pages/401";
 import WithAuth from "../Private/withAuth";
 import TopBarManager from "../Header/TobBarManager";
+import Loading from "@/pages/loading";
+import { useRouter } from "next/router";
+import Custom401 from "@/pages/401";
 
 const LayoutManager = ({ children }:any) => {
   const [showNav, setShowNav] = useState(true);
@@ -31,10 +32,13 @@ const LayoutManager = ({ children }:any) => {
   }, []);
 
   const router = useRouter();
+
   const roleId: any = localStorage.getItem("roleId");
-  if (roleId != 2) {
+  if (roleId && roleId != 2) {
     router.back();
     return Custom401();
+  } else if (!roleId) {
+    return Loading();
   }
 
   return (

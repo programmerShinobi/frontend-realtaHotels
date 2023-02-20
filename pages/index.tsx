@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { Box, InputLabel } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from 'next/router';
-import LayoutGuest from '@/components/Layout/LayoutGuest';
+import Layout from '@/components/Layout/Layout';
 
 export default function Home() {
 const router = useRouter();
@@ -11,7 +11,7 @@ const router = useRouter();
       <Head>
         <title>Home</title>
       </Head>
-      <LayoutGuest>
+      <Layout>
       <section className='Wmx-auto my-auto gap-3 rounded-xl' >
         <div className="title">
           <h1 className='text-orange-600 text-3xl font-bold pb-2 '>--- Realta Hotels ---</h1>
@@ -24,7 +24,7 @@ const router = useRouter();
           <Link prefetch={true} suppressHydrationWarning={true} href={'/auth/signin'} className='text-orange-500'>Sign In</Link> | <Link prefetch={true} suppressHydrationWarning={true} href={'/auth/signupEmployee'} className='text-orange-500'> Sign Up</Link>
         </InputLabel>
       </section>
-      </LayoutGuest>
+      </Layout>
     </Box>
   );
 }

@@ -33,18 +33,9 @@ export default function Guest() {
         <title>Guest</title>
       </Head>
       <LayoutGuest>
-        <section className='Wmx-auto my-auto gap-3 rounded-xl' >
-        <div className="title">
-          <h1 className='text-orange-600 text-3xl font-bold pb-2 '>--- GUEST ---</h1>
-          <p className=' mx-auto my-auto text-gray-400 text-sm pb-3 '>HOME</p>
-        </div>
-          <Button
-            className="bg-orange-100 hover:bg-orange-500 hover:text-white text-gray-700 rounded p-2 normal-case font-normal group transition-colors"
-            onClick={handleLogout}>
-            <LogoutIcon className="h-4 w-4 mr-2" /> Logout
-          </Button>
-          
-        </section>
+          <center className="title mx-auto my-auto">
+            <h1 className='text-orange-600 text-3xl font-bold pb-2 '>--- GUEST ---</h1>
+          </center> 
       </LayoutGuest>
     </Box>
   );
