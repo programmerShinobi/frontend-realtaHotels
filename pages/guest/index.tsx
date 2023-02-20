@@ -3,10 +3,11 @@ import { Box, Button } from "@mui/material";
 import { useRouter } from 'next/router';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useDispatch } from 'react-redux';
-import LayoutUsers from '@/components/Layout/LayoutUsers';
 import { doLogin } from '@/redux/Actions/Users/reduceActions';
+import Cookies from "js-cookie";
+import LayoutGuest from '@/components/Layout/LayoutGuest';
 
-export default function Home() {
+export default function Guest() {
   const router = useRouter();
 
   // useDispatch
@@ -15,18 +16,26 @@ export default function Home() {
   const handleLogout = () => {
     dispatch(doLogin());
     localStorage.removeItem('token');
-    router.push('/auth/signin');
+    localStorage.removeItem('roleId');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userFullName');
+    localStorage.removeItem('profilePhotoMe');
+    localStorage.removeItem('userFullNameNew');
+    Cookies.remove('userId');
+    setTimeout(() => {
+      router.push('/auth/signin');
+    }, 500);
   };
 
   return (
     <Box>
       <Head>
-        <title>Home</title>
+        <title>Guest</title>
       </Head>
-      <LayoutUsers>
+      <LayoutGuest>
         <section className='Wmx-auto my-auto gap-3 rounded-xl' >
         <div className="title">
-          <h1 className='text-orange-600 text-3xl font-bold pb-2 '>--- USERS ---</h1>
+          <h1 className='text-orange-600 text-3xl font-bold pb-2 '>--- GUEST ---</h1>
           <p className=' mx-auto my-auto text-gray-400 text-sm pb-3 '>HOME</p>
         </div>
           <Button
@@ -36,7 +45,7 @@ export default function Home() {
           </Button>
           
         </section>
-      </LayoutUsers>
+      </LayoutGuest>
     </Box>
   );
 }

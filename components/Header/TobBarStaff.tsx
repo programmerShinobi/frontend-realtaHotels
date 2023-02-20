@@ -13,7 +13,7 @@ import { doLogin } from "@/redux/Actions/Users/reduceActions";
 import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
 
-export default function TopBarOB({ showNav, setShowNav }:any) {
+export default function TopBarStaff({ showNav, setShowNav }:any) {
   const router = useRouter();
   const userFullName: any = localStorage.getItem("userFullName");
 

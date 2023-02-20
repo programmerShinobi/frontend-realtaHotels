@@ -14,7 +14,7 @@ const router = useRouter();
       <LayoutGuest>
       <section className='Wmx-auto my-auto gap-3 rounded-xl' >
         <div className="title">
-          <h1 className='text-orange-600 text-3xl font-bold pb-2 '>--- GUEST ---</h1>
+          <h1 className='text-orange-600 text-3xl font-bold pb-2 '>--- Realta Hotels ---</h1>
           <p className=' mx-auto my-auto text-gray-400 text-sm pb-3 '>HOME</p>
         </div>
         <InputLabel
@@ -23,7 +23,6 @@ const router = useRouter();
         >
           <Link prefetch={true} suppressHydrationWarning={true} href={'/auth/signin'} className='text-orange-500'>Sign In</Link> | <Link prefetch={true} suppressHydrationWarning={true} href={'/auth/signupEmployee'} className='text-orange-500'> Sign Up</Link>
         </InputLabel>
-        
       </section>
       </LayoutGuest>
     </Box>
