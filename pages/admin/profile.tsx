@@ -6,7 +6,7 @@ import path from "path";
 import { doUpdatePhotoUsers, doUserRequest, doUpdateUsers } from "@/redux/Actions/Users/reduceActions";
 import { useDispatch, useSelector } from "react-redux";
 import LayoutAdmin from "@/components/Layout/LayoutAdmin";
-import { Box, Button, FormControl, IconButton, InputAdornment, InputLabel, MenuItem, Select, Tooltip } from "@mui/material"
+import { Box, Button, FormControl, IconButton, InputAdornment, InputBase, InputLabel, MenuItem, OutlinedInput, Select, Tooltip, Typography } from "@mui/material"
 import { Dialog, Transition } from '@headlessui/react'
 import * as yup from "yup";
 import { XMarkIcon } from '@heroicons/react/24/solid';
@@ -337,22 +337,22 @@ const Profile: NextPage<Props> = ({ dirs }) => {
           <p className="text-gray-700 text-3xl mb-6 font-bold">Profile</p>
           <div className="w-full md:w-full p-3">
 
-        <Box className="grid shadow-md rounded-xl bg-white">
+        <Box className="grid shadow-md rounded-xl bg-white pb-8">
+          {/* General */}
           <div className="mt-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
-            <label className={styles.textTitleInProfile}>
+            <Typography className={styles.textTitleInProfile}>
               General
-            </label> 
-            </div>    
-            <div className="pt-5 pl-8 text-left font-normal text-orange-900">
-              <label className={styles.textLabelInProfile}>
-                This information will be display, so be careful what you share
-              </label>
-            </div>
-          <div className="flex items-stretch mb-8">
+            </Typography> 
+          </div>    
+          <div className="pt-5 pl-8 text-left font-normal text-orange-900">
+            <Typography className={styles.textLabelInProfile}>
+              This information will be display, so be careful what you share
+            </Typography>
+          </div>
+          <div className="flex items-stretch">
             <Box className="w-full md:w-1/4 pl-16">
               <Box className="flex items-stretch pt-5">
-                <label>
-                  <center>
+                <center>
                   <input
                     type="file"
                     hidden
@@ -364,15 +364,14 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                       }
                     }}
                   />
-                  </center>    
-                  <Box className="flex items-stretch h-28 w-28 pl-4 cursor-pointer">
-                    {selectedImage ? (
-                      <img src={selectedImage} alt="" />
-                    ) : (
-                      <img src={"/images/"+profile.uspro_photo}/>
-                    )}
-                  </Box>
-                </label>
+                </center>    
+                <Box className="flex items-stretch h-28 w-28 pl-4 cursor-pointer">
+                  {selectedImage ? (
+                    <img src={selectedImage} alt="" />
+                  ) : (
+                    <img src={"/images/"+profile.uspro_photo}/>
+                  )}
+                </Box>
                 </Box>
                 {selectedImage ? (
                   <Box className="flex items-center">
@@ -386,7 +385,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                       </Button>
                     </Tooltip>
                   </Box>
-                  ) : (
+                ) : (
                   <Box>
                     <Tooltip title="Upload">
                       <Button
@@ -398,7 +397,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                       </Button>
                     </Tooltip>      
                   </Box>    
-                  )}
+                )}
             </Box>
             <div className="w-full md:w-1/4">
               <Box className="grid col-1 bg-white h-50"> 
@@ -461,6 +460,54 @@ const Profile: NextPage<Props> = ({ dirs }) => {
               </Box>
             </div>    
           </div>
+          {/* Security */}
+          <div className="mt-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+            <Typography className={styles.textTitleInProfile}>
+              Security
+            </Typography> 
+          </div>
+          <div className="pt-5 flex items-stretch">
+            <Box className="w-full md:w-1/4 pl-8">
+              <Box className="flex items-stretch">
+                <div className="text-left font-normal text-orange-900">
+                  <Typography className={styles.textLabelInProfile}>
+                    Change password
+                  </Typography>
+                </div>
+              </Box>
+            </Box>
+            <div className="w-full md:w-1/4">
+              <Box className="grid col-1 bg-white h-50"> 
+                <Box className="space-y-3 w-40">
+                  <OutlinedInput
+                  size="small"
+                  type="text"
+                  value="**********************"
+                />  
+                </Box>
+              </Box>
+            </div>                
+            <div className="w-full md:w-1/4">
+            </div>
+            <div className="w-full md:w-1/4">
+              <Box className="flex items-stretch">
+                <Tooltip title="Edit">
+                  <Button
+                    className="shadow-lg w-28 py-2 px-2 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                    onClick={() => handleEdit()}
+                    >
+                      <p className="normal-case font-normal">{<EditIcon className="h-5 w-5   "/>}&nbsp;{"Edit"}</p>
+                  </Button>
+                </Tooltip>
+              </Box>
+            </div>    
+          </div>
+          {/* Points & Members */}
+          <div className="mt-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+            <Typography className={styles.textTitleInProfile}>
+              Points & Members
+            </Typography> 
+          </div>    
         </Box>
           
         </div>
