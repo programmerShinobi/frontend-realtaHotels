@@ -1,15 +1,18 @@
 import { forwardRef } from "react";
 import Link from "next/link";
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
-import DonutSmallIcon from '@mui/icons-material/DonutSmall';
+import DonutSmallIcon from "@mui/icons-material/DonutSmall";
 import { useRouter } from "next/router";
-import { Disclosure } from '@headlessui/react';
-import { ChevronUpIcon } from '@heroicons/react/20/solid';
+import { Disclosure } from "@headlessui/react";
+import { ChevronUpIcon } from "@heroicons/react/20/solid";
 
 const SideBarManager = forwardRef(({ showNav }: any, ref: any) => {
   const router = useRouter();
   return (
-    <div ref={ref} className="fixed w-56 bg-white shadow-sm h-full overflow-y-auto">
+    <div
+      ref={ref}
+      className="fixed w-56 bg-white shadow-sm h-full overflow-y-auto"
+    >
       <div className="flex justify-center mt-6 mb-5">
         <picture>
           <img
@@ -34,21 +37,24 @@ const SideBarManager = forwardRef(({ showNav }: any, ref: any) => {
                       <p>Dashboard</p>
                     </div>
                     <ChevronRightIcon
-                      className={`${open ? 'rotate-90 transform' : ''
-                        } h-4 w-4 text-orange-500`}
+                      className={`${
+                        open ? "rotate-90 transform" : ""
+                      } h-4 w-4 text-orange-500`}
                     />
                   </Disclosure.Button>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link prefetch={true}  href="/manager">
+                    <Link href="/manager">
                       <div
-                        className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "/manager"
-                          ? "bg-orange-100 text-orange-500"
-                          : "text-orange-900 hover:bg-orange-100 hover:text-orange-500"
-                          }`}
+                        className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${
+                          router.pathname == "/manager"
+                            ? "bg-orange-100 text-orange-500"
+                            : "text-orange-900 hover:bg-orange-100 hover:text-orange-500"
+                        }`}
                       >
                         <ChevronUpIcon
-                          className={`${open ? 'rotate-90 transform' : ''
-                            } h-5 w-5 text-orange-500`}
+                          className={`${
+                            open ? "rotate-90 transform" : ""
+                          } h-5 w-5 text-orange-500`}
                         />
                         <div>
                           <p>All</p>
@@ -57,16 +63,18 @@ const SideBarManager = forwardRef(({ showNav }: any, ref: any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link prefetch={true}  href="#">
+                    <Link href="#">
                       <div
-                        className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
-                          ? "bg-orange-100 text-orange-500"
-                          : "text-orange-900 hover:bg-orange-100 hover:text-orange-500"
-                          }`}
+                        className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${
+                          router.pathname == "#"
+                            ? "bg-orange-100 text-orange-500"
+                            : "text-orange-900 hover:bg-orange-100 hover:text-orange-500"
+                        }`}
                       >
                         <ChevronUpIcon
-                          className={`${open ? 'rotate-90 transform' : ''
-                            } h-5 w-5 text-orange-500`}
+                          className={`${
+                            open ? "rotate-90 transform" : ""
+                          } h-5 w-5 text-orange-500`}
                         />
                         <div>
                           <p>Master</p>
@@ -75,16 +83,18 @@ const SideBarManager = forwardRef(({ showNav }: any, ref: any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link prefetch={true}  href="#">
+                    <Link href="#">
                       <div
-                        className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
-                          ? "bg-orange-100 text-orange-500"
-                          : "text-orange-900 hover:bg-orange-100 hover:text-orange-500"
-                          }`}
+                        className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${
+                          router.pathname == "#"
+                            ? "bg-orange-100 text-orange-500"
+                            : "text-orange-900 hover:bg-orange-100 hover:text-orange-500"
+                        }`}
                       >
                         <ChevronUpIcon
-                          className={`${open ? 'rotate-90 transform' : ''
-                            } h-5 w-5 text-orange-500`}
+                          className={`${
+                            open ? "rotate-90 transform" : ""
+                          } h-5 w-5 text-orange-500`}
                         />
                         <div>
                           <p>HR</p>
@@ -93,16 +103,18 @@ const SideBarManager = forwardRef(({ showNav }: any, ref: any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link prefetch={true}  href="#">
+                    <Link href="#">
                       <div
-                        className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
-                          ? "bg-orange-100 text-orange-500"
-                          : "text-orange-900 hover:bg-orange-100 hover:text-orange-500"
-                          }`}
+                        className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${
+                          router.pathname == "#"
+                            ? "bg-orange-100 text-orange-500"
+                            : "text-orange-900 hover:bg-orange-100 hover:text-orange-500"
+                        }`}
                       >
                         <ChevronUpIcon
-                          className={`${open ? 'rotate-90 transform' : ''
-                            } h-5 w-5 text-orange-500`}
+                          className={`${
+                            open ? "rotate-90 transform" : ""
+                          } h-5 w-5 text-orange-500`}
                         />
                         <div>
                           <p>Master</p>
@@ -111,16 +123,18 @@ const SideBarManager = forwardRef(({ showNav }: any, ref: any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link prefetch={true}  href="#">
+                    <Link href="#">
                       <div
-                        className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
-                          ? "bg-orange-100 text-orange-500"
-                          : "text-orange-900 hover:bg-orange-100 hover:text-orange-500"
-                          }`}
+                        className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${
+                          router.pathname == "#"
+                            ? "bg-orange-100 text-orange-500"
+                            : "text-orange-900 hover:bg-orange-100 hover:text-orange-500"
+                        }`}
                       >
                         <ChevronUpIcon
-                          className={`${open ? 'rotate-90 transform' : ''
-                            } h-5 w-5 text-orange-500`}
+                          className={`${
+                            open ? "rotate-90 transform" : ""
+                          } h-5 w-5 text-orange-500`}
                         />
                         <div>
                           <p>Users</p>
@@ -129,16 +143,18 @@ const SideBarManager = forwardRef(({ showNav }: any, ref: any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link prefetch={true}  href="#">
+                    <Link href="#">
                       <div
-                        className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
-                          ? "bg-orange-100 text-orange-500"
-                          : "text-orange-900 hover:bg-orange-100 hover:text-orange-500"
-                          }`}
+                        className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${
+                          router.pathname == "#"
+                            ? "bg-orange-100 text-orange-500"
+                            : "text-orange-900 hover:bg-orange-100 hover:text-orange-500"
+                        }`}
                       >
                         <ChevronUpIcon
-                          className={`${open ? 'rotate-90 transform' : ''
-                            } h-5 w-5 text-orange-500`}
+                          className={`${
+                            open ? "rotate-90 transform" : ""
+                          } h-5 w-5 text-orange-500`}
                         />
                         <div>
                           <p>Booking</p>
@@ -147,16 +163,18 @@ const SideBarManager = forwardRef(({ showNav }: any, ref: any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link prefetch={true}  href="#">
+                    <Link href="#">
                       <div
-                        className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
-                          ? "bg-orange-100 text-orange-500"
-                          : "text-orange-900 hover:bg-orange-100 hover:text-orange-500"
-                          }`}
+                        className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${
+                          router.pathname == "#"
+                            ? "bg-orange-100 text-orange-500"
+                            : "text-orange-900 hover:bg-orange-100 hover:text-orange-500"
+                        }`}
                       >
                         <ChevronUpIcon
-                          className={`${open ? 'rotate-90 transform' : ''
-                            } h-5 w-5 text-orange-500`}
+                          className={`${
+                            open ? "rotate-90 transform" : ""
+                          } h-5 w-5 text-orange-500`}
                         />
                         <div>
                           <p>Hotel</p>
@@ -165,16 +183,18 @@ const SideBarManager = forwardRef(({ showNav }: any, ref: any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link prefetch={true}  href="#">
+                    <Link href="#">
                       <div
-                        className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
-                          ? "bg-orange-100 text-orange-500"
-                          : "text-orange-900 hover:bg-orange-100 hover:text-orange-500"
-                          }`}
+                        className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${
+                          router.pathname == "#"
+                            ? "bg-orange-100 text-orange-500"
+                            : "text-orange-900 hover:bg-orange-100 hover:text-orange-500"
+                        }`}
                       >
                         <ChevronUpIcon
-                          className={`${open ? 'rotate-90 transform' : ''
-                            } h-5 w-5 text-orange-500`}
+                          className={`${
+                            open ? "rotate-90 transform" : ""
+                          } h-5 w-5 text-orange-500`}
                         />
                         <div>
                           <p>Resto</p>
@@ -183,16 +203,18 @@ const SideBarManager = forwardRef(({ showNav }: any, ref: any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link prefetch={true}  href="#">
+                    <Link href="#">
                       <div
-                        className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
-                          ? "bg-orange-100 text-orange-500"
-                          : "text-orange-900 hover:bg-orange-100 hover:text-orange-500"
-                          }`}
+                        className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${
+                          router.pathname == "#"
+                            ? "bg-orange-100 text-orange-500"
+                            : "text-orange-900 hover:bg-orange-100 hover:text-orange-500"
+                        }`}
                       >
                         <ChevronUpIcon
-                          className={`${open ? 'rotate-90 transform' : ''
-                            } h-5 w-5 text-orange-500`}
+                          className={`${
+                            open ? "rotate-90 transform" : ""
+                          } h-5 w-5 text-orange-500`}
                         />
                         <div>
                           <p>Payment</p>
@@ -201,16 +223,18 @@ const SideBarManager = forwardRef(({ showNav }: any, ref: any) => {
                     </Link>
                   </Disclosure.Panel>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link prefetch={true}  href="#">
+                    <Link href="#">
                       <div
-                        className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "#"
-                          ? "bg-orange-100 text-orange-500"
-                          : "text-orange-900 hover:bg-orange-100 hover:text-orange-500"
-                          }`}
+                        className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${
+                          router.pathname == "#"
+                            ? "bg-orange-100 text-orange-500"
+                            : "text-orange-900 hover:bg-orange-100 hover:text-orange-500"
+                        }`}
                       >
                         <ChevronUpIcon
-                          className={`${open ? 'rotate-90 transform' : ''
-                            } h-5 w-5 text-orange-500`}
+                          className={`${
+                            open ? "rotate-90 transform" : ""
+                          } h-5 w-5 text-orange-500`}
                         />
                         <div>
                           <p>Purchasing</p>
@@ -231,5 +255,3 @@ const SideBarManager = forwardRef(({ showNav }: any, ref: any) => {
 SideBarManager.displayName = "SideBarManager";
 
 export default SideBarManager;
-
-

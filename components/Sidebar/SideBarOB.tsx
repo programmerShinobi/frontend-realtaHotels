@@ -1,15 +1,18 @@
 import { forwardRef } from "react";
 import Link from "next/link";
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
-import LocationCityIcon from '@mui/icons-material/LocationCity';
+import LocationCityIcon from "@mui/icons-material/LocationCity";
 import { useRouter } from "next/router";
-import { Disclosure } from '@headlessui/react';
-import { ChevronUpIcon } from '@heroicons/react/20/solid';
+import { Disclosure } from "@headlessui/react";
+import { ChevronUpIcon } from "@heroicons/react/20/solid";
 
-const SideBarOB = forwardRef(({ showNav }:any, ref:any) => {
+const SideBarOB = forwardRef(({ showNav }: any, ref: any) => {
   const router = useRouter();
   return (
-    <div ref={ref} className="fixed w-56 bg-white shadow-sm h-full overflow-y-auto">
+    <div
+      ref={ref}
+      className="fixed w-56 bg-white shadow-sm h-full overflow-y-auto"
+    >
       <div className="flex justify-center mt-6 mb-5">
         <picture>
           <img
@@ -34,21 +37,24 @@ const SideBarOB = forwardRef(({ showNav }:any, ref:any) => {
                       <p>Hotels</p>
                     </div>
                     <ChevronRightIcon
-                      className={`${open ? 'rotate-90 transform' : ''
-                        } h-4 w-4 text-orange-500`}
+                      className={`${
+                        open ? "rotate-90 transform" : ""
+                      } h-4 w-4 text-orange-500`}
                     />
                   </Disclosure.Button>
                   <Disclosure.Panel className="pt-2 w-full">
-                    <Link prefetch={true}  href="/ob">
+                    <Link href="/ob">
                       <div
-                        className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${router.pathname == "/ob"
-                          ? "bg-orange-100 text-orange-500"
-                          : "text-orange-900 hover:bg-orange-100 hover:text-orange-500"
-                          }`}
+                        className={`shadow-2lg pl-3 px-4 py-2 mx-auto rounded-md text-left text-sm font-medium cursor-pointer flex items-center transition-colors ${
+                          router.pathname == "/ob"
+                            ? "bg-orange-100 text-orange-500"
+                            : "text-orange-900 hover:bg-orange-100 hover:text-orange-500"
+                        }`}
                       >
                         <ChevronUpIcon
-                          className={`${open ? 'rotate-90 transform' : ''
-                            } h-5 w-5 text-orange-500`}
+                          className={`${
+                            open ? "rotate-90 transform" : ""
+                          } h-5 w-5 text-orange-500`}
                         />
                         <div>
                           <p>Task</p>
@@ -69,5 +75,3 @@ const SideBarOB = forwardRef(({ showNav }:any, ref:any) => {
 SideBarOB.displayName = "SideBarOB";
 
 export default SideBarOB;
-
-
