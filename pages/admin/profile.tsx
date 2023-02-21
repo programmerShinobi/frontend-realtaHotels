@@ -76,44 +76,6 @@ const columnsBonusPoints: ColumnsType<DataTypeBonusPoints> = [
   },
 ];
 
-// -------------------------------------------------------------
-
-interface DataTypeMembers {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
-}
-
-type DataIndex = keyof DataTypeMembers;
-
-const dataMembers: DataTypeMembers[] = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-  },
-  {
-    key: '2',
-    name: 'Joe Black',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-  },
-  {
-    key: '3',
-    name: 'Jim Green',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-  },
-  {
-    key: '4',
-    name: 'Jim Red',
-    age: 32,
-    address: 'London No. 2 Lake Park',
-  },
-];
-
 const dataBonusPoints: DataTypeBonusPoints[] = [
   {
     key: '1',
@@ -132,6 +94,49 @@ const dataBonusPoints: DataTypeBonusPoints[] = [
     createdOn: '28 Jun 2019',
     points: 26,
     tags: ['promote'],
+  },
+];
+
+// -------------------------------------------------------------------- //
+
+interface DataTypeMembers {
+  key: string;
+  promoteDate: string;
+  point: number;
+  status: string[];
+  type: string[];
+}
+
+type DataIndexMembers = keyof DataTypeMembers;
+
+const dataMembers: DataTypeMembers[] = [
+  {
+    key: '1',
+    promoteDate: '12-Jan-2022',
+    point: 32,
+    status: ['expired'],
+    type: ['WIZARD'],
+  },
+  {
+    key: '2',
+    promoteDate: '01-Des-2021',
+    point: 30,
+    status: ['default'],
+    type: ['VIP'],
+  },
+  {
+    key: '3',
+    promoteDate: '05-Nov-2020',
+    point: 28,
+    status: ['expired'],
+    type: ['GOLD'],
+  },
+  {
+    key: '4',
+    promoteDate: '10-Oct-2019',
+    point: 26,
+    status: ['default'],
+    type: ['SILVER'],
   },
 ];
 
@@ -452,7 +457,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
   const handleSearch = (
     selectedKeys: string[],
     confirm: (param?: FilterConfirmProps) => void,
-    dataIndex: DataIndex,
+    dataIndex: DataIndexMembers,
   ) => {
     confirm();
     setSearchText(selectedKeys[0]);
@@ -464,7 +469,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     setSearchText('');
   };
 
-  const getColumnSearchProps = (dataIndex: DataIndex): ColumnType<DataTypeMembers> => ({
+  const getColumnSearchProps = (dataIndex: DataIndexMembers): ColumnType<DataTypeMembers> => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
       <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
         <Input
@@ -542,26 +547,70 @@ const Profile: NextPage<Props> = ({ dirs }) => {
 
   const columnsMembers: ColumnsType<DataTypeMembers> = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      title: 'Promote Date',
+      dataIndex: 'promoteDate',
+      key: 'promoteDate',
       width: '30%',
-      ...getColumnSearchProps('name'),
+      ...getColumnSearchProps('promoteDate'),
     },
     {
-      title: 'Age',
-      dataIndex: 'age',
-      key: 'age',
+      title: 'Member Type',
+      dataIndex: 'type',
+      key: 'type',
+      width: '30%',
+      ...getColumnSearchProps('type'),
+      render: (_, { type }) => (
+        <>
+          {type.map((isType) => {
+            let color = isType.length < 5 ? 'geekblue' : 'green';
+            if (isType === 'WIZARD') {
+              color = 'green';
+            } else if (isType === 'VIP') {
+              color = 'purple';
+            } else if (isType === 'GOLD') {
+              color = 'gold';
+            } else if (isType === 'SILVER') {
+              color = 'gray';
+            }
+            return (
+              <Tag color={color} key={isType}>
+                {isType.toUpperCase()}
+              </Tag>
+            );
+          })}
+        </>
+      ),
+    },
+    {
+      title: 'Point',
+      dataIndex: 'point',
+      key: 'point',
       width: '20%',
-      ...getColumnSearchProps('age'),
+      ...getColumnSearchProps('point'),
+      sorter: (a, b) => a.point - b.point,
+      sortDirections: ['descend', 'ascend'],
     },
     {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
-      ...getColumnSearchProps('address'),
-      sorter: (a, b) => a.address.length - b.address.length,
-      sortDirections: ['descend', 'ascend'],
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      width: '20%',
+      ...getColumnSearchProps('status'),
+      render: (_, { status }) => (
+        <>
+          {status.map((isStatus) => {
+            let color = isStatus.length > 5 ? 'geekblue' : 'green';
+            if (isStatus === 'expired') {
+              color = 'volcano';
+            }
+            return (
+              <Tag color={color} key={isStatus}>
+                {isStatus.toUpperCase()}
+              </Tag>
+            );
+          })}
+        </>
+      ),
     },
   ];
 
@@ -571,20 +620,20 @@ const Profile: NextPage<Props> = ({ dirs }) => {
         <div className="overflow-y-auto">
           <p className="text-gray-700 text-3xl mb-6 font-bold">Profile</p>
           <div className="w-full md:w-full p-3">
-          <Box className="grid shadow-md rounded-xl bg-white pb-8">
-            {/* General */}
-            <div className="mt-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
-              <Typography className={styles.textTitleInProfile}>
-                General
-              </Typography> 
-            </div>    
-            <div className="pt-5 pl-8 text-left font-normal text-orange-900">
-              <Typography className={styles.textLabelInProfile}>
-                This information will be display, so be careful what you share
-              </Typography>
-            </div>
-            <div className="flex items-stretch">
-              <Box className="w-full md:w-1/4 justify-center">
+            <Box className="grid shadow-md rounded-xl bg-white pb-8">
+              {/* General */}
+              <div className="mt-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                <Typography className={styles.textTitleInProfile}>
+                  General
+                </Typography>
+              </div>
+              <div className="pt-5 pl-8 text-left font-normal text-orange-900">
+                <Typography className={styles.textLabelInProfile}>
+                  This information will be display, so be careful what you share
+                </Typography>
+              </div>
+              <div className="flex items-stretch">
+                <Box className="w-full md:w-1/4 justify-center">
                   <Box className="flex justify-center pt-5">
                     <label>
                       <center>
@@ -599,624 +648,624 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                             }
                           }}
                         />
-                      </center>    
+                      </center>
                       <Box className="flex justify-center h-28 w-28 cursor-pointer">
                         {selectedImage ? (
                           <img src={selectedImage} alt="" />
                         ) : (
-                          <img src={"/images/"+profile.uspro_photo}/>
+                          <img src={"/images/" + profile.uspro_photo} />
                         )}
                       </Box>
                     </label>
-                </Box>
-                {selectedImage ? (
-                  <Box className="flex justify-center">
+                  </Box>
+                  {selectedImage ? (
+                    <Box className="flex justify-center">
                       <button
                         className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
                         onClick={handleUpload}
                         disabled={uploading}
                         style={{ opacity: uploading ? ".5" : "1" }}>
-                          <p className="normal-case font-normal">{uploading ? <CloudSyncIcon/> : <CloudUploadIcon className="h-5 w-5  "/>}&nbsp;{"Upload"}</p>
+                        <p className="normal-case font-normal">{uploading ? <CloudSyncIcon /> : <CloudUploadIcon className="h-5 w-5  " />}&nbsp;{"Upload"}</p>
                       </button>
-                  </Box>
-                ) : (
-                  <Box className="flex justify-center">
+                    </Box>
+                  ) : (
+                    <Box className="flex justify-center">
                       <button
                         className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
                         
                         disabled={true}
                         style={{ opacity: uploading ? ".5" : "1" }}>
-                          <p className="normal-case font-normal">{uploading ? <CloudSyncIcon/> : <CloudUploadIcon className="h-5 w-5  "/>}&nbsp;{"Upload"}</p>
-                      </button>      
-                  </Box>    
-                )}
-              </Box>
-              <div className="w-full md:w-1/4">
-                <Box className="grid col-1 bg-white h-50"> 
-                  <Box className="max-w-4xl pt-3 space-y-3 pb-3">
-                    {/* Full Name */}
-                    <div className="flex flex-wrap">
-                      <span className={styles.formProfile+"text-left w-50"}>{profile.user_full_name?profile.user_full_name:"None"}</span>
-                    </div>
-                    {/* Memb. Name */}
-                    <div className="flex flex-wrap">
-                      <span className={styles.formProfile+"text-left w-50"}>
-                        {
-                          profile.usme_memb_name === "SILVER" ? "Silver Member" :
-                          profile.usme_memb_name === "GOLD" ? "Gold Member" :
-                          profile.usme_memb_name === "VIP" ? "VIP Member" :
-                          profile.usme_memb_name === "WIZARD" ? "Wizard Member" :
-                          "None"
-                        }
-                      </span>    
-                    </div>
-                    {/* Type Agency */}
-                    <div className="flex flex-wrap">
-                      <span className={styles.formProfile+"text-left w-50"}>
-                        {
-                          profile.user_type === "T" ? "Travel Agency" :
-                          profile.user_type === "C" ? "Company Agency" :
-                          profile.user_type === "I" ? "Individual Agency" :
-                          "None"
-                        }
-                      </span>
+                        <p className="normal-case font-normal">{uploading ? <CloudSyncIcon /> : <CloudUploadIcon className="h-5 w-5  " />}&nbsp;{"Upload"}</p>
+                      </button>
+                    </Box>
+                  )}
+                </Box>
+                <div className="w-full md:w-1/4">
+                  <Box className="grid col-1 bg-white h-50">
+                    <Box className="max-w-4xl pt-3 space-y-3 pb-3">
+                      {/* Full Name */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile + "text-left w-50"}>{profile.user_full_name ? profile.user_full_name : "None"}</span>
+                      </div>
+                      {/* Memb. Name */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile + "text-left w-50"}>
+                          {
+                            profile.usme_memb_name === "SILVER" ? "Silver Member" :
+                              profile.usme_memb_name === "GOLD" ? "Gold Member" :
+                                profile.usme_memb_name === "VIP" ? "VIP Member" :
+                                  profile.usme_memb_name === "WIZARD" ? "Wizard Member" :
+                                    "None"
+                          }
+                        </span>
+                      </div>
+                      {/* Type Agency */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile + "text-left w-50"}>
+                          {
+                            profile.user_type === "T" ? "Travel Agency" :
+                              profile.user_type === "C" ? "Company Agency" :
+                                profile.user_type === "I" ? "Individual Agency" :
+                                  "None"
+                          }
+                        </span>
                           
-                    </div>
+                      </div>
+                    </Box>
                   </Box>
-                </Box>
-              </div>                
-              <div className="w-full md:w-1/4">
-                <Box className="grid col-1 bg-white"> 
-                  <Box className="max-w-4xl pr-5 pt-3 space-y-3 pb-3">
-                    {/* Email */}
-                    <div className="flex flex-wrap">
-                      <span className={styles.formProfile+"text-left w-50"}>{profile.user_email?profile.user_email+" (default)":"None"}</span>
-                    </div>
-                    {/* Phone Number */}
-                    <div className="flex flex-wrap">
-                      <span className={styles.formProfile+"text-left w-50"}>{profile.user_phone_number?profile.user_phone_number+" (active)":"None"}</span>
-                    </div>
+                </div>
+                <div className="w-full md:w-1/4">
+                  <Box className="grid col-1 bg-white">
+                    <Box className="max-w-4xl pr-5 pt-3 space-y-3 pb-3">
+                      {/* Email */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile + "text-left w-50"}>{profile.user_email ? profile.user_email + " (default)" : "None"}</span>
+                      </div>
+                      {/* Phone Number */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile + "text-left w-50"}>{profile.user_phone_number ? profile.user_phone_number + " (active)" : "None"}</span>
+                      </div>
+                    </Box>
                   </Box>
-                </Box>
-              </div>
-              <div className="w-full md:w-1/4">
-                <Box className="flex items-stretch pt-32">
+                </div>
+                <div className="w-full md:w-1/4">
+                  <Box className="flex items-stretch pt-32">
                     <button
                       className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
                       onClick={() => handleEdit()}
-                      >
-                        <p className="normal-case font-normal">{<EditIcon className="h-4 w-4   "/>}&nbsp;{"Edit"}</p>
+                    >
+                      <p className="normal-case font-normal">{<EditIcon className="h-4 w-4   " />}&nbsp;{"Edit"}</p>
                     </button>
-                </Box>
-              </div>    
-            </div>
-            {/* Security */}
-            <div className="mt-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
-              <Typography className={styles.textTitleInProfile}>
-                Security
-              </Typography> 
-            </div>
-            <div className="pt-5 flex items-stretch">
-              <Box className="w-full md:w-1/4 pl-8">
-                <Box className="flex items-stretch">
-                  <div className="text-left font-normal text-orange-900">
-                    <Typography className={styles.textLabelInProfile}>
-                      Change password
-                    </Typography>
-                  </div>
-                </Box>
-              </Box>
-              <div className="w-full md:w-1/4">
-                <Box className="grid col-1 bg-white h-50"> 
-                  <Box className="space-y-3 w-40">
-                  <OutlinedInput
-                    readOnly={true}
-                    size="small"
-                    type="text"
-                    value="**********************"
-                  />  
+                  </Box>
+                </div>
+              </div>
+              {/* Security */}
+              <div className="mt-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                <Typography className={styles.textTitleInProfile}>
+                  Security
+                </Typography>
+              </div>
+              <div className="pt-5 flex items-stretch">
+                <Box className="w-full md:w-1/4 pl-8">
+                  <Box className="flex items-stretch">
+                    <div className="text-left font-normal text-orange-900">
+                      <Typography className={styles.textLabelInProfile}>
+                        Change password
+                      </Typography>
+                    </div>
                   </Box>
                 </Box>
-              </div>                
-              <div className="w-full md:w-1/4">
-              </div>
-              <div className="w-full md:w-1/4">
-                <Box className="flex items-stretch">
+                <div className="w-full md:w-1/4">
+                  <Box className="grid col-1 bg-white h-50">
+                    <Box className="space-y-3 w-40">
+                      <OutlinedInput
+                        readOnly={true}
+                        size="small"
+                        type="text"
+                        value="**********************"
+                      />
+                    </Box>
+                  </Box>
+                </div>
+                <div className="w-full md:w-1/4">
+                </div>
+                <div className="w-full md:w-1/4">
+                  <Box className="flex items-stretch">
                     <button
                       className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
                       onClick={() => handleEdit()}
-                      >
-                        <p className="normal-case font-normal">{<EditIcon className="h-4 w-4   "/>}&nbsp;{"Edit"}</p>
+                    >
+                      <p className="normal-case font-normal">{<EditIcon className="h-4 w-4   " />}&nbsp;{"Edit"}</p>
                     </button>
-                </Box>
-              </div>    
-            </div>
-            {/* Points & Members */}
-            <div className="mt-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
-              <Typography className={styles.textTitleInProfile}>
-                Points & Members
-              </Typography> 
-            </div>   
-            <div className="pl-8 pt-8 pr-8">
-              <Tabs
-                onChange={onChangeTab}
-                type="card"
-                tabBarGutter={8}
-              >
-                <Tabs.TabPane
-                  tab={
-                    <div
-                      className="font-bold  items-center text-orange-900"
-                    >
-                      Bonus Points
-                    </div>
-                  }
-                  key="1"
+                  </Box>
+                </div>
+              </div>
+              {/* Points & Members */}
+              <div className="mt-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                <Typography className={styles.textTitleInProfile}>
+                  Points & Members
+                </Typography>
+              </div>
+              <div className="pl-8 pt-8 pr-8">
+                <Tabs
+                  onChange={onChangeTab}
+                  type="card"
+                  tabBarGutter={8}
                 >
-                  <Table columns={columnsBonusPoints} dataSource={dataBonusPoints} />
-                </Tabs.TabPane>
-                <Tabs.TabPane
-                  tab={
-                    <div
-                      className="font-bold items-center text-orange-900"
-                    >
-                      Members
-                    </div>
-                  }
-                  key="2"
+                  <Tabs.TabPane
+                    tab={
+                      <div
+                        className="font-bold  items-center text-orange-900"
+                      >
+                        Bonus Points
+                      </div>
+                    }
+                    key="1"
+                  >
+                    <Table columns={columnsBonusPoints} dataSource={dataBonusPoints} />
+                  </Tabs.TabPane>
+                  <Tabs.TabPane
+                    tab={
+                      <div
+                        className="font-bold items-center text-orange-900"
+                      >
+                        Members
+                      </div>
+                    }
+                    key="2"
+                  >
+                    <Table columns={columnsMembers} dataSource={dataMembers} />
+                  </Tabs.TabPane>
+                </Tabs>
+              </div>
+            </Box>
+          </div>
+        </div>
+        <Transition appear show={isOpenEdit} as={Fragment}>
+          <Dialog as="div" className="relative z-10" onClose={closeModalEdit}>
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <div className="fixed inset-0 bg-black bg-opacity-25" />
+            </Transition.Child>
+            <div className="fixed inset-0 overflow-y-auto">
+              <div className="flex min-h-full items-center justify-center p-4 text-center">
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0 scale-95"
+                  enterTo="opacity-100 scale-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100 scale-100"
+                  leaveTo="opacity-0 scale-95"
                 >
-                  <Table columns={columnsMembers} dataSource={dataMembers} />
-                </Tabs.TabPane>
-              </Tabs>
-            </div> 
-          </Box>
-        </div>  
-      </div>
-      <Transition appear show={isOpenEdit} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModalEdit}>
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <div className="fixed inset-0 bg-black bg-opacity-25" />
-          </Transition.Child>
-          <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 text-center">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
-              >
-                <Dialog.Panel className="w-full max-w-md transform max-h-96 overflow-y-auto rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title
-                    as="h3"
-                  className="text-lg font-medium leading-6 text-black"
-                  >
-                    Edit User
-                  </Dialog.Title>
-                  <br></br>
-                  <Formik
-                    onSubmit={handleFormSubmitEdit}
-                    initialValues={initialValues}
-                    validationSchema={checkoutSchema}
-                  >
-                    {({
+                  <Dialog.Panel className="w-full max-w-md transform max-h-96 overflow-y-auto rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                    <Dialog.Title
+                      as="h3"
+                      className="text-lg font-medium leading-6 text-black"
+                    >
+                      Edit User
+                    </Dialog.Title>
+                    <br></br>
+                    <Formik
+                      onSubmit={handleFormSubmitEdit}
+                      initialValues={initialValues}
+                      validationSchema={checkoutSchema}
+                    >
+                      {({
                         values,
                         errors,
                         touched,
                         handleBlur,
                         handleChange,
                         handleSubmit,
-                    }) => (
-                      <Form onSubmit={handleSubmit}>
-                        <Box
-                          display="grid"
-                          gap="30px"
-                          gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-                        >
-                        <TextField
-                          hidden
-                          type='hidden'
-                          value={values.userId=DataUserEdit.userId}
-                          />
+                      }) => (
+                        <Form onSubmit={handleSubmit}>
+                          <Box
+                            display="grid"
+                            gap="30px"
+                            gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+                          >
+                            <TextField
+                              hidden
+                              type='hidden'
+                              value={values.userId = DataUserEdit.userId}
+                            />
 
-                          {/* FullName */}
-                          <TextField
-                            color="warning"
-                            fullWidth
-                            variant="filled"
-                            type="text"
-                            label="Full Name"
-                            onBlur={handleBlur}
-                            onChange={(event) => {eventHandlerEdit('userFullName')(event); handleChange(event)}}
-                            value={values.userFullName?values.userFullName:values.userFullName=DataUserEdit.userFullName}                            
-                            name="userFullName"
-                            error={!!touched.userFullName && !!errors.userFullName}
-                            helperText={getHelperText(touched.userFullName, errors.userFullName)}
-                            sx={{ gridColumn: "span 4" }}
-                          />
-
-                          {/* usproBirth */}
-                          <TextField
-                            color="warning"
-                            fullWidth
-                            variant="filled"
-                            type="date"
-                            label="Birth"
-                            onBlur={handleBlur}
-                            onChange={(event) => {eventHandlerEdit('usproBirth')(event); handleChange(event)}}
-                            value={values.usproBirth?values.usproBirth:values.usproBirth=DataUserEdit.usproBirth}
-                            name="usproBirth"
-                            error={!!touched.usproBirth && !!errors.usproBirth}
-                            helperText={getHelperText(touched.usproBirth, errors.usproBirth)}
-                            sx={{ gridColumn: "span 4" }}
-                          />
-
-                          {/* usproGender */}
-                          <FormControl variant="filled" sx={{ gridColumn: "span 4" }}>
-                            <InputLabel id="usproGender" color="warning">Gender</InputLabel>
-                            <Select
-                              placeholder="Select gender ..."
+                            {/* FullName */}
+                            <TextField
                               color="warning"
                               fullWidth
                               variant="filled"
-                              className='form-control'
-                              label="Gender"
-                              onBlur={handleBlur}                             
-                              onChange={(event) => {eventHandlerEdit('usproGender')(event); handleChange(event)}}
-                              value={values.usproGender?values.usproGender:values.usproGender=DataUserEdit.usproGender}
-                              name="usproGender"
-                              error={!!touched.usproGender && !!errors.usproGender}
+                              type="text"
+                              label="Full Name"
+                              onBlur={handleBlur}
+                              onChange={(event) => { eventHandlerEdit('userFullName')(event); handleChange(event) }}
+                              value={values.userFullName ? values.userFullName : values.userFullName = DataUserEdit.userFullName}
+                              name="userFullName"
+                              error={!!touched.userFullName && !!errors.userFullName}
+                              helperText={getHelperText(touched.userFullName, errors.userFullName)}
+                              sx={{ gridColumn: "span 4" }}
+                            />
+
+                            {/* usproBirth */}
+                            <TextField
+                              color="warning"
+                              fullWidth
+                              variant="filled"
+                              type="date"
+                              label="Birth"
+                              onBlur={handleBlur}
+                              onChange={(event) => { eventHandlerEdit('usproBirth')(event); handleChange(event) }}
+                              value={values.usproBirth ? values.usproBirth : values.usproBirth = DataUserEdit.usproBirth}
+                              name="usproBirth"
+                              error={!!touched.usproBirth && !!errors.usproBirth}
+                              helperText={getHelperText(touched.usproBirth, errors.usproBirth)}
+                              sx={{ gridColumn: "span 4" }}
+                            />
+
+                            {/* usproGender */}
+                            <FormControl variant="filled" sx={{ gridColumn: "span 4" }}>
+                              <InputLabel id="usproGender" color="warning">Gender</InputLabel>
+                              <Select
+                                placeholder="Select gender ..."
+                                color="warning"
+                                fullWidth
+                                variant="filled"
+                                className='form-control'
+                                label="Gender"
+                                onBlur={handleBlur}
+                                onChange={(event) => { eventHandlerEdit('usproGender')(event); handleChange(event) }}
+                                value={values.usproGender ? values.usproGender : values.usproGender = DataUserEdit.usproGender}
+                                name="usproGender"
+                                error={!!touched.usproGender && !!errors.usproGender}
                               // helperText={getHelperText(touched.usproGender, errors.usproGender)}
-                          >
-                              <MenuItem value=''><em>none</em></MenuItem>
-                              <MenuItem value='M'>Male</MenuItem>
-                              <MenuItem value='F'>Female</MenuItem>
-                          </Select>
-                          {!!touched.usproGender && !!errors.usproGender && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.usproGender, errors.usproGender)}</span>}
-                          </FormControl>
+                              >
+                                <MenuItem value=''><em>none</em></MenuItem>
+                                <MenuItem value='M'>Male</MenuItem>
+                                <MenuItem value='F'>Female</MenuItem>
+                              </Select>
+                              {!!touched.usproGender && !!errors.usproGender && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.usproGender, errors.usproGender)}</span>}
+                            </FormControl>
 
-                          {/* usproMaritalStatus */}
-                          <FormControl variant="filled" sx={{ gridColumn: "span 4" }}>
-                            <InputLabel id="usproMaritalStatus" color="warning">Marital Status</InputLabel>
-                            <Select
-                              placeholder="Select status ..."
-                              color="warning"
-                              fullWidth
-                              variant="filled"
-                              className='form-control'
-                              label="Marital Status"
-                              onBlur={handleBlur}                             
-                              onChange={(event) => {eventHandlerEdit('usproMaritalStatus')(event); handleChange(event)}}
-                              value={values.usproMaritalStatus?values.usproMaritalStatus:values.usproMaritalStatus=DataUserEdit.usproMaritalStatus}
-                              name="usproMaritalStatus"
-                              error={!!touched.usproMaritalStatus && !!errors.usproMaritalStatus}
+                            {/* usproMaritalStatus */}
+                            <FormControl variant="filled" sx={{ gridColumn: "span 4" }}>
+                              <InputLabel id="usproMaritalStatus" color="warning">Marital Status</InputLabel>
+                              <Select
+                                placeholder="Select status ..."
+                                color="warning"
+                                fullWidth
+                                variant="filled"
+                                className='form-control'
+                                label="Marital Status"
+                                onBlur={handleBlur}
+                                onChange={(event) => { eventHandlerEdit('usproMaritalStatus')(event); handleChange(event) }}
+                                value={values.usproMaritalStatus ? values.usproMaritalStatus : values.usproMaritalStatus = DataUserEdit.usproMaritalStatus}
+                                name="usproMaritalStatus"
+                                error={!!touched.usproMaritalStatus && !!errors.usproMaritalStatus}
                               // helperText={getHelperText(touched.usproMaritalStatus, errors.usproMaritalStatus)}
-                          >
-                              <MenuItem value=''><em>none</em></MenuItem>
-                              <MenuItem value='S'>Single</MenuItem>
-                              <MenuItem value='M'>Married</MenuItem>
-                          </Select>
-                          {!!touched.usproMaritalStatus && !!errors.usproMaritalStatus && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.usproMaritalStatus, errors.usproMaritalStatus)}</span>}
-                          </FormControl>
+                              >
+                                <MenuItem value=''><em>none</em></MenuItem>
+                                <MenuItem value='S'>Single</MenuItem>
+                                <MenuItem value='M'>Married</MenuItem>
+                              </Select>
+                              {!!touched.usproMaritalStatus && !!errors.usproMaritalStatus && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.usproMaritalStatus, errors.usproMaritalStatus)}</span>}
+                            </FormControl>
                           
-                          {/* UserType */}
-                          <FormControl variant="filled" sx={{ gridColumn: "span 4" }} error={!!touched.userType && !!errors.userType}>
-                            <InputLabel id="userType" color="warning">Type</InputLabel>
-                            <Select
-                              placeholder="Select type ..."
+                            {/* UserType */}
+                            <FormControl variant="filled" sx={{ gridColumn: "span 4" }} error={!!touched.userType && !!errors.userType}>
+                              <InputLabel id="userType" color="warning">Type</InputLabel>
+                              <Select
+                                placeholder="Select type ..."
+                                color="warning"
+                                fullWidth
+                                variant="filled"
+                                className='form-control'
+                                label="Type"
+                                onBlur={handleBlur}
+                                onChange={(event) => { eventHandlerEdit('userType')(event); handleChange(event) }}
+                                value={values.userType ? values.userType : values.userType = DataUserEdit.userType}
+                                name="userType"
+                              >
+                                <MenuItem value=''><em>none</em></MenuItem>
+                                <MenuItem value='T'>Travel Agent</MenuItem>
+                                <MenuItem value='C'>Company</MenuItem>
+                                <MenuItem value='I'>Individual</MenuItem>
+                              </Select>
+                              {!!touched.userType && !!errors.userType && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.userType, errors.userType)}</span>}
+                            </FormControl>
+
+                            {/* Email */}
+                            <TextField
                               color="warning"
                               fullWidth
                               variant="filled"
-                              className='form-control'
-                              label="Type"
-                              onBlur={handleBlur}                             
-                              onChange={(event) => {eventHandlerEdit('userType')(event); handleChange(event)}}
-                              value={values.userType?values.userType:values.userType=DataUserEdit.userType}
-                              name="userType"
-                            >
-                              <MenuItem value=''><em>none</em></MenuItem>
-                              <MenuItem value='T'>Travel Agent</MenuItem>
-                              <MenuItem value='C'>Company</MenuItem>
-                              <MenuItem value='I'>Individual</MenuItem>
-                          </Select>
-                          {!!touched.userType && !!errors.userType && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.userType, errors.userType)}</span>}
-                          </FormControl>
+                              type="email"
+                              label="Email"
+                              onBlur={handleBlur}
+                              onChange={(event) => { eventHandlerEdit('userEmail')(event); handleChange(event) }}
+                              value={values.userEmail ? values.userEmail : values.userEmail = DataUserEdit.userEmail}
+                              name="userEmail"
+                              error={!!touched.userEmail && !!errors.userEmail}
+                              helperText={getHelperText(touched.userEmail, errors.userEmail)}
+                              sx={{ gridColumn: "span 4" }}
+                            />
 
-                          {/* Email */}
-                          <TextField
-                            color="warning"
-                            fullWidth
-                            variant="filled"
-                            type="email"
-                            label="Email"
-                            onBlur={handleBlur}
-                            onChange={(event) => {eventHandlerEdit('userEmail')(event); handleChange(event)}}
-                            value={values.userEmail?values.userEmail:values.userEmail=DataUserEdit.userEmail}
-                            name="userEmail"
-                            error={!!touched.userEmail && !!errors.userEmail}
-                            helperText={getHelperText(touched.userEmail, errors.userEmail)}
-                            sx={{ gridColumn: "span 4" }}
-                          />
-
-                          {/* uspaPasswordhash */}
-                          <TextField
-                            color="warning"
-                            fullWidth
-                            variant="filled"
-                            type={showPassword ? 'text' : 'password'}
-                            InputProps={{
-                              endAdornment: (
-                                <InputAdornment position="end">
-                                  <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    onMouseDown={handleMouseDownPassword}
-                                  >
-                                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                                  </IconButton>
-                                </InputAdornment>
-                              ),
-                            }}
-                            label="Password"
-                            onBlur={handleBlur}
-                            onChange={(event) => {eventHandlerEdit('uspaPasswordhash')(event); handleChange(event)}}
-                            value={values.uspaPasswordhash}
-                            name="uspaPasswordhash"
-                            error={!!touched.uspaPasswordhash && !!errors.uspaPasswordhash}
-                            helperText={getHelperText(touched.uspaPasswordhash, errors.uspaPasswordhash)}
-                            sx={{ gridColumn: "span 4" }}
-                          />
-
-                          {/* PhoneNumber */}
-                          <TextField
-                            color="warning"
-                            fullWidth
-                            variant="filled"
-                            type="text"
-                            label="Phone Number"
-                            onBlur={handleBlur}
-                            onChange={(event) => {eventHandlerEdit('userPhoneNumber')(event); handleChange(event)}}
-                            value={values.userPhoneNumber?values.userPhoneNumber:values.userPhoneNumber=DataUserEdit.userPhoneNumber}
-                            name="userPhoneNumber"
-                            error={!!touched.userPhoneNumber && !!errors.userPhoneNumber}
-                            helperText={getHelperText(touched.userPhoneNumber, errors.userPhoneNumber)}
-                            sx={{ gridColumn: "span 4" }}
-                          />
-
-                          {/* usproNationalId */}
-                          <TextField
-                            color="warning"
-                            fullWidth
-                            variant="filled"
-                            type="text"
-                            label="National ID"
-                            onBlur={handleBlur}
-                            onChange={(event) => {eventHandlerEdit('usproNationalId')(event); handleChange(event)}}
-                            value={values.usproNationalId?values.usproNationalId:values.usproNationalId=DataUserEdit.usproNationalId}
-                            name="usproNationalId"
-                            error={!!touched.usproNationalId && !!errors.usproNationalId}
-                            helperText={getHelperText(touched.usproNationalId, errors.usproNationalId)}
-                            sx={{ gridColumn: "span 4" }}
-                          />
-                          
-                          {/* usproAddr */}
-
-                          {/* CompanyName */}
-                          <TextField
-                            color="warning"
-                            fullWidth
-                            variant="filled"
-                            type="text"
-                            label="Company Name"
-                            onBlur={handleBlur}
-                            onChange={(event) => {eventHandlerEdit('userCompanyName')(event); handleChange(event)}}
-                            value={values.userCompanyName?values.userCompanyName:values.userCompanyName=DataUserEdit.userCompanyName}
-                            name="userCompanyName"
-                            error={!!touched.userCompanyName && !!errors.userCompanyName}
-                            helperText={getHelperText(touched.userCompanyName, errors.userCompanyName)}
-                            sx={{ gridColumn: "span 4" }}
-                          />
-
-                          {/* usproJobTitle */}
-                          <TextField
-                            color="warning"
-                            fullWidth
-                            variant="filled"
-                            type="text"
-                            label="Job Title"
-                            onBlur={handleBlur}
-                            onChange={(event) => {eventHandlerEdit('usproJobTitle')(event); handleChange(event)}}
-                            value={values.usproJobTitle?values.usproJobTitle:values.usproJobTitle=DataUserEdit.usproJobTitle}
-                            name="usproJobTitle"
-                            error={!!touched.usproJobTitle && !!errors.usproJobTitle}
-                            helperText={getHelperText(touched.usproJobTitle, errors.usproJobTitle)}
-                            sx={{ gridColumn: "span 4" }}
-                          />
-
-                          {/* usmeType */}
-                          <FormControl variant="filled" sx={{ gridColumn: "span 4" }}>
-                            <InputLabel id="usmeType" color="warning">Member Type</InputLabel>
-                            <Select
-                              placeholder="Select Type ..."
+                            {/* uspaPasswordhash */}
+                            <TextField
                               color="warning"
                               fullWidth
                               variant="filled"
-                              className='form-control'
-                              label="Member Type"
-                              onBlur={handleBlur}                             
-                              onChange={(event) => {eventHandlerEdit('usmeType')(event); handleChange(event)}}
-                              value={values.usmeType?values.usmeType:values.usmeType=DataUserEdit.usmeType}
-                              name="usmeType"
-                              error={!!touched.usmeType && !!errors.usmeType}
+                              type={showPassword ? 'text' : 'password'}
+                              InputProps={{
+                                endAdornment: (
+                                  <InputAdornment position="end">
+                                    <IconButton
+                                      aria-label="toggle password visibility"
+                                      onClick={() => setShowPassword(!showPassword)}
+                                      onMouseDown={handleMouseDownPassword}
+                                    >
+                                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                  </InputAdornment>
+                                ),
+                              }}
+                              label="Password"
+                              onBlur={handleBlur}
+                              onChange={(event) => { eventHandlerEdit('uspaPasswordhash')(event); handleChange(event) }}
+                              value={values.uspaPasswordhash}
+                              name="uspaPasswordhash"
+                              error={!!touched.uspaPasswordhash && !!errors.uspaPasswordhash}
+                              helperText={getHelperText(touched.uspaPasswordhash, errors.uspaPasswordhash)}
+                              sx={{ gridColumn: "span 4" }}
+                            />
+
+                            {/* PhoneNumber */}
+                            <TextField
+                              color="warning"
+                              fullWidth
+                              variant="filled"
+                              type="text"
+                              label="Phone Number"
+                              onBlur={handleBlur}
+                              onChange={(event) => { eventHandlerEdit('userPhoneNumber')(event); handleChange(event) }}
+                              value={values.userPhoneNumber ? values.userPhoneNumber : values.userPhoneNumber = DataUserEdit.userPhoneNumber}
+                              name="userPhoneNumber"
+                              error={!!touched.userPhoneNumber && !!errors.userPhoneNumber}
+                              helperText={getHelperText(touched.userPhoneNumber, errors.userPhoneNumber)}
+                              sx={{ gridColumn: "span 4" }}
+                            />
+
+                            {/* usproNationalId */}
+                            <TextField
+                              color="warning"
+                              fullWidth
+                              variant="filled"
+                              type="text"
+                              label="National ID"
+                              onBlur={handleBlur}
+                              onChange={(event) => { eventHandlerEdit('usproNationalId')(event); handleChange(event) }}
+                              value={values.usproNationalId ? values.usproNationalId : values.usproNationalId = DataUserEdit.usproNationalId}
+                              name="usproNationalId"
+                              error={!!touched.usproNationalId && !!errors.usproNationalId}
+                              helperText={getHelperText(touched.usproNationalId, errors.usproNationalId)}
+                              sx={{ gridColumn: "span 4" }}
+                            />
+                          
+                            {/* usproAddr */}
+
+                            {/* CompanyName */}
+                            <TextField
+                              color="warning"
+                              fullWidth
+                              variant="filled"
+                              type="text"
+                              label="Company Name"
+                              onBlur={handleBlur}
+                              onChange={(event) => { eventHandlerEdit('userCompanyName')(event); handleChange(event) }}
+                              value={values.userCompanyName ? values.userCompanyName : values.userCompanyName = DataUserEdit.userCompanyName}
+                              name="userCompanyName"
+                              error={!!touched.userCompanyName && !!errors.userCompanyName}
+                              helperText={getHelperText(touched.userCompanyName, errors.userCompanyName)}
+                              sx={{ gridColumn: "span 4" }}
+                            />
+
+                            {/* usproJobTitle */}
+                            <TextField
+                              color="warning"
+                              fullWidth
+                              variant="filled"
+                              type="text"
+                              label="Job Title"
+                              onBlur={handleBlur}
+                              onChange={(event) => { eventHandlerEdit('usproJobTitle')(event); handleChange(event) }}
+                              value={values.usproJobTitle ? values.usproJobTitle : values.usproJobTitle = DataUserEdit.usproJobTitle}
+                              name="usproJobTitle"
+                              error={!!touched.usproJobTitle && !!errors.usproJobTitle}
+                              helperText={getHelperText(touched.usproJobTitle, errors.usproJobTitle)}
+                              sx={{ gridColumn: "span 4" }}
+                            />
+
+                            {/* usmeType */}
+                            <FormControl variant="filled" sx={{ gridColumn: "span 4" }}>
+                              <InputLabel id="usmeType" color="warning">Member Type</InputLabel>
+                              <Select
+                                placeholder="Select Type ..."
+                                color="warning"
+                                fullWidth
+                                variant="filled"
+                                className='form-control'
+                                label="Member Type"
+                                onBlur={handleBlur}
+                                onChange={(event) => { eventHandlerEdit('usmeType')(event); handleChange(event) }}
+                                value={values.usmeType ? values.usmeType : values.usmeType = DataUserEdit.usmeType}
+                                name="usmeType"
+                                error={!!touched.usmeType && !!errors.usmeType}
                               // helperText={getHelperText(touched.usmeType, errors.usmeType)}
-                          >
-                              <MenuItem value=''><em>none</em></MenuItem>
-                              <MenuItem value='default'>default</MenuItem>
-                              <MenuItem value='expired'>expired</MenuItem>
-                          </Select>
-                          {!!touched.usmeType && !!errors.usmeType && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.usmeType, errors.usmeType)}</span>}
-                          </FormControl>
+                              >
+                                <MenuItem value=''><em>none</em></MenuItem>
+                                <MenuItem value='default'>default</MenuItem>
+                                <MenuItem value='expired'>expired</MenuItem>
+                              </Select>
+                              {!!touched.usmeType && !!errors.usmeType && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.usmeType, errors.usmeType)}</span>}
+                            </FormControl>
 
-                          {/* usmeMembName */}
-                          <FormControl variant="filled" sx={{ gridColumn: "span 4" }}>
-                            <InputLabel id="usmeMembName" color="warning">Member Name</InputLabel>
-                            <Select
-                              placeholder="Select Name ..."
-                              color="warning"
-                              fullWidth
-                              variant="filled"
-                              className='form-control'
-                              label="Member Name"
-                              onBlur={handleBlur}                             
-                              onChange={(event) => {eventHandlerEdit('usmeMembName')(event); handleChange(event)}}
-                              value={values.usmeMembName?values.usmeMembName:values.usmeMembName=DataUserEdit.usmeMembName}
-                              name="usmeMembName"
-                              error={!!touched.usmeMembName && !!errors.usmeMembName}
+                            {/* usmeMembName */}
+                            <FormControl variant="filled" sx={{ gridColumn: "span 4" }}>
+                              <InputLabel id="usmeMembName" color="warning">Member Name</InputLabel>
+                              <Select
+                                placeholder="Select Name ..."
+                                color="warning"
+                                fullWidth
+                                variant="filled"
+                                className='form-control'
+                                label="Member Name"
+                                onBlur={handleBlur}
+                                onChange={(event) => { eventHandlerEdit('usmeMembName')(event); handleChange(event) }}
+                                value={values.usmeMembName ? values.usmeMembName : values.usmeMembName = DataUserEdit.usmeMembName}
+                                name="usmeMembName"
+                                error={!!touched.usmeMembName && !!errors.usmeMembName}
                               // helperText={getHelperText(touched.usmeMembName, errors.usmeMembName)}
-                          >
-                              <MenuItem value=''><em>none</em></MenuItem>
-                              <MenuItem value='SILVER'>SILVER</MenuItem>
-                              <MenuItem value='GOLD'>GOLD</MenuItem>
-                              <MenuItem value='VIP'>VIP</MenuItem>
-                              <MenuItem value='WIZARD'>WIZARD</MenuItem>
-                          </Select>
-                          {!!touched.usmeMembName && !!errors.usmeMembName && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.usmeMembName, errors.usmeMembName)}</span>}
-                          </FormControl>
+                              >
+                                <MenuItem value=''><em>none</em></MenuItem>
+                                <MenuItem value='SILVER'>SILVER</MenuItem>
+                                <MenuItem value='GOLD'>GOLD</MenuItem>
+                                <MenuItem value='VIP'>VIP</MenuItem>
+                                <MenuItem value='WIZARD'>WIZARD</MenuItem>
+                              </Select>
+                              {!!touched.usmeMembName && !!errors.usmeMembName && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.usmeMembName, errors.usmeMembName)}</span>}
+                            </FormControl>
 
-                          {/* usmePoints */}
-                          <TextField
-                            color="warning"
-                            fullWidth
-                            variant="filled"
-                            type="number"
-                            label="Member Points"
-                            onBlur={handleBlur}
-                            onChange={(event) => {eventHandlerEdit('usmePoints')(event); handleChange(event)}}
-                            value={values.usmePoints?values.usmePoints:values.usmePoints=DataUserEdit.usmePoints}
-                            name="usmePoints"
-                            error={!!touched.usmePoints && !!errors.usmePoints}
-                            helperText={getHelperText(touched.usmePoints, errors.usmePoints)}
-                            sx={{ gridColumn: "span 4" }}
-                          />
-
-                          {/* ubpoBonusType */}
-                          <FormControl variant="filled" sx={{ gridColumn: "span 4" }}>
-                            <InputLabel id="ubpoBonusType" color="warning">Bonus Type</InputLabel>
-                            <Select
-                              placeholder="Select type ..."
+                            {/* usmePoints */}
+                            <TextField
                               color="warning"
                               fullWidth
                               variant="filled"
-                              className='form-control'
-                              label="Bonus Type"
-                              onBlur={handleBlur}                             
-                              onChange={(event) => {eventHandlerEdit('ubpoBonusType')(event); handleChange(event)}}
-                              value={values.ubpoBonusType?values.ubpoBonusType:values.ubpoBonusType=DataUserEdit.ubpoBonusType}
-                              name="ubpoBonusType"
-                              error={!!touched.ubpoBonusType && !!errors.ubpoBonusType}
+                              type="number"
+                              label="Member Points"
+                              onBlur={handleBlur}
+                              onChange={(event) => { eventHandlerEdit('usmePoints')(event); handleChange(event) }}
+                              value={values.usmePoints ? values.usmePoints : values.usmePoints = DataUserEdit.usmePoints}
+                              name="usmePoints"
+                              error={!!touched.usmePoints && !!errors.usmePoints}
+                              helperText={getHelperText(touched.usmePoints, errors.usmePoints)}
+                              sx={{ gridColumn: "span 4" }}
+                            />
+
+                            {/* ubpoBonusType */}
+                            <FormControl variant="filled" sx={{ gridColumn: "span 4" }}>
+                              <InputLabel id="ubpoBonusType" color="warning">Bonus Type</InputLabel>
+                              <Select
+                                placeholder="Select type ..."
+                                color="warning"
+                                fullWidth
+                                variant="filled"
+                                className='form-control'
+                                label="Bonus Type"
+                                onBlur={handleBlur}
+                                onChange={(event) => { eventHandlerEdit('ubpoBonusType')(event); handleChange(event) }}
+                                value={values.ubpoBonusType ? values.ubpoBonusType : values.ubpoBonusType = DataUserEdit.ubpoBonusType}
+                                name="ubpoBonusType"
+                                error={!!touched.ubpoBonusType && !!errors.ubpoBonusType}
                               // helperText={getHelperText(touched.ubpoBonusType, errors.ubpoBonusType)}
-                          >
-                              <MenuItem value=''><em>none</em></MenuItem>
-                              <MenuItem value='R'>Rating</MenuItem>
-                              <MenuItem value='P'>Promote</MenuItem>
-                          </Select>
-                          {!!touched.ubpoBonusType && !!errors.ubpoBonusType && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.ubpoBonusType, errors.ubpoBonusType)}</span>}
-                          </FormControl>
+                              >
+                                <MenuItem value=''><em>none</em></MenuItem>
+                                <MenuItem value='R'>Rating</MenuItem>
+                                <MenuItem value='P'>Promote</MenuItem>
+                              </Select>
+                              {!!touched.ubpoBonusType && !!errors.ubpoBonusType && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.ubpoBonusType, errors.ubpoBonusType)}</span>}
+                            </FormControl>
 
-                          {/* ubpoTotalPoints */}
-                          <TextField
-                            color="warning"
-                            fullWidth
-                            variant="filled"
-                            type="number"
-                            label="Total Bonus Points"
-                            onBlur={handleBlur}
-                            onChange={(event) => {eventHandlerEdit('ubpoTotalPoints')(event); handleChange(event)}}
-                            value={values.ubpoTotalPoints?values.ubpoTotalPoints:values.ubpoTotalPoints=DataUserEdit.ubpoTotalPoints}
-                            name="ubpoTotalPoints"
-                            error={!!touched.ubpoTotalPoints && !!errors.ubpoTotalPoints}
-                            helperText={getHelperText(touched.ubpoTotalPoints, errors.ubpoTotalPoints)}
-                            sx={{ gridColumn: "span 4" }}
-                          />
-
-                          {/* usroRole */}
-                          <FormControl variant="filled" sx={{ gridColumn: "span 4" }}>
-                            <InputLabel id="usroRole" color="warning">Role</InputLabel>
-                            <Select
-                              placeholder="Select role ..."
+                            {/* ubpoTotalPoints */}
+                            <TextField
                               color="warning"
                               fullWidth
                               variant="filled"
-                              className='form-control'
-                              label="Role"
-                              onBlur={handleBlur}                             
-                              onChange={(event) => {eventHandlerEdit('usroRole')(event); handleChange(event)}}
-                              value={values.usroRole?values.usroRole:values.usroRole=DataUserEdit.usroRole}
-                              name="usroRole"
-                              error={!!touched.usroRole && !!errors.usroRole}
-                              // helperText={getHelperText(touched.usroRole, errors.usroRole)}
-                          >
-                              <MenuItem value=''><em>none</em></MenuItem>
-                              <MenuItem value={1}>Guest</MenuItem>
-                              <MenuItem value={2}>Manager</MenuItem>
-                              <MenuItem value={3}>Office Boy</MenuItem>
-                              <MenuItem value={4}>Admin</MenuItem>
-                              <MenuItem value={5}>User</MenuItem>
-                          </Select>
-                          {!!touched.usroRole && !!errors.usroRole && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.usroRole, errors.usroRole)}</span>}
-                          </FormControl>
-                          
-                        </Box>
+                              type="number"
+                              label="Total Bonus Points"
+                              onBlur={handleBlur}
+                              onChange={(event) => { eventHandlerEdit('ubpoTotalPoints')(event); handleChange(event) }}
+                              value={values.ubpoTotalPoints ? values.ubpoTotalPoints : values.ubpoTotalPoints = DataUserEdit.ubpoTotalPoints}
+                              name="ubpoTotalPoints"
+                              error={!!touched.ubpoTotalPoints && !!errors.ubpoTotalPoints}
+                              helperText={getHelperText(touched.ubpoTotalPoints, errors.ubpoTotalPoints)}
+                              sx={{ gridColumn: "span 4" }}
+                            />
 
-                        <Box display="flex" justifyContent="center" mt="20px">
-                          <Box display="flex">
-                            <button
-                              type="reset"
-                              color="warning"
-                              className="rounded-md bg-yellow-100 text-yellow-500 border-warning-500 first-line:bg-opacity-20 px-4 py-2 text-sm font-normal  hover:bg-opacity-30 focus:outline-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                                <RefreshIcon width={15} height={15}/>
-                            </button>
+                            {/* usroRole */}
+                            <FormControl variant="filled" sx={{ gridColumn: "span 4" }}>
+                              <InputLabel id="usroRole" color="warning">Role</InputLabel>
+                              <Select
+                                placeholder="Select role ..."
+                                color="warning"
+                                fullWidth
+                                variant="filled"
+                                className='form-control'
+                                label="Role"
+                                onBlur={handleBlur}
+                                onChange={(event) => { eventHandlerEdit('usroRole')(event); handleChange(event) }}
+                                value={values.usroRole ? values.usroRole : values.usroRole = DataUserEdit.usroRole}
+                                name="usroRole"
+                                error={!!touched.usroRole && !!errors.usroRole}
+                              // helperText={getHelperText(touched.usroRole, errors.usroRole)}
+                              >
+                                <MenuItem value=''><em>none</em></MenuItem>
+                                <MenuItem value={1}>Guest</MenuItem>
+                                <MenuItem value={2}>Manager</MenuItem>
+                                <MenuItem value={3}>Office Boy</MenuItem>
+                                <MenuItem value={4}>Admin</MenuItem>
+                                <MenuItem value={5}>User</MenuItem>
+                              </Select>
+                              {!!touched.usroRole && !!errors.usroRole && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.usroRole, errors.usroRole)}</span>}
+                            </FormControl>
+                          
                           </Box>
-                          <Box display="flex" pl="100px">
-                            <button
-                              type="submit"
-                              color="success"
-                              className="rounded-md bg-green-100 text-green-500 border-warning-500 first-line:bg-opacity-20 px-4 py-2 text-sm font-normal  hover:bg-opacity-30 focus:outline-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                              <SaveIcon width={15} height={15} />
-                            </button>
+
+                          <Box display="flex" justifyContent="center" mt="20px">
+                            <Box display="flex">
+                              <button
+                                type="reset"
+                                color="warning"
+                                className="rounded-md bg-yellow-100 text-yellow-500 border-warning-500 first-line:bg-opacity-20 px-4 py-2 text-sm font-normal  hover:bg-opacity-30 focus:outline-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                                <RefreshIcon width={15} height={15} />
+                              </button>
+                            </Box>
+                            <Box display="flex" pl="100px">
+                              <button
+                                type="submit"
+                                color="success"
+                                className="rounded-md bg-green-100 text-green-500 border-warning-500 first-line:bg-opacity-20 px-4 py-2 text-sm font-normal  hover:bg-opacity-30 focus:outline-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                                <SaveIcon width={15} height={15} />
+                              </button>
+                            </Box>
+                            <Box display="flex" pl="100px">
+                              <button
+                                onClick={closeModalEdit}
+                                type="button"
+                                color="error"
+                                className="rounded-md bg-red-100 text-red-500 border-error-500 first-line:bg-opacity-20 px-4 py-2 text-sm font-normal  hover:bg-opacity-30 focus:outline-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                                <XMarkIcon width={20} height={20} />
+                              </button>
+                            </Box>
                           </Box>
-                          <Box display="flex" pl="100px">
-                            <button
-                              onClick={closeModalEdit}
-                              type="button"
-                              color="error"
-                              className="rounded-md bg-red-100 text-red-500 border-error-500 first-line:bg-opacity-20 px-4 py-2 text-sm font-normal  hover:bg-opacity-30 focus:outline-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                                <XMarkIcon width={20} height={20}/>
-                            </button>
-                          </Box>
-                        </Box>
-                      </Form>
-                    )}
-                  </Formik>
-                </Dialog.Panel>
-              </Transition.Child>
+                        </Form>
+                      )}
+                    </Formik>
+                  </Dialog.Panel>
+                </Transition.Child>
+              </div>
             </div>
-          </div>
-        </Dialog>
-      </Transition>
-    </LayoutAdmin>
-  </>
-  )
+          </Dialog>
+        </Transition>
+      </LayoutAdmin>
+    </>
+  );
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
