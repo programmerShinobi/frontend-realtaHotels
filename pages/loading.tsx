@@ -1,11 +1,15 @@
-import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
-import { Box, FormLabel } from '@mui/material';
+import React from 'react';
+import { Backdrop, Box, CircularProgress, FormLabel } from '@mui/material';
 
 export default function Loading() {
   return (
-    <Box className="h-screen w-full flex flex-col justify-center items-center bg-transparent">
-      <FormLabel className="text-2xl font-bold ">{"Loading..."}</FormLabel>
+    <Box>
+      <Backdrop
+        sx={{ color:"#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={true}
+      >
+        <CircularProgress color="primary" />
+      </Backdrop>
     </Box>
   );
 }
