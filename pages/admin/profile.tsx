@@ -12,8 +12,6 @@ import * as yup from "yup";
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import TextField from '@mui/material/TextField';
 import { Form, Formik } from 'formik';
-import { styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
 import styles from '../../styles/ContentProfile.module.css';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import SaveIcon from '@mui/icons-material/Save';
@@ -24,7 +22,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CloudSyncIcon from '@mui/icons-material/CloudSync';
 import EditIcon from '@mui/icons-material/Edit';
 import moment from "moment";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { InputRef, Tabs, Tag, Button, Input, Space, Table } from "antd";
 import { SearchOutlined } from '@ant-design/icons';
 import type { ColumnsType, ColumnType } from 'antd/es/table';
@@ -38,62 +36,36 @@ interface Props {
 interface DataTypeBonusPoints {
   key: string;
   createdOn: string;
-  points: number;
-  tags: string[];
+  point: number;
+  type: string[];
 }
 
-const columnsBonusPoints: ColumnsType<DataTypeBonusPoints> = [
-  {
-    title: 'Created On',
-    dataIndex: 'createdOn',
-    key: 'createdOn',
-    render: (text:any) => <a>{text}</a>,
-  },
-  {
-    title: 'Bonus Type',
-    key: 'tags',
-    dataIndex: 'tags',
-    render: (_, { tags }) => (
-      <>
-        {tags.map((tag) => {
-          let color = tag.length > 5 ? 'geekblue' : 'green';
-          if (tag === 'rating') {
-            color = 'volcano';
-          }
-          return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          );
-        })}
-      </>
-    ),
-  },
-  {
-    title: 'Points',
-    dataIndex: 'points',
-    key: 'points',
-  },
-];
+type DataIndexBonusPoints = keyof DataTypeBonusPoints;
 
 const dataBonusPoints: DataTypeBonusPoints[] = [
   {
     key: '1',
-    createdOn: '12 Jan 2022',
-    tags: ['promote'],
-    points: 32,
+    createdOn: '12-Jan-2022',
+    type: ['r'],
+    point: 32,
   },
   {
     key: '2',
-    createdOn: '01 Mar 2021',
-    points: 29,
-    tags: ['rating'],
+    createdOn: '01-Des-2021',
+    type: ['p'],
+    point: 30,
   },
   {
     key: '3',
-    createdOn: '28 Jun 2019',
-    points: 26,
-    tags: ['promote'],
+    createdOn: '05-Nov-2020',
+    type: ['r'],
+    point: 28,
+  },
+  {
+    key: '4',
+    createdOn: '10-Oct-2019',
+    type: ['p'],
+    point: 26,
   },
 ];
 
@@ -252,12 +224,12 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     userCompanyName: yup.string().required("required"),
     userEmail: yup.string().email("invalid email").required("required"),
     userPhoneNumber: yup.string().matches(phoneRegExp, "Phone number is not valid").required("required"),
-    uspaPasswordhash: yup.string().required("required"),
-    ubpoTotalPoints : yup.number().required("required"),
-    ubpoBonusType : yup.string().required("required"),
-    usmeMembName : yup.string().required("required"),
-    usmePoints : yup.number().required("required"),
-    usmeType : yup.string().required("required"), 
+    // uspaPasswordhash: yup.string().required("required"),
+    // ubpoTotalPoints : yup.number().required("required"),
+    // ubpoBonusType : yup.string().required("required"),
+    // usmeMembName : yup.string().required("required"),
+    // usmePoints : yup.number().required("required"),
+    // usmeType : yup.string().required("required"), 
     usroRole: yup.number().required("required"),
     usproNationalId: yup.string().required("required"),
     usproBirth : yup.string().required("required"),
@@ -454,7 +426,22 @@ const Profile: NextPage<Props> = ({ dirs }) => {
   const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef<InputRef>(null);
 
-  const handleSearch = (
+  const handleSearchBonusPoints = (
+    selectedKeys: string[],
+    confirm: (param?: FilterConfirmProps) => void,
+    dataIndex: DataIndexBonusPoints,
+  ) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+
+  const handleResetBonusPoints = (clearFilters: () => void) => {
+    clearFilters();
+    setSearchText('');
+  };
+
+  const handleSearchMembers = (
     selectedKeys: string[],
     confirm: (param?: FilterConfirmProps) => void,
     dataIndex: DataIndexMembers,
@@ -464,12 +451,12 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     setSearchedColumn(dataIndex);
   };
 
-  const handleReset = (clearFilters: () => void) => {
+  const handleResetMembers = (clearFilters: () => void) => {
     clearFilters();
     setSearchText('');
   };
 
-  const getColumnSearchProps = (dataIndex: DataIndexMembers): ColumnType<DataTypeMembers> => ({
+  const getColumnSearchPropsBonusPoints = (dataIndex: DataIndexBonusPoints): ColumnType<DataTypeBonusPoints> => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
       <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
         <Input
@@ -477,12 +464,12 @@ const Profile: NextPage<Props> = ({ dirs }) => {
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
           onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
+          onPressEnter={() => handleSearchBonusPoints(selectedKeys as string[], confirm, dataIndex)}
           style={{ marginBottom: 8, display: 'block' }}
         />
         <Space>
           <Button
-            onClick={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
+            onClick={() => handleSearchBonusPoints(selectedKeys as string[], confirm, dataIndex)}
             icon={<SearchOutlined />}
             size="small"
             style={{ width: 90 }}
@@ -490,7 +477,124 @@ const Profile: NextPage<Props> = ({ dirs }) => {
             Search
           </Button>
           <Button
-            onClick={() => clearFilters && handleReset(clearFilters)}
+            onClick={() => clearFilters && handleResetBonusPoints(clearFilters)}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({ closeDropdown: false });
+              setSearchText((selectedKeys as string[])[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Filter
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            close
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered: boolean) => (
+      <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        .toString()
+        .toLowerCase()
+        .includes((value as string).toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ''}
+        />
+      ) : (
+        text
+      ),
+  });
+
+  const columnsBonusPoints: ColumnsType<DataTypeBonusPoints> = [
+    {
+      title: 'Created On',
+      dataIndex: 'createdOn',
+      key: 'createdOn',
+      width: '30%',
+      ...getColumnSearchPropsBonusPoints('createdOn'),
+    },
+    {
+      title: 'Bonus Type',
+      dataIndex: 'type',
+      key: 'type',
+      width: '30%',
+      ...getColumnSearchPropsBonusPoints('type'),
+      render: (_, { type }) => (
+        <>
+          {type.map((isType) => {
+            let color = isType.length < 5 ? 'geekblue' : 'green';
+            if (isType === 'p') {
+              color = 'orange';
+            }
+            return (
+              <Tag color={color} key={isType}>
+                {isType=='p'?'PROMOTE':'RATING'}
+              </Tag>
+            );
+          })}
+        </>
+      ),
+    },
+    {
+      title: 'Point',
+      dataIndex: 'point',
+      key: 'point',
+      width: '20%',
+      ...getColumnSearchPropsBonusPoints('point'),
+      sorter: (a, b) => a.point - b.point,
+      sortDirections: ['descend', 'ascend'],
+    },
+  ];
+
+  const getColumnSearchPropsMembers = (dataIndex: DataIndexMembers): ColumnType<DataTypeMembers> => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
+      <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => handleSearchMembers(selectedKeys as string[], confirm, dataIndex)}
+          style={{ marginBottom: 8, display: 'block' }}
+        />
+        <Space>
+          <Button
+            onClick={() => handleSearchMembers(selectedKeys as string[], confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleResetMembers(clearFilters)}
             size="small"
             style={{ width: 90 }}
           >
@@ -551,14 +655,14 @@ const Profile: NextPage<Props> = ({ dirs }) => {
       dataIndex: 'promoteDate',
       key: 'promoteDate',
       width: '30%',
-      ...getColumnSearchProps('promoteDate'),
+      ...getColumnSearchPropsMembers('promoteDate'),
     },
     {
       title: 'Member Type',
       dataIndex: 'type',
       key: 'type',
       width: '30%',
-      ...getColumnSearchProps('type'),
+      ...getColumnSearchPropsMembers('type'),
       render: (_, { type }) => (
         <>
           {type.map((isType) => {
@@ -586,7 +690,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
       dataIndex: 'point',
       key: 'point',
       width: '20%',
-      ...getColumnSearchProps('point'),
+      ...getColumnSearchPropsMembers('point'),
       sorter: (a, b) => a.point - b.point,
       sortDirections: ['descend', 'ascend'],
     },
@@ -595,7 +699,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
       dataIndex: 'status',
       key: 'status',
       width: '20%',
-      ...getColumnSearchProps('status'),
+      ...getColumnSearchPropsMembers('status'),
       render: (_, { status }) => (
         <>
           {status.map((isStatus) => {
@@ -894,19 +998,108 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                               sx={{ gridColumn: "span 4" }}
                             />
 
-                            {/* usproBirth */}
+                            {/* UserType */}
+                            <FormControl variant="filled" sx={{ gridColumn: "span 4" }} error={!!touched.userType && !!errors.userType}>
+                              <InputLabel id="userType" color="warning">Type</InputLabel>
+                              <Select
+                                placeholder="Select type ..."
+                                color="warning"
+                                fullWidth
+                                variant="filled"
+                                className='form-control'
+                                label="Type"
+                                onBlur={handleBlur}
+                                onChange={(event) => { eventHandlerEdit('userType')(event); handleChange(event) }}
+                                value={values.userType ? values.userType : values.userType = DataUserEdit.userType}
+                                name="userType"
+                              >
+                                <MenuItem value=''><em>none</em></MenuItem>
+                                <MenuItem value='T'>Travel Agent</MenuItem>
+                                <MenuItem value='C'>Company</MenuItem>
+                                <MenuItem value='I'>Individual</MenuItem>
+                              </Select>
+                              {!!touched.userType && !!errors.userType && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.userType, errors.userType)}</span>}
+                            </FormControl>
+
+                            {/* PhoneNumber */}
                             <TextField
                               color="warning"
                               fullWidth
                               variant="filled"
-                              type="date"
-                              label="Birth"
+                              type="text"
+                              label="Phone Number"
                               onBlur={handleBlur}
-                              onChange={(event) => { eventHandlerEdit('usproBirth')(event); handleChange(event) }}
-                              value={values.usproBirth ? values.usproBirth : values.usproBirth = DataUserEdit.usproBirth}
-                              name="usproBirth"
-                              error={!!touched.usproBirth && !!errors.usproBirth}
-                              helperText={getHelperText(touched.usproBirth, errors.usproBirth)}
+                              onChange={(event) => { eventHandlerEdit('userPhoneNumber')(event); handleChange(event) }}
+                              value={values.userPhoneNumber ? values.userPhoneNumber : values.userPhoneNumber = DataUserEdit.userPhoneNumber}
+                              name="userPhoneNumber"
+                              error={!!touched.userPhoneNumber && !!errors.userPhoneNumber}
+                              helperText={getHelperText(touched.userPhoneNumber, errors.userPhoneNumber)}
+                              sx={{ gridColumn: "span 4" }}
+                            />
+
+                            {/* Email */}
+                            <TextField
+                              color="warning"
+                              fullWidth
+                              variant="filled"
+                              type="email"
+                              label="Email"
+                              onBlur={handleBlur}
+                              onChange={(event) => { eventHandlerEdit('userEmail')(event); handleChange(event) }}
+                              value={values.userEmail ? values.userEmail : values.userEmail = DataUserEdit.userEmail}
+                              name="userEmail"
+                              error={!!touched.userEmail && !!errors.userEmail}
+                              helperText={getHelperText(touched.userEmail, errors.userEmail)}
+                              sx={{ gridColumn: "span 4" }}
+                            />
+                            
+                            {/* CompanyName */}
+                            <TextField
+                              color="warning"
+                              fullWidth
+                              variant="filled"
+                              type="text"
+                              label="Company Name"
+                              onBlur={handleBlur}
+                              onChange={(event) => { eventHandlerEdit('userCompanyName')(event); handleChange(event) }}
+                              value={values.userCompanyName ? values.userCompanyName : values.userCompanyName = DataUserEdit.userCompanyName}
+                              name="userCompanyName"
+                              error={!!touched.userCompanyName && !!errors.userCompanyName}
+                              helperText={getHelperText(touched.userCompanyName, errors.userCompanyName)}
+                              sx={{ gridColumn: "span 4" }}
+                            />
+
+                            {/* ---------------------------------------------------- */}
+                          
+                            {/* usproNationalId */}
+                            <TextField
+                              color="warning"
+                              fullWidth
+                              variant="filled"
+                              type="text"
+                              label="National ID"
+                              onBlur={handleBlur}
+                              onChange={(event) => { eventHandlerEdit('usproNationalId')(event); handleChange(event) }}
+                              value={values.usproNationalId ? values.usproNationalId : values.usproNationalId = DataUserEdit.usproNationalId}
+                              name="usproNationalId"
+                              error={!!touched.usproNationalId && !!errors.usproNationalId}
+                              helperText={getHelperText(touched.usproNationalId, errors.usproNationalId)}
+                              sx={{ gridColumn: "span 4" }}
+                            />
+
+                            {/* usproJobTitle */}
+                            <TextField
+                              color="warning"
+                              fullWidth
+                              variant="filled"
+                              type="text"
+                              label="Job Title"
+                              onBlur={handleBlur}
+                              onChange={(event) => { eventHandlerEdit('usproJobTitle')(event); handleChange(event) }}
+                              value={values.usproJobTitle ? values.usproJobTitle : values.usproJobTitle = DataUserEdit.usproJobTitle}
+                              name="usproJobTitle"
+                              error={!!touched.usproJobTitle && !!errors.usproJobTitle}
+                              helperText={getHelperText(touched.usproJobTitle, errors.usproJobTitle)}
                               sx={{ gridColumn: "span 4" }}
                             />
 
@@ -934,6 +1127,22 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                               {!!touched.usproGender && !!errors.usproGender && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.usproGender, errors.usproGender)}</span>}
                             </FormControl>
 
+                            {/* usproBirth */}
+                            <TextField
+                              color="warning"
+                              fullWidth
+                              variant="filled"
+                              type="date"
+                              label="Birth"
+                              onBlur={handleBlur}
+                              onChange={(event) => { eventHandlerEdit('usproBirth')(event); handleChange(event) }}
+                              value={values.usproBirth ? values.usproBirth : values.usproBirth = DataUserEdit.usproBirth}
+                              name="usproBirth"
+                              error={!!touched.usproBirth && !!errors.usproBirth}
+                              helperText={getHelperText(touched.usproBirth, errors.usproBirth)}
+                              sx={{ gridColumn: "span 4" }}
+                            />
+
                             {/* usproMaritalStatus */}
                             <FormControl variant="filled" sx={{ gridColumn: "span 4" }}>
                               <InputLabel id="usproMaritalStatus" color="warning">Marital Status</InputLabel>
@@ -957,48 +1166,11 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                               </Select>
                               {!!touched.usproMaritalStatus && !!errors.usproMaritalStatus && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.usproMaritalStatus, errors.usproMaritalStatus)}</span>}
                             </FormControl>
-                          
-                            {/* UserType */}
-                            <FormControl variant="filled" sx={{ gridColumn: "span 4" }} error={!!touched.userType && !!errors.userType}>
-                              <InputLabel id="userType" color="warning">Type</InputLabel>
-                              <Select
-                                placeholder="Select type ..."
-                                color="warning"
-                                fullWidth
-                                variant="filled"
-                                className='form-control'
-                                label="Type"
-                                onBlur={handleBlur}
-                                onChange={(event) => { eventHandlerEdit('userType')(event); handleChange(event) }}
-                                value={values.userType ? values.userType : values.userType = DataUserEdit.userType}
-                                name="userType"
-                              >
-                                <MenuItem value=''><em>none</em></MenuItem>
-                                <MenuItem value='T'>Travel Agent</MenuItem>
-                                <MenuItem value='C'>Company</MenuItem>
-                                <MenuItem value='I'>Individual</MenuItem>
-                              </Select>
-                              {!!touched.userType && !!errors.userType && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.userType, errors.userType)}</span>}
-                            </FormControl>
 
-                            {/* Email */}
-                            <TextField
-                              color="warning"
-                              fullWidth
-                              variant="filled"
-                              type="email"
-                              label="Email"
-                              onBlur={handleBlur}
-                              onChange={(event) => { eventHandlerEdit('userEmail')(event); handleChange(event) }}
-                              value={values.userEmail ? values.userEmail : values.userEmail = DataUserEdit.userEmail}
-                              name="userEmail"
-                              error={!!touched.userEmail && !!errors.userEmail}
-                              helperText={getHelperText(touched.userEmail, errors.userEmail)}
-                              sx={{ gridColumn: "span 4" }}
-                            />
+                            {/* usproAddr */}
 
                             {/* uspaPasswordhash */}
-                            <TextField
+                            {/* <TextField
                               color="warning"
                               fullWidth
                               variant="filled"
@@ -1024,207 +1196,8 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                               error={!!touched.uspaPasswordhash && !!errors.uspaPasswordhash}
                               helperText={getHelperText(touched.uspaPasswordhash, errors.uspaPasswordhash)}
                               sx={{ gridColumn: "span 4" }}
-                            />
+                            /> */}
 
-                            {/* PhoneNumber */}
-                            <TextField
-                              color="warning"
-                              fullWidth
-                              variant="filled"
-                              type="text"
-                              label="Phone Number"
-                              onBlur={handleBlur}
-                              onChange={(event) => { eventHandlerEdit('userPhoneNumber')(event); handleChange(event) }}
-                              value={values.userPhoneNumber ? values.userPhoneNumber : values.userPhoneNumber = DataUserEdit.userPhoneNumber}
-                              name="userPhoneNumber"
-                              error={!!touched.userPhoneNumber && !!errors.userPhoneNumber}
-                              helperText={getHelperText(touched.userPhoneNumber, errors.userPhoneNumber)}
-                              sx={{ gridColumn: "span 4" }}
-                            />
-
-                            {/* usproNationalId */}
-                            <TextField
-                              color="warning"
-                              fullWidth
-                              variant="filled"
-                              type="text"
-                              label="National ID"
-                              onBlur={handleBlur}
-                              onChange={(event) => { eventHandlerEdit('usproNationalId')(event); handleChange(event) }}
-                              value={values.usproNationalId ? values.usproNationalId : values.usproNationalId = DataUserEdit.usproNationalId}
-                              name="usproNationalId"
-                              error={!!touched.usproNationalId && !!errors.usproNationalId}
-                              helperText={getHelperText(touched.usproNationalId, errors.usproNationalId)}
-                              sx={{ gridColumn: "span 4" }}
-                            />
-                          
-                            {/* usproAddr */}
-
-                            {/* CompanyName */}
-                            <TextField
-                              color="warning"
-                              fullWidth
-                              variant="filled"
-                              type="text"
-                              label="Company Name"
-                              onBlur={handleBlur}
-                              onChange={(event) => { eventHandlerEdit('userCompanyName')(event); handleChange(event) }}
-                              value={values.userCompanyName ? values.userCompanyName : values.userCompanyName = DataUserEdit.userCompanyName}
-                              name="userCompanyName"
-                              error={!!touched.userCompanyName && !!errors.userCompanyName}
-                              helperText={getHelperText(touched.userCompanyName, errors.userCompanyName)}
-                              sx={{ gridColumn: "span 4" }}
-                            />
-
-                            {/* usproJobTitle */}
-                            <TextField
-                              color="warning"
-                              fullWidth
-                              variant="filled"
-                              type="text"
-                              label="Job Title"
-                              onBlur={handleBlur}
-                              onChange={(event) => { eventHandlerEdit('usproJobTitle')(event); handleChange(event) }}
-                              value={values.usproJobTitle ? values.usproJobTitle : values.usproJobTitle = DataUserEdit.usproJobTitle}
-                              name="usproJobTitle"
-                              error={!!touched.usproJobTitle && !!errors.usproJobTitle}
-                              helperText={getHelperText(touched.usproJobTitle, errors.usproJobTitle)}
-                              sx={{ gridColumn: "span 4" }}
-                            />
-
-                            {/* usmeType */}
-                            <FormControl variant="filled" sx={{ gridColumn: "span 4" }}>
-                              <InputLabel id="usmeType" color="warning">Member Type</InputLabel>
-                              <Select
-                                placeholder="Select Type ..."
-                                color="warning"
-                                fullWidth
-                                variant="filled"
-                                className='form-control'
-                                label="Member Type"
-                                onBlur={handleBlur}
-                                onChange={(event) => { eventHandlerEdit('usmeType')(event); handleChange(event) }}
-                                value={values.usmeType ? values.usmeType : values.usmeType = DataUserEdit.usmeType}
-                                name="usmeType"
-                                error={!!touched.usmeType && !!errors.usmeType}
-                              // helperText={getHelperText(touched.usmeType, errors.usmeType)}
-                              >
-                                <MenuItem value=''><em>none</em></MenuItem>
-                                <MenuItem value='default'>default</MenuItem>
-                                <MenuItem value='expired'>expired</MenuItem>
-                              </Select>
-                              {!!touched.usmeType && !!errors.usmeType && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.usmeType, errors.usmeType)}</span>}
-                            </FormControl>
-
-                            {/* usmeMembName */}
-                            <FormControl variant="filled" sx={{ gridColumn: "span 4" }}>
-                              <InputLabel id="usmeMembName" color="warning">Member Name</InputLabel>
-                              <Select
-                                placeholder="Select Name ..."
-                                color="warning"
-                                fullWidth
-                                variant="filled"
-                                className='form-control'
-                                label="Member Name"
-                                onBlur={handleBlur}
-                                onChange={(event) => { eventHandlerEdit('usmeMembName')(event); handleChange(event) }}
-                                value={values.usmeMembName ? values.usmeMembName : values.usmeMembName = DataUserEdit.usmeMembName}
-                                name="usmeMembName"
-                                error={!!touched.usmeMembName && !!errors.usmeMembName}
-                              // helperText={getHelperText(touched.usmeMembName, errors.usmeMembName)}
-                              >
-                                <MenuItem value=''><em>none</em></MenuItem>
-                                <MenuItem value='SILVER'>SILVER</MenuItem>
-                                <MenuItem value='GOLD'>GOLD</MenuItem>
-                                <MenuItem value='VIP'>VIP</MenuItem>
-                                <MenuItem value='WIZARD'>WIZARD</MenuItem>
-                              </Select>
-                              {!!touched.usmeMembName && !!errors.usmeMembName && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.usmeMembName, errors.usmeMembName)}</span>}
-                            </FormControl>
-
-                            {/* usmePoints */}
-                            <TextField
-                              color="warning"
-                              fullWidth
-                              variant="filled"
-                              type="number"
-                              label="Member Points"
-                              onBlur={handleBlur}
-                              onChange={(event) => { eventHandlerEdit('usmePoints')(event); handleChange(event) }}
-                              value={values.usmePoints ? values.usmePoints : values.usmePoints = DataUserEdit.usmePoints}
-                              name="usmePoints"
-                              error={!!touched.usmePoints && !!errors.usmePoints}
-                              helperText={getHelperText(touched.usmePoints, errors.usmePoints)}
-                              sx={{ gridColumn: "span 4" }}
-                            />
-
-                            {/* ubpoBonusType */}
-                            <FormControl variant="filled" sx={{ gridColumn: "span 4" }}>
-                              <InputLabel id="ubpoBonusType" color="warning">Bonus Type</InputLabel>
-                              <Select
-                                placeholder="Select type ..."
-                                color="warning"
-                                fullWidth
-                                variant="filled"
-                                className='form-control'
-                                label="Bonus Type"
-                                onBlur={handleBlur}
-                                onChange={(event) => { eventHandlerEdit('ubpoBonusType')(event); handleChange(event) }}
-                                value={values.ubpoBonusType ? values.ubpoBonusType : values.ubpoBonusType = DataUserEdit.ubpoBonusType}
-                                name="ubpoBonusType"
-                                error={!!touched.ubpoBonusType && !!errors.ubpoBonusType}
-                              // helperText={getHelperText(touched.ubpoBonusType, errors.ubpoBonusType)}
-                              >
-                                <MenuItem value=''><em>none</em></MenuItem>
-                                <MenuItem value='R'>Rating</MenuItem>
-                                <MenuItem value='P'>Promote</MenuItem>
-                              </Select>
-                              {!!touched.ubpoBonusType && !!errors.ubpoBonusType && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.ubpoBonusType, errors.ubpoBonusType)}</span>}
-                            </FormControl>
-
-                            {/* ubpoTotalPoints */}
-                            <TextField
-                              color="warning"
-                              fullWidth
-                              variant="filled"
-                              type="number"
-                              label="Total Bonus Points"
-                              onBlur={handleBlur}
-                              onChange={(event) => { eventHandlerEdit('ubpoTotalPoints')(event); handleChange(event) }}
-                              value={values.ubpoTotalPoints ? values.ubpoTotalPoints : values.ubpoTotalPoints = DataUserEdit.ubpoTotalPoints}
-                              name="ubpoTotalPoints"
-                              error={!!touched.ubpoTotalPoints && !!errors.ubpoTotalPoints}
-                              helperText={getHelperText(touched.ubpoTotalPoints, errors.ubpoTotalPoints)}
-                              sx={{ gridColumn: "span 4" }}
-                            />
-
-                            {/* usroRole */}
-                            <FormControl variant="filled" sx={{ gridColumn: "span 4" }}>
-                              <InputLabel id="usroRole" color="warning">Role</InputLabel>
-                              <Select
-                                placeholder="Select role ..."
-                                color="warning"
-                                fullWidth
-                                variant="filled"
-                                className='form-control'
-                                label="Role"
-                                onBlur={handleBlur}
-                                onChange={(event) => { eventHandlerEdit('usroRole')(event); handleChange(event) }}
-                                value={values.usroRole ? values.usroRole : values.usroRole = DataUserEdit.usroRole}
-                                name="usroRole"
-                                error={!!touched.usroRole && !!errors.usroRole}
-                              // helperText={getHelperText(touched.usroRole, errors.usroRole)}
-                              >
-                                <MenuItem value=''><em>none</em></MenuItem>
-                                <MenuItem value={1}>Guest</MenuItem>
-                                <MenuItem value={2}>Manager</MenuItem>
-                                <MenuItem value={3}>Office Boy</MenuItem>
-                                <MenuItem value={4}>Admin</MenuItem>
-                                <MenuItem value={5}>User</MenuItem>
-                              </Select>
-                              {!!touched.usroRole && !!errors.usroRole && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.usroRole, errors.usroRole)}</span>}
-                            </FormControl>
-                          
                           </Box>
 
                           <Box display="flex" justifyContent="center" mt="20px">
