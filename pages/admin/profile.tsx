@@ -12,8 +12,6 @@ import * as yup from "yup";
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import TextField from '@mui/material/TextField';
 import { Form, Formik } from 'formik';
-import { styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
 import styles from '../../styles/ContentProfile.module.css';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import SaveIcon from '@mui/icons-material/Save';
@@ -24,7 +22,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CloudSyncIcon from '@mui/icons-material/CloudSync';
 import EditIcon from '@mui/icons-material/Edit';
 import moment from "moment";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { InputRef, Tabs, Tag, Button, Input, Space, Table } from "antd";
 import { SearchOutlined } from '@ant-design/icons';
 import type { ColumnsType, ColumnType } from 'antd/es/table';
@@ -38,62 +36,36 @@ interface Props {
 interface DataTypeBonusPoints {
   key: string;
   createdOn: string;
-  points: number;
-  tags: string[];
+  point: number;
+  type: string[];
 }
 
-const columnsBonusPoints: ColumnsType<DataTypeBonusPoints> = [
-  {
-    title: 'Created On',
-    dataIndex: 'createdOn',
-    key: 'createdOn',
-    render: (text:any) => <a>{text}</a>,
-  },
-  {
-    title: 'Bonus Type',
-    key: 'tags',
-    dataIndex: 'tags',
-    render: (_, { tags }) => (
-      <>
-        {tags.map((tag) => {
-          let color = tag.length > 5 ? 'geekblue' : 'green';
-          if (tag === 'rating') {
-            color = 'volcano';
-          }
-          return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          );
-        })}
-      </>
-    ),
-  },
-  {
-    title: 'Points',
-    dataIndex: 'points',
-    key: 'points',
-  },
-];
+type DataIndexBonusPoints = keyof DataTypeBonusPoints;
 
 const dataBonusPoints: DataTypeBonusPoints[] = [
   {
     key: '1',
-    createdOn: '12 Jan 2022',
-    tags: ['promote'],
-    points: 32,
+    createdOn: '12-Jan-2022',
+    type: ['rating'],
+    point: 32,
   },
   {
     key: '2',
-    createdOn: '01 Mar 2021',
-    points: 29,
-    tags: ['rating'],
+    createdOn: '01-Des-2021',
+    type: ['default'],
+    point: 30,
   },
   {
     key: '3',
-    createdOn: '28 Jun 2019',
-    points: 26,
-    tags: ['promote'],
+    createdOn: '05-Nov-2020',
+    type: ['rating'],
+    point: 28,
+  },
+  {
+    key: '4',
+    createdOn: '10-Oct-2019',
+    type: ['default'],
+    point: 26,
   },
 ];
 
@@ -454,7 +426,22 @@ const Profile: NextPage<Props> = ({ dirs }) => {
   const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef<InputRef>(null);
 
-  const handleSearch = (
+  const handleSearchBonusPoints = (
+    selectedKeys: string[],
+    confirm: (param?: FilterConfirmProps) => void,
+    dataIndex: DataIndexBonusPoints,
+  ) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+
+  const handleResetBonusPoints = (clearFilters: () => void) => {
+    clearFilters();
+    setSearchText('');
+  };
+
+  const handleSearchMembers = (
     selectedKeys: string[],
     confirm: (param?: FilterConfirmProps) => void,
     dataIndex: DataIndexMembers,
@@ -464,12 +451,12 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     setSearchedColumn(dataIndex);
   };
 
-  const handleReset = (clearFilters: () => void) => {
+  const handleResetMembers = (clearFilters: () => void) => {
     clearFilters();
     setSearchText('');
   };
 
-  const getColumnSearchProps = (dataIndex: DataIndexMembers): ColumnType<DataTypeMembers> => ({
+  const getColumnSearchPropsBonusPoints = (dataIndex: DataIndexBonusPoints): ColumnType<DataTypeBonusPoints> => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
       <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
         <Input
@@ -477,12 +464,12 @@ const Profile: NextPage<Props> = ({ dirs }) => {
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
           onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
+          onPressEnter={() => handleSearchBonusPoints(selectedKeys as string[], confirm, dataIndex)}
           style={{ marginBottom: 8, display: 'block' }}
         />
         <Space>
           <Button
-            onClick={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
+            onClick={() => handleSearchBonusPoints(selectedKeys as string[], confirm, dataIndex)}
             icon={<SearchOutlined />}
             size="small"
             style={{ width: 90 }}
@@ -490,7 +477,124 @@ const Profile: NextPage<Props> = ({ dirs }) => {
             Search
           </Button>
           <Button
-            onClick={() => clearFilters && handleReset(clearFilters)}
+            onClick={() => clearFilters && handleResetBonusPoints(clearFilters)}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({ closeDropdown: false });
+              setSearchText((selectedKeys as string[])[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Filter
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            close
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered: boolean) => (
+      <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        .toString()
+        .toLowerCase()
+        .includes((value as string).toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ''}
+        />
+      ) : (
+        text
+      ),
+  });
+
+  const columnsBonusPoints: ColumnsType<DataTypeBonusPoints> = [
+    {
+      title: 'Created On',
+      dataIndex: 'createdOn',
+      key: 'createdOn',
+      width: '30%',
+      ...getColumnSearchPropsBonusPoints('createdOn'),
+    },
+    {
+      title: 'Bonus Type',
+      dataIndex: 'type',
+      key: 'type',
+      width: '30%',
+      ...getColumnSearchPropsBonusPoints('type'),
+      render: (_, { type }) => (
+        <>
+          {type.map((isType) => {
+            let color = isType.length < 5 ? 'geekblue' : 'green';
+            if (isType === 'default') {
+              color = 'geekblue';
+            }
+            return (
+              <Tag color={color} key={isType}>
+                {isType.toUpperCase()}
+              </Tag>
+            );
+          })}
+        </>
+      ),
+    },
+    {
+      title: 'Point',
+      dataIndex: 'point',
+      key: 'point',
+      width: '20%',
+      ...getColumnSearchPropsBonusPoints('point'),
+      sorter: (a, b) => a.point - b.point,
+      sortDirections: ['descend', 'ascend'],
+    },
+  ];
+
+  const getColumnSearchPropsMembers = (dataIndex: DataIndexMembers): ColumnType<DataTypeMembers> => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
+      <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => handleSearchMembers(selectedKeys as string[], confirm, dataIndex)}
+          style={{ marginBottom: 8, display: 'block' }}
+        />
+        <Space>
+          <Button
+            onClick={() => handleSearchMembers(selectedKeys as string[], confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleResetMembers(clearFilters)}
             size="small"
             style={{ width: 90 }}
           >
@@ -551,14 +655,14 @@ const Profile: NextPage<Props> = ({ dirs }) => {
       dataIndex: 'promoteDate',
       key: 'promoteDate',
       width: '30%',
-      ...getColumnSearchProps('promoteDate'),
+      ...getColumnSearchPropsMembers('promoteDate'),
     },
     {
       title: 'Member Type',
       dataIndex: 'type',
       key: 'type',
       width: '30%',
-      ...getColumnSearchProps('type'),
+      ...getColumnSearchPropsMembers('type'),
       render: (_, { type }) => (
         <>
           {type.map((isType) => {
@@ -586,7 +690,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
       dataIndex: 'point',
       key: 'point',
       width: '20%',
-      ...getColumnSearchProps('point'),
+      ...getColumnSearchPropsMembers('point'),
       sorter: (a, b) => a.point - b.point,
       sortDirections: ['descend', 'ascend'],
     },
@@ -595,7 +699,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
       dataIndex: 'status',
       key: 'status',
       width: '20%',
-      ...getColumnSearchProps('status'),
+      ...getColumnSearchPropsMembers('status'),
       render: (_, { status }) => (
         <>
           {status.map((isStatus) => {
