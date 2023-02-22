@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import Custom401 from "@/pages/401";
 import WithAuth from "../Private/withAuth";
 import TopBarGuest from "../Header/TobBarGuest";
-import Loading from "@/pages/loading";
+import LoadingIndicator from "../Indicator/LoadingIndicator";
 
 const LayoutGuest = ({ children }:any) => {
 
@@ -15,7 +15,7 @@ const LayoutGuest = ({ children }:any) => {
     router.back();
     return Custom401();
   } else if (!roleId) {
-    return Loading();
+    return <LoadingIndicator/>;
   }
 
   return (
