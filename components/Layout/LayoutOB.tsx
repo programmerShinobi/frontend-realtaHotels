@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import Custom401 from "@/pages/401";
 import WithAuth from "../Private/withAuth";
 import TopBarOB from "../Header/TobBarOB";
-import Loading from "@/pages/loading";
+import LoadingIndicator from "../Indicator/LoadingIndicator";
 
 const LayoutOB = ({ children }:any) => {
   const [showNav, setShowNav] = useState(true);
@@ -38,7 +38,7 @@ const LayoutOB = ({ children }:any) => {
     router.back();
     return Custom401();
   } else if (!roleId) {
-    return Loading();
+    return <LoadingIndicator/>;
   }
 
   return (
