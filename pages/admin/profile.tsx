@@ -37,84 +37,36 @@ const Profile: NextPage<Props> = ({ dirs }) => {
   const [uploading, setUploading] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedFile, setSelectedFile] = useState<File>();
+  const [profile, setProfile]:any = useState([]);
+  const [profileBP, setProfileBP]:any = useState([]);
+  const [profileMemb, setProfileMemb]:any = useState([]);
   const dispatchEditPhoto = useDispatch();
-  const [profile, setProfile] = useState({
-    user_id: null,
-    user_full_name: null,
-    user_company_name: null,
-    user_type: null,
-    user_email: null,
-    user_phone_number: null,
-    uspa_passwordhash: null,
-    ubpo_create_on: null,
-    ubpo_total_points: null,
-    ubpo_bonus_type: null,
-    usme_promote_date:null,
-    usme_memb_name: null,
-    usme_points: null,
-    usme_type: null,
-    usro_role: null,
-    uspro_national_id: null,
-    uspro_birth: "",
-    uspro_job_title: null,
-    uspro_marital_status: null,
-    uspro_gender: null,
-    uspro_addr_id: null,
-    uspro_photo:null
-  });
-  const [profileBP, setProfileBP] = useState([]);
-  const [profileMemb, setProfileMemb] = useState([]);
-  
+  const dispatchProfile = useDispatch();
   const userMe = useSelector((state: any) => state.usersReducers.user);
-  
   useEffect(() => {
     const userId = localStorage.getItem('userId');
-    const displayedPayload: any = dispatchEdit(doUserRequest(userId));
-    if (displayedPayload.payload == userId) {
-      if (userMe) {
-        if (userMe.results) {
-          const displayedUser: any = userMe.results[0];
-          if (displayedUser) {
-            setProfile({
-              ...profile,
-              user_id: displayedUser.user_id,
-              user_full_name: displayedUser.user_full_name,
-              user_company_name: displayedUser.user_company_name,
-              user_type: displayedUser.user_type,
-              user_email: displayedUser.user_email,
-              user_phone_number: displayedUser.user_phone_number,
-              uspa_passwordhash: displayedUser.uspa_passwordhash,
-              ubpo_create_on: displayedUser.ubpo_create_on,
-              ubpo_total_points: displayedUser.ubpo_total_points,
-              ubpo_bonus_type: displayedUser.ubpo_bonus_type,
-              usme_promote_date: displayedUser.usme_promote_date,
-              usme_memb_name: displayedUser.usme_memb_name,
-              usme_points: displayedUser.usme_points,
-              usme_type: displayedUser.usme_type,
-              usro_role: displayedUser.usro_role,
-              uspro_national_id: displayedUser.uspro_national_id,
-              uspro_birth: moment(displayedUser.uspro_birth).format("DD MMMM YYYY"),
-              uspro_job_title: displayedUser.uspro_job_title,
-              uspro_marital_status: displayedUser.uspro_marital_status,
-              uspro_gender: displayedUser.uspro_gender,
-              uspro_addr_id: displayedUser.uspro_addr_id,
-              uspro_photo:displayedUser.uspro_photo
-            });
-          }
-          const displayedUserBP: any = userMe.results;
-          if (displayedUserBP) {
-            setProfileBP(displayedUserBP);
-          }
-
-          const displayedUserMemb: any = userMe.results;
-          if (displayedUserMemb) {
-            setProfileMemb(displayedUserMemb);
-          }
-        }
-      }
+    dispatchProfile(doUserRequest(userId));
+  },[]);
+  
+  useEffect(() => {
+    if (userMe && userMe.results) {
+      setProfile(userMe.results[0]);
     }
-  // },[]);
-  }, [userMe]);
+  })
+
+  useEffect(() => {
+    const displayedUserBP: any = userMe.results;
+    if (displayedUserBP) {
+      setProfileBP(displayedUserBP);
+    }
+  })
+
+  useEffect(() => {
+    const displayedUserMemb: any = userMe.results;
+    if (displayedUserMemb) {
+      setProfileMemb(displayedUserMemb);
+    }
+  })
 
   const [BonusPoints, setBonusPoints]: any = useState([]);
   useEffect(() => {
@@ -214,13 +166,6 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     userCompanyName: yup.string().required("required"),
     userEmail: yup.string().email("invalid email").required("required"),
     userPhoneNumber: yup.string().matches(phoneRegExp, "Phone number is not valid").required("required"),
-    // uspaPasswordhash: yup.string().required("required"),
-    // ubpoTotalPoints : yup.number().required("required"),
-    // ubpoBonusType : yup.string().required("required"),
-    // usmeMembName : yup.string().required("required"),
-    // usmePoints : yup.number().required("required"),
-    // usmeType : yup.string().required("required"), 
-    usroRole: yup.number().required("required"),
     usproNationalId: yup.string().required("required"),
     usproBirth : yup.string().required("required"),
     usproJobTitle : yup.string().required("required"),
@@ -283,7 +228,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     usproMaritalStatus: null,
     usproGender: null,
     usproAddr: 1
-  })
+  });
 
   //  function : open modals Edit user
   function openModalEdit() {
@@ -337,69 +282,21 @@ const Profile: NextPage<Props> = ({ dirs }) => {
       setDataUserEdit({...DataUserEdit, [data] : event.target.value});
   }
 
-  const dispatch = useDispatch();
   const routerEdit = useRouter()
-
+  const dispatchUpdate = useDispatch();
+  
   // function handle submit form edit users (API POST users)
   const handleFormSubmitEdit = (values: any, { setSubmitting }: any) => {
-    const userId = localStorage.getItem('userId');
     setSubmitting(true);
-    dispatchEdit(doUpdateUsers(userId, values));
+    const userId = localStorage.getItem('userId');
+    dispatchUpdate(doUpdateUsers(userId, values));
+
     setTimeout(() => {
       setIsOpenEdit(false);
-      localStorage.setItem('userFullNameNew', values.userFullName);
+      dispatchProfile(doUserRequest(userId));
       routerEdit.reload();
-      dispatch(doUserRequest(userId));
-      if (values) {
-        if (values.userId == userId) {
-          const dateBirth = moment(values.usproBirth).format("YYYY-MM-DD");
-          setProfile({
-            ...profile,
-            user_id: values.userId,
-            user_full_name: values.userFullName,
-            user_company_name: values.userCompanyName,
-            user_type: values.userType,
-            user_email: values.userEmail,
-            user_phone_number: values.userPhoneNumber,
-            uspa_passwordhash: values.uspaPasswordhash,
-            ubpo_total_points: values.ubpoTotalPoints,
-            ubpo_bonus_type: values.ubpoBonusType,
-            usme_memb_name: values.usmeMembName,
-            usme_points: values.usmePoints,
-            usme_type: values.usmeType,
-            usro_role: values.usroRole,
-            uspro_national_id: values.usproNationalId,
-            uspro_birth: moment(values.usproBirth).format("DD MMMM YYYY"),
-            uspro_job_title: values.usproJobTitle,
-            uspro_marital_status: values.usproMaritalStatus,
-            uspro_gender: values.usproGender,
-            uspro_addr_id: values.usproAddr,
-            uspro_photo:values.usproPhoto
-          });
-          setDataUserEdit({
-            ...DataUserEdit,
-            userId: values.userId,
-            userFullName: values.userFullName,
-            userCompanyName: values.userCompanyName,
-            userType: values.userType,
-            userEmail: values.userEmail,
-            userPhoneNumber: values.userPhoneNumber,
-            ubpoTotalPoints: values.ubpoTotalPoints,
-            ubpoBonusType: values.ubpoBonusType,
-            usmeMembName: values.usmeMembName,
-            usmePoints: values.usmePoints,
-            usmeType: values.usmeType,
-            usroRole: values.roleId,
-            usproNationalId: values.usproNationalId,
-            usproBirth: dateBirth,
-            usproJobTitle: values.usproJobTitle,
-            usproMaritalStatus: values.usproMaritalStatus,
-            usproGender: values.usproGender,
-            usproAddr: 1
-          });
-        }
-      }
-    }, 500);
+      localStorage.setItem('userFullNameNew', values.userFullName);
+    }, 3000);
     setSubmitting(false);
   };
 
@@ -749,7 +646,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                         {selectedImage ? (
                           <img src={selectedImage} alt="" />
                         ) : (
-                          <img src={"/images/" + profile.uspro_photo} />
+                          <img src={"/images/" + profile.uspro_photo}/>
                         )}
                       </Box>
                     </label>
