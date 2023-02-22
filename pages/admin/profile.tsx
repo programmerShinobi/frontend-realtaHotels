@@ -150,9 +150,55 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     setUploading(false);
   };
 
+  // define useState API POST users
+  let [DataUserEdit, setDataUserEdit] = useState({
+    userId: null,
+    userFullName: null,
+    userCompanyName: null,
+    userType: null,
+    userEmail: null,
+    userPhoneNumber: null,
+    uspaPasswordhash: null,
+    uspaConfirmPasswordhash:null,
+    ubpoTotalPoints: null,
+    ubpoBonusType: null,
+    usmeMembName: null,
+    usmePoints: null,
+    usmeType: null,
+    usroRole: null,
+    usproNationalId: null,
+    usproBirth: "",
+    usproJobTitle: null,
+    usproMaritalStatus: null,
+    usproGender: null,
+    usproAddr: 1
+  });
+
+  const user = useSelector((state: any) => state.usersReducers.user);
+
   // getHelper for display in form
-  const getHelperText = (touched:any, errors:any) => {
-    return (touched && errors ? errors : false)
+  const getHelperText = (touched: any, errors: any, field:any) => {
+    if (field == "fullName") {
+      return (touched && errors ? errors : "enter your full name");
+    } else if (field == "userType") {
+      return (touched && errors ? errors : "enter your type");
+    } else if(field == "phone") {
+      return (touched && errors ? errors : "enter your phone numb.");
+    } else if (field == "email") {
+      return (touched && errors ? errors : "enter your email");
+    } else if (field == "companyName") {
+      return (touched && errors ? errors : "enter your company name");
+    } else if (field == "nationalID") {
+      return (touched && errors ? errors : "enter your national ID");
+    } else if (field == "jobTitle") {
+      return (touched && errors ? errors : "enter your job title");
+    } else if (field == "usproGender") {
+      return (touched && errors ? errors : "enter your gender");
+    } else if (field == "usproBirth") {
+      return (touched && errors ? errors : "enter your birth");
+    } else if (field == "status") {
+      return (touched && errors ? errors : "enter your marital status");
+    }
   }
 
   // phone regExp
@@ -207,35 +253,10 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     setIsOpenEdit(false)
   }
 
-  // define useState API POST users
-  let [DataUserEdit, setDataUserEdit] = useState({
-    userId: null,
-    userFullName: null,
-    userCompanyName: null,
-    userType: null,
-    userEmail: null,
-    userPhoneNumber: null,
-    uspaPasswordhash: null,
-    ubpoTotalPoints: null,
-    ubpoBonusType: null,
-    usmeMembName: null,
-    usmePoints: null,
-    usmeType: null,
-    usroRole: null,
-    usproNationalId: null,
-    usproBirth: "",
-    usproJobTitle: null,
-    usproMaritalStatus: null,
-    usproGender: null,
-    usproAddr: 1
-  });
-
   //  function : open modals Edit user
   function openModalEdit() {
     setIsOpenEdit(true);
   }
-  
-  const user = useSelector((state: any) => state.usersReducers.user);
 
   // function handler API PUT user
   const handleEdit = () => {
@@ -300,8 +321,99 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     setSubmitting(false);
   };
 
+  // getHelper for display in form
+  const getHelperTextPassword = (touched: any, errors: any, field:any) => {
+    if (field == "currentPassword") {
+      return (touched && errors ? errors : "enter your current password");
+    } else if(field == "password") {
+      return (touched && errors ? errors : "enter your password");
+    }  else if(field == "confirmPassword") {
+      return (touched && errors ? errors : "enter your confirm password");
+    }
+  }
+
+  // check all validasi required & etc
+  const checkoutSchemaPassword:any = yup.object().shape({
+    uspaPasswordhash: yup.string().required("required"),
+    uspaConfirmPasswordhash: yup.string()
+      .oneOf([yup.ref('uspaPasswordhash'), null], 'Passwords must match')
+      .required('required'),
+  });
+
+  // function initialValue field from table users
+  const initialValuesPassword: any = {
+    userId:null,
+    uspaPasswordhash: "",
+
+  };
+ 
+  const dispatchEditPassword = useDispatch();
+
+  // useState : modals Edit user
+  const [isOpenEditPassword, setIsOpenEditPassword] = useState(false)
+
+  //  function : close modals Edit user
+  function closeModalEditPassword() {
+    setIsOpenEditPassword(false)
+  }
+
+  //  function : open modals Edit user
+  function openModalEditPassword() {
+    setIsOpenEditPassword(true);
+  }
+
+  // function handler API PUT user
+  const handleEditPassword = () => {
+    const userId = localStorage.getItem('userId');
+    const displayedPayload:any = dispatchEdit(doUserRequest(userId));
+    if (displayedPayload.payload == userId) {
+      if (user) {
+        if (user.results) {
+          const displayedUser:any = user.results[0];
+          if (displayedUser) {
+            if (displayedUser.user_id == userId) {
+              openModalEditPassword();
+              setDataUserEdit({
+                ...DataUserEdit,
+                userId: displayedUser.user_id,
+                uspaPasswordhash: displayedUser.uspa_passwordhash
+              });
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  // function handler API PUT users
+  const eventHandlerEditPassword = (data: any) => (event: any) => {
+      setDataUserEdit({...DataUserEdit, [data] : event.target.value});
+  }
+
+  const routerEditPassword = useRouter();
+  const dispatchUpdatePassword = useDispatch();
+  
+  // function handle submit form edit users (API POST users)
+  const handleFormSubmitEditPassword = (values: any, { setSubmitting }: any) => {
+    setSubmitting(true);
+    const userId = localStorage.getItem('userId');
+    dispatchUpdatePassword(doUpdateUsers(userId, values));
+
+    setTimeout(() => {
+      setIsOpenEdit(false);
+      dispatchProfile(doUserRequest(userId));
+      routerEditPassword.reload();
+    }, 3000);
+    setSubmitting(false);
+  };
+
   const [showPassword, setShowPassword] = useState(false);
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
+
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const handleMouseDownConfirmPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
 
@@ -766,7 +878,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                   <Box className="flex items-stretch">
                     <button
                       className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
-                      onClick={() => handleEdit()}
+                      onClick={() => handleEditPassword()}
                     >
                       <p className="normal-case font-normal">{<EditIcon className="h-4 w-4   " />}&nbsp;{"Edit"}</p>
                     </button>
@@ -873,9 +985,10 @@ const Profile: NextPage<Props> = ({ dirs }) => {
 
                             {/* FullName */}
                             <TextField
-                              color="warning"
+                              size="small"
                               fullWidth
-                              variant="filled"
+                              color="warning"
+                              variant="standard"
                               type="text"
                               label="Full Name"
                               onBlur={handleBlur}
@@ -883,38 +996,38 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                               value={values.userFullName ? values.userFullName : values.userFullName = DataUserEdit.userFullName}
                               name="userFullName"
                               error={!!touched.userFullName && !!errors.userFullName}
-                              helperText={getHelperText(touched.userFullName, errors.userFullName)}
+                              helperText={getHelperText(touched.userFullName, errors.userFullName, "fullName")}
                               sx={{ gridColumn: "span 4" }}
                             />
 
                             {/* UserType */}
-                            <FormControl variant="filled" sx={{ gridColumn: "span 4" }} error={!!touched.userType && !!errors.userType}>
-                              <InputLabel id="userType" color="warning">Type</InputLabel>
+                            <FormControl color="warning" size="small" variant="standard"  sx={{ gridColumn: "span 4" }} error={!!touched.userType && !!errors.userType}>
+                              <InputLabel id="userType" >Type</InputLabel>
                               <Select
                                 placeholder="Select type ..."
-                                color="warning"
                                 fullWidth
-                                variant="filled"
+                                variant="standard"
                                 className='form-control'
-                                label="Type"
+                                name="userType"
                                 onBlur={handleBlur}
                                 onChange={(event) => { eventHandlerEdit('userType')(event); handleChange(event) }}
                                 value={values.userType ? values.userType : values.userType = DataUserEdit.userType}
-                                name="userType"
+                                
                               >
                                 <MenuItem value=''><em>none</em></MenuItem>
                                 <MenuItem value='T'>Travel Agent</MenuItem>
                                 <MenuItem value='C'>Company</MenuItem>
                                 <MenuItem value='I'>Individual</MenuItem>
                               </Select>
-                              {!!touched.userType && !!errors.userType && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.userType, errors.userType)}</span>}
                             </FormControl>
+                              {!!touched.userType && !!errors.userType && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.userType, errors.userType,"userType")}</span>}
 
                             {/* PhoneNumber */}
                             <TextField
-                              color="warning"
+                              size="small"
                               fullWidth
-                              variant="filled"
+                              color="warning"
+                              variant="standard"
                               type="text"
                               label="Phone Number"
                               onBlur={handleBlur}
@@ -922,15 +1035,16 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                               value={values.userPhoneNumber ? values.userPhoneNumber : values.userPhoneNumber = DataUserEdit.userPhoneNumber}
                               name="userPhoneNumber"
                               error={!!touched.userPhoneNumber && !!errors.userPhoneNumber}
-                              helperText={getHelperText(touched.userPhoneNumber, errors.userPhoneNumber)}
+                              helperText={getHelperText(touched.userPhoneNumber, errors.userPhoneNumber, "phone")}
                               sx={{ gridColumn: "span 4" }}
                             />
 
                             {/* Email */}
                             <TextField
-                              color="warning"
+                              size="small"
                               fullWidth
-                              variant="filled"
+                              color="warning"
+                              variant="standard"
                               type="email"
                               label="Email"
                               onBlur={handleBlur}
@@ -938,15 +1052,16 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                               value={values.userEmail ? values.userEmail : values.userEmail = DataUserEdit.userEmail}
                               name="userEmail"
                               error={!!touched.userEmail && !!errors.userEmail}
-                              helperText={getHelperText(touched.userEmail, errors.userEmail)}
+                              helperText={getHelperText(touched.userEmail, errors.userEmail, "email")}
                               sx={{ gridColumn: "span 4" }}
                             />
                             
                             {/* CompanyName */}
                             <TextField
-                              color="warning"
+                              size="small"
                               fullWidth
-                              variant="filled"
+                              color="warning"
+                              variant="standard"
                               type="text"
                               label="Company Name"
                               onBlur={handleBlur}
@@ -954,7 +1069,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                               value={values.userCompanyName ? values.userCompanyName : values.userCompanyName = DataUserEdit.userCompanyName}
                               name="userCompanyName"
                               error={!!touched.userCompanyName && !!errors.userCompanyName}
-                              helperText={getHelperText(touched.userCompanyName, errors.userCompanyName)}
+                              helperText={getHelperText(touched.userCompanyName, errors.userCompanyName, "companyName")}
                               sx={{ gridColumn: "span 4" }}
                             />
 
@@ -962,9 +1077,10 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                           
                             {/* usproNationalId */}
                             <TextField
-                              color="warning"
+                              size="small"
                               fullWidth
-                              variant="filled"
+                              color="warning"
+                              variant="standard"
                               type="text"
                               label="National ID"
                               onBlur={handleBlur}
@@ -972,15 +1088,16 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                               value={values.usproNationalId ? values.usproNationalId : values.usproNationalId = DataUserEdit.usproNationalId}
                               name="usproNationalId"
                               error={!!touched.usproNationalId && !!errors.usproNationalId}
-                              helperText={getHelperText(touched.usproNationalId, errors.usproNationalId)}
+                              helperText={getHelperText(touched.usproNationalId, errors.usproNationalId, "nationalID")}
                               sx={{ gridColumn: "span 4" }}
                             />
 
                             {/* usproJobTitle */}
                             <TextField
-                              color="warning"
+                              size="small"
                               fullWidth
-                              variant="filled"
+                              color="warning"
+                              variant="standard"
                               type="text"
                               label="Job Title"
                               onBlur={handleBlur}
@@ -988,39 +1105,37 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                               value={values.usproJobTitle ? values.usproJobTitle : values.usproJobTitle = DataUserEdit.usproJobTitle}
                               name="usproJobTitle"
                               error={!!touched.usproJobTitle && !!errors.usproJobTitle}
-                              helperText={getHelperText(touched.usproJobTitle, errors.usproJobTitle)}
+                              helperText={getHelperText(touched.usproJobTitle, errors.usproJobTitle, "jobTitle")}
                               sx={{ gridColumn: "span 4" }}
                             />
 
                             {/* usproGender */}
-                            <FormControl variant="filled" sx={{ gridColumn: "span 4" }}>
-                              <InputLabel id="usproGender" color="warning">Gender</InputLabel>
+                            <FormControl color="warning" size="small" variant="standard" sx={{ gridColumn: "span 4" }}>
+                              <InputLabel id="usproGender">Gender</InputLabel>
                               <Select
-                                placeholder="Select gender ..."
-                                color="warning"
+                                size="small"
                                 fullWidth
-                                variant="filled"
-                                className='form-control'
+                                variant="standard"
                                 label="Gender"
                                 onBlur={handleBlur}
                                 onChange={(event) => { eventHandlerEdit('usproGender')(event); handleChange(event) }}
                                 value={values.usproGender ? values.usproGender : values.usproGender = DataUserEdit.usproGender}
                                 name="usproGender"
                                 error={!!touched.usproGender && !!errors.usproGender}
-                              // helperText={getHelperText(touched.usproGender, errors.usproGender)}
                               >
                                 <MenuItem value=''><em>none</em></MenuItem>
                                 <MenuItem value='M'>Male</MenuItem>
                                 <MenuItem value='F'>Female</MenuItem>
                               </Select>
-                              {!!touched.usproGender && !!errors.usproGender && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.usproGender, errors.usproGender)}</span>}
                             </FormControl>
+                              {!!touched.usproGender && !!errors.usproGender && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.usproGender, errors.usproGender, "usproGender")}</span>}
 
                             {/* usproBirth */}
                             <TextField
-                              color="warning"
+                              size="small"
                               fullWidth
-                              variant="filled"
+                              color="warning"
+                              variant="standard"
                               type="date"
                               label="Birth"
                               onBlur={handleBlur}
@@ -1028,41 +1143,134 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                               value={values.usproBirth ? values.usproBirth : values.usproBirth = DataUserEdit.usproBirth}
                               name="usproBirth"
                               error={!!touched.usproBirth && !!errors.usproBirth}
-                              helperText={getHelperText(touched.usproBirth, errors.usproBirth)}
+                              helperText={getHelperText(touched.usproBirth, errors.usproBirth, "usproBirth")}
                               sx={{ gridColumn: "span 4" }}
                             />
 
                             {/* usproMaritalStatus */}
-                            <FormControl variant="filled" sx={{ gridColumn: "span 4" }}>
-                              <InputLabel id="usproMaritalStatus" color="warning">Marital Status</InputLabel>
+                            <FormControl color="warning" size="small" variant="standard" sx={{ gridColumn: "span 4" }}>
+                              <InputLabel id="usproMaritalStatus">Marital Status</InputLabel>
                               <Select
-                                placeholder="Select status ..."
-                                color="warning"
+                                size="small"
                                 fullWidth
-                                variant="filled"
-                                className='form-control'
+                                variant="standard"
                                 label="Marital Status"
                                 onBlur={handleBlur}
                                 onChange={(event) => { eventHandlerEdit('usproMaritalStatus')(event); handleChange(event) }}
                                 value={values.usproMaritalStatus ? values.usproMaritalStatus : values.usproMaritalStatus = DataUserEdit.usproMaritalStatus}
                                 name="usproMaritalStatus"
                                 error={!!touched.usproMaritalStatus && !!errors.usproMaritalStatus}
-                              // helperText={getHelperText(touched.usproMaritalStatus, errors.usproMaritalStatus)}
                               >
                                 <MenuItem value=''><em>none</em></MenuItem>
                                 <MenuItem value='S'>Single</MenuItem>
                                 <MenuItem value='M'>Married</MenuItem>
                               </Select>
-                              {!!touched.usproMaritalStatus && !!errors.usproMaritalStatus && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.usproMaritalStatus, errors.usproMaritalStatus)}</span>}
                             </FormControl>
+                              {!!touched.usproMaritalStatus && !!errors.usproMaritalStatus && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.usproMaritalStatus, errors.usproMaritalStatus, "status")}</span>}
 
                             {/* usproAddr */}
 
+                          </Box>
+
+                          <Box display="flex" justifyContent="center" mt="20px">
+                            <Box display="flex">
+                              <button
+                                type="reset"
+                                color="warning"
+                                className="rounded-md bg-yellow-100 text-yellow-500 border-warning-500 first-line:bg-opacity-20 px-4 py-2 text-sm font-normal  hover:bg-opacity-30 focus:outline-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                                <RefreshIcon width={15} height={15} />
+                              </button>
+                            </Box>
+                            <Box display="flex" pl="100px">
+                              <button
+                                type="submit"
+                                color="warning"
+                                className="rounded-md bg-green-100 text-green-500 border-warning-500 first-line:bg-opacity-20 px-4 py-2 text-sm font-normal  hover:bg-opacity-30 focus:outline-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                                <SaveIcon width={15} height={15} />
+                              </button>
+                            </Box>
+                            <Box display="flex" pl="100px">
+                              <button
+                                onClick={closeModalEdit}
+                                type="button"
+                                color="error"
+                                className="rounded-md bg-red-100 text-red-500 border-error-500 first-line:bg-opacity-20 px-4 py-2 text-sm font-normal  hover:bg-opacity-30 focus:outline-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                                <XMarkIcon width={20} height={20} />
+                              </button>
+                            </Box>
+                          </Box>
+                        </Form>
+                      )}
+                    </Formik>
+                  </Dialog.Panel>
+                </Transition.Child>
+              </div>
+            </div>
+          </Dialog>
+        </Transition>
+        <Transition appear show={isOpenEditPassword} as={Fragment}>
+          <Dialog as="div" className="relative z-10" onClose={closeModalEditPassword}>
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <div className="fixed inset-0 bg-black bg-opacity-25" />
+            </Transition.Child>
+            <div className="fixed inset-0 overflow-y-auto">
+              <div className="flex min-h-full items-center justify-center p-4 text-center">
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0 scale-95"
+                  enterTo="opacity-100 scale-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100 scale-100"
+                  leaveTo="opacity-0 scale-95"
+                >
+                  <Dialog.Panel className="w-full max-w-md transform max-h-96 overflow-y-auto rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                    <Dialog.Title
+                      as="h3"
+                      className="text-lg font-medium leading-6 text-black"
+                    >
+                      Edit User
+                    </Dialog.Title>
+                    <br></br>
+                    <Formik
+                      onSubmit={handleFormSubmitEditPassword}
+                      initialValues={initialValuesPassword}
+                      validationSchema={checkoutSchemaPassword}
+                    >
+                      {({
+                        values,
+                        errors,
+                        touched,
+                        handleBlur,
+                        handleChange,
+                        handleSubmit,
+                      }) => (
+                        <Form onSubmit={handleSubmit}>
+                          <Box
+                            display="grid"
+                            gap="30px"
+                            gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+                          >
+                            <TextField
+                              hidden
+                              type='hidden'
+                              value={values.userId = DataUserEdit.userId}
+                            />
+
                             {/* uspaPasswordhash */}
-                            {/* <TextField
-                              color="warning"
+                            <TextField
+                              size="small"
                               fullWidth
-                              variant="filled"
+                              color="warning"
+                              variant="standard"
                               type={showPassword ? 'text' : 'password'}
                               InputProps={{
                                 endAdornment: (
@@ -1083,10 +1291,39 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                               value={values.uspaPasswordhash}
                               name="uspaPasswordhash"
                               error={!!touched.uspaPasswordhash && !!errors.uspaPasswordhash}
-                              helperText={getHelperText(touched.uspaPasswordhash, errors.uspaPasswordhash)}
+                              helperText={getHelperTextPassword(touched.uspaPasswordhash, errors.uspaPasswordhash, "password")}
                               sx={{ gridColumn: "span 4" }}
-                            /> */}
-
+                            />
+                            
+                            {/* confirmPassword */}
+                            <TextField
+                              size="small"
+                              fullWidth
+                              color="warning"
+                              variant="standard"
+                              type={showConfirmPassword ? 'text' : 'password'}
+                              InputProps={{
+                                endAdornment: (
+                                  <InputAdornment position="end">
+                                    <IconButton
+                                      aria-label="toggle password visibility"
+                                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                      onMouseDown={handleMouseDownConfirmPassword}
+                                    >
+                                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                  </InputAdornment>
+                                ),
+                              }}
+                              label="Confirm Passoword"
+                              onBlur={handleBlur}
+                              onChange={(event) => { eventHandlerEdit('uspaConfirmPasswordhash')(event); handleChange(event) }}
+                              value={values.uspaConfirmPasswordhash}
+                              name="uspaConfirmPasswordhash"
+                              error={!!touched.uspaConfirmPasswordhash && !!errors.uspaConfirmPasswordhash}
+                              helperText={getHelperTextPassword(touched.uspaConfirmPasswordhash, errors.uspaConfirmPasswordhash, "confirmPassword")}
+                              sx={{ gridColumn: "span 4" }}
+                            />
                           </Box>
 
                           <Box display="flex" justifyContent="center" mt="20px">
@@ -1101,14 +1338,14 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                             <Box display="flex" pl="100px">
                               <button
                                 type="submit"
-                                color="success"
+                                color="warning"
                                 className="rounded-md bg-green-100 text-green-500 border-warning-500 first-line:bg-opacity-20 px-4 py-2 text-sm font-normal  hover:bg-opacity-30 focus:outline-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                                 <SaveIcon width={15} height={15} />
                               </button>
                             </Box>
                             <Box display="flex" pl="100px">
                               <button
-                                onClick={closeModalEdit}
+                                onClick={closeModalEditPassword}
                                 type="button"
                                 color="error"
                                 className="rounded-md bg-red-100 text-red-500 border-error-500 first-line:bg-opacity-20 px-4 py-2 text-sm font-normal  hover:bg-opacity-30 focus:outline-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">

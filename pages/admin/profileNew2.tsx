@@ -33,7 +33,7 @@ interface Props {
   dirs: string[];
 }
 
-const Profile: NextPage<Props> = ({ dirs }) => {
+const ProfileNew2: NextPage<Props> = ({ dirs }) => {
   const [uploading, setUploading] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedFile, setSelectedFile] = useState<File>();
@@ -620,4 +620,4 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
 };
 
-export default Profile;
+export default ProfileNew2;
