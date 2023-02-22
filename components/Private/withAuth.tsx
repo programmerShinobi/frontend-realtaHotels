@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { useEffect } from 'react';
 import { NextPage } from "next";
-import Loading from "@/pages/loading";
+import LoadingIndicator from "../Indicator/LoadingIndicator";
 
 const WithAuth = <P extends object>(WrappedComponent: NextPage<P>) => {
   return (props: P) => {
@@ -22,7 +22,7 @@ const WithAuth = <P extends object>(WrappedComponent: NextPage<P>) => {
       return <WrappedComponent {...props} />;
     }
     else {
-      return (<Loading/>);
+      return (<LoadingIndicator/>);
     }
   }
 }
