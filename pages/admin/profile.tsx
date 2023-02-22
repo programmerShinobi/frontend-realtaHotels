@@ -116,7 +116,11 @@ const Profile: NextPage<Props> = ({ dirs }) => {
   const [uploading, setUploading] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedFile, setSelectedFile] = useState<File>();
+  const [profile, setProfile]:any = useState([]);
+  const [profileBP, setProfileBP]:any = useState([]);
+  const [profileMemb, setProfileMemb]:any = useState([]);
   const dispatchEditPhoto = useDispatch();
+<<<<<<< Updated upstream
   const [profile, setProfile] = useState({
     user_id: null,
     user_full_name: null,
@@ -143,10 +147,13 @@ const Profile: NextPage<Props> = ({ dirs }) => {
   });
   const [profileBP, setProfileBP] = useState([]);
   
+=======
+  const dispatchProfile = useDispatch();
+>>>>>>> Stashed changes
   const userMe = useSelector((state: any) => state.usersReducers.user);
-  
   useEffect(() => {
     const userId = localStorage.getItem('userId');
+<<<<<<< Updated upstream
     const displayedPayload: any = dispatchEdit(doUserRequest(userId));
     if (displayedPayload.payload == userId) {
       if (userMe) {
@@ -185,9 +192,30 @@ const Profile: NextPage<Props> = ({ dirs }) => {
           }
         }
       }
+=======
+    dispatchProfile(doUserRequest(userId));
+  },[]);
+  
+  useEffect(() => {
+    if (userMe && userMe.results) {
+      setProfile(userMe.results[0]);
+>>>>>>> Stashed changes
     }
-  // },[]);
-  }, [userMe]);
+  })
+
+  useEffect(() => {
+    const displayedUserBP: any = userMe.results;
+    if (displayedUserBP) {
+      setProfileBP(displayedUserBP);
+    }
+  })
+
+  useEffect(() => {
+    const displayedUserMemb: any = userMe.results;
+    if (displayedUserMemb) {
+      setProfileMemb(displayedUserMemb);
+    }
+  })
 
   // OLD1 ----------------------------------------------------------
   // const [BonusPoints, setBonusPoints]: any = useState([]);
@@ -325,13 +353,6 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     userCompanyName: yup.string().required("required"),
     userEmail: yup.string().email("invalid email").required("required"),
     userPhoneNumber: yup.string().matches(phoneRegExp, "Phone number is not valid").required("required"),
-    // uspaPasswordhash: yup.string().required("required"),
-    // ubpoTotalPoints : yup.number().required("required"),
-    // ubpoBonusType : yup.string().required("required"),
-    // usmeMembName : yup.string().required("required"),
-    // usmePoints : yup.number().required("required"),
-    // usmeType : yup.string().required("required"), 
-    usroRole: yup.number().required("required"),
     usproNationalId: yup.string().required("required"),
     usproBirth : yup.string().required("required"),
     usproJobTitle : yup.string().required("required"),
@@ -394,7 +415,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     usproMaritalStatus: null,
     usproGender: null,
     usproAddr: 1
-  })
+  });
 
   //  function : open modals Edit user
   function openModalEdit() {
@@ -448,69 +469,21 @@ const Profile: NextPage<Props> = ({ dirs }) => {
       setDataUserEdit({...DataUserEdit, [data] : event.target.value});
   }
 
-  const dispatch = useDispatch();
   const routerEdit = useRouter()
-
+  const dispatchUpdate = useDispatch();
+  
   // function handle submit form edit users (API POST users)
   const handleFormSubmitEdit = (values: any, { setSubmitting }: any) => {
-    const userId = localStorage.getItem('userId');
     setSubmitting(true);
-    dispatchEdit(doUpdateUsers(userId, values));
+    const userId = localStorage.getItem('userId');
+    dispatchUpdate(doUpdateUsers(userId, values));
+
     setTimeout(() => {
       setIsOpenEdit(false);
-      localStorage.setItem('userFullNameNew', values.userFullName);
+      dispatchProfile(doUserRequest(userId));
       routerEdit.reload();
-      dispatch(doUserRequest(userId));
-      if (values) {
-        if (values.userId == userId) {
-          const dateBirth = moment(values.usproBirth).format("YYYY-MM-DD");
-          setProfile({
-            ...profile,
-            user_id: values.userId,
-            user_full_name: values.userFullName,
-            user_company_name: values.userCompanyName,
-            user_type: values.userType,
-            user_email: values.userEmail,
-            user_phone_number: values.userPhoneNumber,
-            uspa_passwordhash: values.uspaPasswordhash,
-            ubpo_total_points: values.ubpoTotalPoints,
-            ubpo_bonus_type: values.ubpoBonusType,
-            usme_memb_name: values.usmeMembName,
-            usme_points: values.usmePoints,
-            usme_type: values.usmeType,
-            usro_role: values.usroRole,
-            uspro_national_id: values.usproNationalId,
-            uspro_birth: moment(values.usproBirth).format("DD MMMM YYYY"),
-            uspro_job_title: values.usproJobTitle,
-            uspro_marital_status: values.usproMaritalStatus,
-            uspro_gender: values.usproGender,
-            uspro_addr_id: values.usproAddr,
-            uspro_photo:values.usproPhoto
-          });
-          setDataUserEdit({
-            ...DataUserEdit,
-            userId: values.userId,
-            userFullName: values.userFullName,
-            userCompanyName: values.userCompanyName,
-            userType: values.userType,
-            userEmail: values.userEmail,
-            userPhoneNumber: values.userPhoneNumber,
-            ubpoTotalPoints: values.ubpoTotalPoints,
-            ubpoBonusType: values.ubpoBonusType,
-            usmeMembName: values.usmeMembName,
-            usmePoints: values.usmePoints,
-            usmeType: values.usmeType,
-            usroRole: values.roleId,
-            usproNationalId: values.usproNationalId,
-            usproBirth: dateBirth,
-            usproJobTitle: values.usproJobTitle,
-            usproMaritalStatus: values.usproMaritalStatus,
-            usproGender: values.usproGender,
-            usproAddr: 1
-          });
-        }
-      }
-    }, 500);
+      localStorage.setItem('userFullNameNew', values.userFullName);
+    }, 3000);
     setSubmitting(false);
   };
 
@@ -858,7 +831,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                         {selectedImage ? (
                           <img src={selectedImage} alt="" />
                         ) : (
-                          <img src={"/images/" + profile.uspro_photo} />
+                          <img src={"/images/" + profile.uspro_photo}/>
                         )}
                       </Box>
                     </label>
