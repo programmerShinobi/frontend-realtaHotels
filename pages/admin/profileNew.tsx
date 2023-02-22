@@ -3,7 +3,7 @@ import React, { useState, useEffect, Fragment, useRef } from 'react'
 import axios from "axios";
 import fs from "fs/promises";
 import path from "path";
-import { doUpdatePhotoUsers, doUserRequest, doUpdateUsers } from "@/redux/Actions/Users/reduceActions";
+import { doUpdatePhotoUsers, doUserRequest, doUpdateUsers, doUsersRequest } from "@/redux/Actions/Users/reduceActions";
 import { useDispatch, useSelector } from "react-redux";
 import LayoutAdmin from "@/components/Layout/LayoutAdmin";
 import { Box, FormControl, Grid, IconButton, InputAdornment, InputBase, InputLabel, MenuItem, OutlinedInput, Select, Tooltip, Typography } from "@mui/material"
@@ -33,89 +33,7 @@ interface Props {
   dirs: string[];
 }
 
-<<<<<<< Updated upstream
-interface DataTypeBonusPoints {
-  key: string;
-  createdOn: string;
-  point: number;
-  type: string[];
-}
-
-type DataIndexBonusPoints = keyof DataTypeBonusPoints;
-
-const dataBonusPoints: DataTypeBonusPoints[] = [
-  {
-    key: '1',
-    createdOn: '12-Jan-2022',
-    type: ['r'],
-    point: 32,
-  },
-  {
-    key: '2',
-    createdOn: '01-Des-2021',
-    type: ['p'],
-    point: 30,
-  },
-  {
-    key: '3',
-    createdOn: '05-Nov-2020',
-    type: ['r'],
-    point: 28,
-  },
-  {
-    key: '4',
-    createdOn: '10-Oct-2019',
-    type: ['p'],
-    point: 26,
-  },
-];
-
-// -------------------------------------------------------------------- //
-
-interface DataTypeMembers {
-  key: string;
-  promoteDate: string;
-  point: number;
-  status: string[];
-  type: string[];
-}
-
-type DataIndexMembers = keyof DataTypeMembers;
-
-const dataMembers: DataTypeMembers[] = [
-  {
-    key: '1',
-    promoteDate: '12-Jan-2022',
-    point: 32,
-    status: ['expired'],
-    type: ['WIZARD'],
-  },
-  {
-    key: '2',
-    promoteDate: '01-Des-2021',
-    point: 30,
-    status: ['default'],
-    type: ['VIP'],
-  },
-  {
-    key: '3',
-    promoteDate: '05-Nov-2020',
-    point: 28,
-    status: ['expired'],
-    type: ['GOLD'],
-  },
-  {
-    key: '4',
-    promoteDate: '10-Oct-2019',
-    point: 26,
-    status: ['default'],
-    type: ['SILVER'],
-  },
-];
-
-=======
->>>>>>> Stashed changes
-const Profile: NextPage<Props> = ({ dirs }) => {
+const ProfileNew: NextPage<Props> = ({ dirs }) => {
   const [uploading, setUploading] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedFile, setSelectedFile] = useState<File>();
@@ -127,26 +45,20 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     user_type: null,
     user_email: null,
     user_phone_number: null,
-    uspa_passwordhash: null,
-    ubpo_total_points: null,
-    ubpo_bonus_type: null,
-    usme_memb_name: null,
-    usme_points: null,
-    usme_type: null,
+    user_password: null,
+    user_bonus_points: null,
+    user_members: null,
     usro_role: null,
     uspro_national_id: null,
     uspro_birth: "",
     uspro_job_title: null,
     uspro_marital_status: null,
     uspro_gender: null,
-    uspro_addr: null,
+    uspro_addr_id: null,
     uspro_photo:null
   });
-<<<<<<< Updated upstream
-=======
   const [profileBP, setProfileBP] = useState([]);
   const [profileMemb, setProfileMemb] = useState([]);
->>>>>>> Stashed changes
   
   const userMe = useSelector((state: any) => state.usersReducers.user);
   
@@ -156,106 +68,118 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     if (displayedPayload.payload == userId) {
       if (userMe) {
         if (userMe.results) {
-          const displayedUser: any = userMe.results[0];
+          const displayedUser: any = userMe.results;
           if (displayedUser) {
-            if (displayedUser.user_id == userId) {
-              setProfile({
-                ...profile,
-                user_id: displayedUser.user_id,
-                user_full_name: displayedUser.user_full_name,
-                user_company_name: displayedUser.user_company_name,
-                user_type: displayedUser.user_type,
-                user_email: displayedUser.user_email,
-                user_phone_number: displayedUser.user_phone_number,
-                uspa_passwordhash: displayedUser.uspa_passwordhash,
-                ubpo_total_points: displayedUser.ubpo_total_points,
-                ubpo_bonus_type: displayedUser.ubpo_bonus_type,
-                usme_memb_name: displayedUser.usme_memb_name,
-                usme_points: displayedUser.usme_points,
-                usme_type: displayedUser.usme_type,
-                usro_role: displayedUser.usro_role,
-                uspro_national_id: displayedUser.uspro_national_id,
-                uspro_birth: moment(displayedUser.uspro_birth).format("DD MMMM YYYY"),
-                uspro_job_title: displayedUser.uspro_job_title,
-                uspro_marital_status: displayedUser.uspro_marital_status,
-                uspro_gender: displayedUser.uspro_gender,
-                uspro_addr: displayedUser.uspro_addr,
-                uspro_photo:displayedUser.uspro_photo
-              });
-            }
-          }
+            setProfile({
+              ...profile,
+              user_id: displayedUser.userId,
+              user_full_name: displayedUser.userFullName,
+              user_company_name: displayedUser.userCompanyName,
+              user_type: displayedUser.userType,
+              user_email: displayedUser.userEmail,
+              user_phone_number: displayedUser.userPhoneNumber,
+              user_password: displayedUser.userPassword,
+              user_bonus_points: displayedUser.userBonusPoints,
+              user_members: displayedUser.userMembers,
+              usro_role: displayedUser.userRoles.usroRole,
+              uspro_national_id: displayedUser.userProfiles.usproNationalId,
+              uspro_birth: moment(displayedUser.userProfiles.usproBirth).format("DD MMMM YYYY"),
+              uspro_job_title: displayedUser.userProfiles.usproJobTitle,
+              uspro_marital_status: displayedUser.userProfiles.usproMaritalStatus,
+              uspro_gender: displayedUser.userProfiles.usproGender,
+              uspro_addr_id: displayedUser.userProfiles.usproAddrId,
+              uspro_photo:displayedUser.userProfiles.usproPhoto
+            });
 
-          const displayedUserMemb: any = userMe.results;
-          if (displayedUserMemb) {
-            setProfileMemb(displayedUserMemb);
+            setProfileBP(displayedUser.userBonusPoints);
+            setProfileMemb(displayedUser.userMembers);
           }
         }
       }
     }
-<<<<<<< Updated upstream
-  },[userMe]);
-=======
-  // },[]);
   }, [userMe]);
 
   const [BonusPoints, setBonusPoints]: any = useState([]);
   useEffect(() => {
-    if (profileBP.length > 0) {
-      const reducedBonusPoints = profileBP.reduce((accumulator:any, current:any) => {
-        const index = accumulator.findIndex((item:any) => item.key === current.ubpo_user_id && item.createdOn === moment(current.ubpo_create_on).format("DD-MMM-YYYY") && item.type[0] === current.ubpo_bonus_type);
-        if (index === -1) {
-          accumulator.push({
-            key: current.ubpo_user_id,
-            createdOn: moment(current.ubpo_create_on).format("DD-MMM-YYYY"),
-            type: [current.ubpo_bonus_type],
-            point: parseInt(current.ubpo_total_points),
-          });
-        }
-        return accumulator;
-      }, []);
-      setBonusPoints(reducedBonusPoints);
-    }
+      const updatedBonusPoints = profileBP.map((profile: any) => {
+          return {
+            key: profile.ubpoId,
+            createdOn:  moment(profile.ubpoCreateOn).format("DD-MMM-YYYY"),
+            type: [profile.ubpoBonusType],
+            point: parseInt(profile.ubpoTotalPoints),
+          };
+      });
+      setBonusPoints(updatedBonusPoints);
   }, [profileBP]);
+
   interface DataTypeBonusPoints {
     key: string;
     createdOn: string;
     point: number;
     type: string[];
   }
+
   type DataIndexBonusPoints = keyof DataTypeBonusPoints;
+
   const dataBonusPoints: DataTypeBonusPoints[] = BonusPoints;
 
   const [Members, setMembers]: any = useState([]);
   useEffect(() => {
-    if (profileMemb.length > 0) {
-      const reducedMembers = profileMemb.reduce((accumulator:any, current:any) => {
-        const index = accumulator.findIndex((item:any) => item.key === current.usme_user_id && item.promoteDate === moment(current.usme_promote_date).format("DD-MMM-YYYY") && item.type[0] === current.usme_memb_name && item.status[0] === current.usme_type);
-        if (index === -1) {
-          accumulator.push({
-            key: current.usme_user_id,
-            promoteDate: moment(current.usme_promote_date).format("DD-MMM-YYYY"),
-            type: [current.usme_memb_name],
-            point: parseInt(current.usme_points),
-            status:[current.usme_type]
-          });
-        }
-        return accumulator;
-      }, []);
-      setMembers(reducedMembers);
-    }
+    const updatedMembers = profileMemb.map((profile: any) => {
+        console.info(profile)
+          return {
+            key: profile.usmeId,
+            promoteDate:  moment(profile.usmePromoteDate).format("DD-MMM-YYYY"),
+            point: parseInt(profile.usmePoints),
+            status: [profile.usmeType],
+          };
+      });
+      setMembers(updatedMembers);
   }, [profileMemb]);
+
   interface DataTypeMembers {
     key: string;
     promoteDate: string;
-    type: string[];
     point: number;
     status: string[];
+    type: string[];
   }
+
   type DataIndexMembers = keyof DataTypeMembers;
-  const dataMembers: DataTypeMembers[] = Members;
->>>>>>> Stashed changes
+
+  const dataMembers: DataTypeMembers[] = [
+    {
+      key: '1',
+      promoteDate: '12-Jan-2022',
+      point: 32,
+      status: ['expired'],
+      type: ['WIZARD'],
+    },
+    {
+      key: '2',
+      promoteDate: '01-Des-2021',
+      point: 30,
+      status: ['default'],
+      type: ['VIP'],
+    },
+    {
+      key: '3',
+      promoteDate: '05-Nov-2020',
+      point: 28,
+      status: ['expired'],
+      type: ['GOLD'],
+    },
+    {
+      key: '4',
+      promoteDate: '10-Oct-2019',
+      point: 26,
+      status: ['default'],
+      type: ['SILVER'],
+    },
+  ];
 
   const routerEditPhoto = useRouter();
+
   const handleUpload = async () => {
     setUploading(true);
     try {
@@ -353,12 +277,6 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     userType: null,
     userEmail: null,
     userPhoneNumber: null,
-    uspaPasswordhash: null,
-    ubpoTotalPoints: null,
-    ubpoBonusType: null,
-    usmeMembName: null,
-    usmePoints: null,
-    usmeType: null,
     usroRole: null,
     usproNationalId: null,
     usproBirth: "",
@@ -394,12 +312,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                 userCompanyName: displayedUser.user_company_name,
                 userType: displayedUser.user_type,
                 userEmail: displayedUser.user_email,
-                userPhoneNumber: displayedUser.user_phone_number,
-                ubpoTotalPoints: displayedUser.ubpo_total_points,
-                ubpoBonusType: displayedUser.ubpo_bonus_type,
-                usmeMembName: displayedUser.usme_memb_name,
-                usmePoints: displayedUser.usme_points,
-                usmeType: displayedUser.usme_type,
+                userPhoneNumber: displayedUser.user_phone_number,                
                 usroRole: displayedUser.role_id,
                 usproNationalId: displayedUser.uspro_national_id,
                 usproBirth: dateBirth,
@@ -444,19 +357,14 @@ const Profile: NextPage<Props> = ({ dirs }) => {
             user_type: values.userType,
             user_email: values.userEmail,
             user_phone_number: values.userPhoneNumber,
-            uspa_passwordhash: values.uspaPasswordhash,
-            ubpo_total_points: values.ubpoTotalPoints,
-            ubpo_bonus_type: values.ubpoBonusType,
-            usme_memb_name: values.usmeMembName,
-            usme_points: values.usmePoints,
-            usme_type: values.usmeType,
+            user_password: values.uspaPasswordhash,
             usro_role: values.usroRole,
             uspro_national_id: values.usproNationalId,
             uspro_birth: moment(values.usproBirth).format("DD MMMM YYYY"),
             uspro_job_title: values.usproJobTitle,
             uspro_marital_status: values.usproMaritalStatus,
             uspro_gender: values.usproGender,
-            uspro_addr: values.usproAddr,
+            uspro_addr_id: values.usproAddr,
             uspro_photo:values.usproPhoto
           });
           setDataUserEdit({
@@ -467,11 +375,6 @@ const Profile: NextPage<Props> = ({ dirs }) => {
             userType: values.userType,
             userEmail: values.userEmail,
             userPhoneNumber: values.userPhoneNumber,
-            ubpoTotalPoints: values.ubpoTotalPoints,
-            ubpoBonusType: values.ubpoBonusType,
-            usmeMembName: values.usmeMembName,
-            usmePoints: values.usmePoints,
-            usmeType: values.usmeType,
             usroRole: values.roleId,
             usproNationalId: values.usproNationalId,
             usproBirth: dateBirth,
@@ -622,15 +525,13 @@ const Profile: NextPage<Props> = ({ dirs }) => {
       render: (_, { type }) => (
         <>
           {type.map((isType) => {
-            let color = isType.length < 5 ? 'geekblue' : 'green';
-            if (isType === 'p') {
+            let color = isType ? 'geekblue' : 'green';
+            if (isType === 'P') {
               color = 'orange';
-            } else if (isType === 'R') {
-              color = 'geekblue'
             }
             return (
               <Tag color={color} key={isType}>
-                {isType=='p'?'PROMOTE':'RATING'}
+                {isType=='P'?'PROMOTE':'RATING'}
               </Tag>
             );
           })}
@@ -869,13 +770,13 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                       {/* Memb. Name */}
                       <div className="flex flex-wrap">
                         <span className={styles.formProfile + "text-left w-50"}>
-                          {
+                          {/* {
                             profile.usme_memb_name === "SILVER" ? "Silver Member" :
                               profile.usme_memb_name === "GOLD" ? "Gold Member" :
                                 profile.usme_memb_name === "VIP" ? "VIP Member" :
                                   profile.usme_memb_name === "WIZARD" ? "Wizard Member" :
                                     "None"
-                          }
+                          } */}
                         </span>
                       </div>
                       {/* Type Agency */}
@@ -1329,4 +1230,4 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
 };
 
-export default Profile;
+export default ProfileNew;
