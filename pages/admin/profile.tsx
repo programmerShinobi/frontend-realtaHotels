@@ -33,6 +33,85 @@ interface Props {
   dirs: string[];
 }
 
+// interface DataTypeBonusPoints {
+//   key: string;
+//   createdOn: string;
+//   point: number;
+//   type: string[];
+// }
+
+// type DataIndexBonusPoints = keyof DataTypeBonusPoints;
+
+// const dataBonusPoints: DataTypeBonusPoints[] = [
+//   {
+//     key: '1',
+//     createdOn: '12-Jan-2022',
+//     type: ['r'],
+//     point: 32,
+//   },
+//   {
+//     key: '2',
+//     createdOn: '01-Des-2021',
+//     type: ['p'],
+//     point: 30,
+//   },
+//   {
+//     key: '3',
+//     createdOn: '05-Nov-2020',
+//     type: ['r'],
+//     point: 28,
+//   },
+//   {
+//     key: '4',
+//     createdOn: '10-Oct-2019',
+//     type: ['p'],
+//     point: 26,
+//   },
+// ];
+
+// -------------------------------------------------------------------- //
+
+interface DataTypeMembers {
+  key: string;
+  promoteDate: string;
+  point: number;
+  status: string[];
+  type: string[];
+}
+
+type DataIndexMembers = keyof DataTypeMembers;
+
+const dataMembers: DataTypeMembers[] = [
+  {
+    key: '1',
+    promoteDate: '12-Jan-2022',
+    point: 32,
+    status: ['expired'],
+    type: ['WIZARD'],
+  },
+  {
+    key: '2',
+    promoteDate: '01-Des-2021',
+    point: 30,
+    status: ['default'],
+    type: ['VIP'],
+  },
+  {
+    key: '3',
+    promoteDate: '05-Nov-2020',
+    point: 28,
+    status: ['expired'],
+    type: ['GOLD'],
+  },
+  {
+    key: '4',
+    promoteDate: '10-Oct-2019',
+    point: 26,
+    status: ['default'],
+    type: ['SILVER'],
+  },
+];
+
 const Profile: NextPage<Props> = ({ dirs }) => {
   const [uploading, setUploading] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
@@ -63,7 +142,6 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     uspro_photo:null
   });
   const [profileBP, setProfileBP] = useState([]);
-  const [profileMemb, setProfileMemb] = useState([]);
   
   const userMe = useSelector((state: any) => state.usersReducers.user);
   
@@ -105,72 +183,104 @@ const Profile: NextPage<Props> = ({ dirs }) => {
           if (displayedUserBP) {
             setProfileBP(displayedUserBP);
           }
-
-          const displayedUserMemb: any = userMe.results;
-          if (displayedUserMemb) {
-            setProfileMemb(displayedUserMemb);
-          }
         }
       }
     }
   // },[]);
   }, [userMe]);
 
+  // OLD1 ----------------------------------------------------------
+  // const [BonusPoints, setBonusPoints]: any = useState([]);
+  
+  // useEffect(() => {
+    
+  //   profileBP && profileBP.map((profile: any) => {
+  //       setBonusPoints([{
+  //         ...BonusPoints,
+  //         key: profile.ubpo_user_id,
+  //         createdOn: profile.ubpo_create_on,
+  //         type: [profile.ubpo_bonus_type],
+  //         point: parseInt(profile.ubpo_total_points),
+  //       }]);
+  //   });
+  // },[]);
+
+  // interface DataTypeBonusPoints {
+  //   key: string;
+  //   createdOn: string;
+  //   point: number;
+  //   type: string[];
+  // }
+
+  // type DataIndexBonusPoints = keyof DataTypeBonusPoints;
+
+  // const dataBonusPoints: DataTypeBonusPoints[] = BonusPoints
+  // console.info(BonusPoints);
+
+  // OLD2------------------------------------------------------------------------------
+  
+  // const [BonusPoints, setBonusPoints]: [DataTypeBonusPoints[], any] = useState([]);
+
+  // useEffect(() => {
+  //   profileBP && profileBP.forEach((profile: any) => {
+  //     if (profileBP.length > 0) { 
+
+  //       setBonusPoints((prevBonusPoints:any) => [
+  //         ...prevBonusPoints,
+  //         {
+  //           key: profile.ubpo_user_id,
+  //           createdOn: profile.ubpo_create_on,
+  //           type: [profile.ubpo_bonus_type],
+  //           point: parseInt(profile.ubpo_total_points),
+  //         },
+  //       ]);
+  //     }
+  //   });
+  // }, [BonusPoints]);
+
+  // interface DataTypeBonusPoints {
+  //   key: string;
+  //   createdOn: string;
+  //   point: number;
+  //   type: string[];
+  // }
+
+  // type DataIndexBonusPoints = keyof DataTypeBonusPoints;
+
+  // const dataBonusPoints: DataTypeBonusPoints[] = BonusPoints;
+  // console.info(BonusPoints);
+
+  
+  // LAST----------------------------------------------------------------------------------
   const [BonusPoints, setBonusPoints]: any = useState([]);
+
   useEffect(() => {
     if (profileBP.length > 0) {
-      const reducedBonusPoints = profileBP.reduce((accumulator:any, current:any) => {
-        const index = accumulator.findIndex((item:any) => item.key === current.ubpo_user_id && item.createdOn === moment(current.ubpo_create_on).format("DD-MMM-YYYY") && item.type[0] === current.ubpo_bonus_type);
-        if (index === -1) {
-          accumulator.push({
-            key: current.ubpo_user_id,
-            createdOn: moment(current.ubpo_create_on).format("DD-MMM-YYYY"),
-            type: [current.ubpo_bonus_type],
-            point: parseInt(current.ubpo_total_points),
-          });
-        }
-        return accumulator;
-      }, []);
-      setBonusPoints(reducedBonusPoints);
+      const updatedBonusPoints = profileBP.map((profile: any) => {
+        return {
+          key: profile.ubpo_user_id,
+          createdOn:  moment(profile.ubpo_create_on).format("DD-MMM-YYYY"),
+          type: [profile.ubpo_bonus_type],
+          point: parseInt(profile.ubpo_total_points),
+        };
+      });
+      setBonusPoints(updatedBonusPoints);
     }
   }, [profileBP]);
+
   interface DataTypeBonusPoints {
     key: string;
     createdOn: string;
     point: number;
     type: string[];
   }
+
   type DataIndexBonusPoints = keyof DataTypeBonusPoints;
+
   const dataBonusPoints: DataTypeBonusPoints[] = BonusPoints;
 
-  const [Members, setMembers]: any = useState([]);
-  useEffect(() => {
-    if (profileMemb.length > 0) {
-      const reducedMembers = profileMemb.reduce((accumulator:any, current:any) => {
-        const index = accumulator.findIndex((item:any) => item.key === current.usme_user_id && item.promoteDate === moment(current.usme_promote_date).format("DD-MMM-YYYY") && item.type[0] === current.usme_memb_name && item.status[0] === current.usme_type);
-        if (index === -1) {
-          accumulator.push({
-            key: current.usme_user_id,
-            promoteDate: moment(current.usme_promote_date).format("DD-MMM-YYYY"),
-            type: [current.usme_memb_name],
-            point: parseInt(current.usme_points),
-            status:[current.usme_type]
-          });
-        }
-        return accumulator;
-      }, []);
-      setMembers(reducedMembers);
-    }
-  }, [profileMemb]);
-  interface DataTypeMembers {
-    key: string;
-    promoteDate: string;
-    type: string[];
-    point: number;
-    status: string[];
-  }
-  type DataIndexMembers = keyof DataTypeMembers;
-  const dataMembers: DataTypeMembers[] = Members;
+  console.info(BonusPoints);
+
 
   const routerEditPhoto = useRouter();
   const handleUpload = async () => {
