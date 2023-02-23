@@ -30,7 +30,18 @@
     font-style: normal;
     font-weight: 100;
     font-size: 14px;
-    line-height: 12px;
     border: gray;
     width: auto;
+}
+
+@media (max-width: 600px) {
+    .formProfile {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 100;
+        font-size: 12px;
+        line-height: 21px;
+        padding-bottom: 10px;
+        width: auto;
+    }
 }

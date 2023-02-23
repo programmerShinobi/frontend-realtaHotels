@@ -20,6 +20,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CloudSyncIcon from '@mui/icons-material/CloudSync';
 import EditIcon from '@mui/icons-material/Edit';
+import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 import moment from "moment";
 import { useRouter } from "next/router";
 import { InputRef, Tabs, Tag, Button, Input, Space, Table } from "antd";
@@ -499,20 +500,20 @@ const Profile: NextPage<Props> = ({ dirs }) => {
         <Space>
           <Button
             onClick={() => handleSearchBonusPoints(selectedKeys as string[], confirm, dataIndex)}
-            icon={<SearchOutlined />}
+            icon={<SearchOutlined className="mb-6"  />}
             size="small"
-            style={{ width: 90 }}
+            style={{ width: 32, height:32 }}
           >
-            Search
           </Button>
           <Button
             onClick={() => clearFilters && handleResetBonusPoints(clearFilters)}
+            icon={<RotateLeftIcon />}
             size="small"
-            style={{ width: 90 }}
+            style={{ width: 32,height:32  }}
           >
-            Reset
           </Button>
           <Button
+            className="text-gray-500"
             type="link"
             size="small"
             onClick={() => {
@@ -524,13 +525,14 @@ const Profile: NextPage<Props> = ({ dirs }) => {
             Filter
           </Button>
           <Button
+            className="text-red-500"
             type="link"
             size="small"
             onClick={() => {
               close();
             }}
           >
-            close
+            Close
           </Button>
         </Space>
       </div>
@@ -620,20 +622,20 @@ const Profile: NextPage<Props> = ({ dirs }) => {
         <Space>
           <Button
             onClick={() => handleSearchMembers(selectedKeys as string[], confirm, dataIndex)}
-            icon={<SearchOutlined />}
+            icon={<SearchOutlined className="mb-7" />}
             size="small"
-            style={{ width: 90 }}
+            style={{ width: 32,height:32 }}
           >
-            Search
           </Button>
           <Button
             onClick={() => clearFilters && handleResetMembers(clearFilters)}
+            icon={<RotateLeftIcon />}
             size="small"
-            style={{ width: 90 }}
+            style={{ width: 32,height:32 }}
           >
-            Reset
           </Button>
           <Button
+            className="text-gray-500"
             type="link"
             size="small"
             onClick={() => {
@@ -645,13 +647,14 @@ const Profile: NextPage<Props> = ({ dirs }) => {
             Filter
           </Button>
           <Button
+            className="text-red-500"
             type="link"
             size="small"
             onClick={() => {
               close();
             }}
           >
-            close
+            Close
           </Button>
         </Space>
       </div>
@@ -758,19 +761,19 @@ const Profile: NextPage<Props> = ({ dirs }) => {
         <p className="text-gray-700 text-3xl mb-7 font-bold">Profile</p>
         <Box className="grid shadow-md rounded-xl bg-white pb-8">
           {/* General */}
-          <Box className="mt-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+          <Box className="m-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
             <Typography className={styles.textTitleInProfile}>
               General
             </Typography>
           </Box>
-          <Box className="pt-5 pl-8 text-left font-normal text-orange-900">
+          <Box className="pl-8 pb-8 pr-8 text-left font-normal text-orange-900">
             <Typography className={styles.textLabelInProfile}>
               This information will be display, so be careful what you share
             </Typography>
           </Box>
-          <Box className="flex items-end">
+          <Box className="pl-8 pb-8 pr-8 flex items-start">
             <Box className="w-full md:w-1/4 justify-center">
-              <Box className="flex justify-center pt-5">
+              <Box className="flex justify-center ">
                 <label>
                   <center>
                     <Input
@@ -801,101 +804,101 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                     onClick={handleUpload}
                     disabled={uploading}
                     style={{ opacity: uploading ? ".5" : "1" }}>
-                    <p className="normal-case font-normal">{uploading ? <CloudSyncIcon /> : <CloudUploadIcon className="h-5 w-5  " />}&nbsp;{"Upload"}</p>
+                    <p className="normal-case font-normal">{uploading ? <CloudSyncIcon /> : <CloudUploadIcon className="h-5 w-5" />}&nbsp;{"Upload"}</p>
                   </button>
                 </Box>
               ) : (
                 <Box className="flex justify-center">
-                  <button
-                    className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
-                    
+                  <Button
+                    className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-gray-100 text-center text-gray-400 hover:bg-gray-200 hover:text-gray-600 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75"
                     disabled={true}
                     style={{ opacity: uploading ? ".5" : "1" }}>
-                    <p className="normal-case font-normal">{uploading ? <CloudSyncIcon /> : <CloudUploadIcon className="h-5 w-5  " />}&nbsp;{"Upload"}</p>
-                  </button>
+                    <p className="normal-case font-normal">{uploading ? <CloudSyncIcon /> : <CloudUploadIcon className="h-5 w-5" />}&nbsp;{"Upload"}</p>
+                    </Button>
                 </Box>
               )}
             </Box>
             <Box className="w-full md:w-1/4">
-              <Box className="grid col-1 bg-white h-50">
-                <Box className="max-w-4xl space-y-3 pb-12">
+              <Box className="grid bg-white">
+                <Box className="max-w-4xl space-y-3 mb-6">
                   {/* Full Name */}
                   <div className="flex flex-wrap">
-                    <span className={styles.formProfile + "text-left w-50"}>{profile.user_full_name ? profile.user_full_name : "None"}</span>
+                    <span className={styles.formProfile}>{profile.user_full_name ? profile.user_full_name : <em>{"None"}</em>}</span>
                   </div>
                   {/* Memb. Name */}
                   <div className="flex flex-wrap">
-                    <span className={styles.formProfile + "text-left w-50"}>
+                    <span className={styles.formProfile}>
                       {
                         profile.usme_memb_name === "SILVER" ? "Silver Member" :
                           profile.usme_memb_name === "GOLD" ? "Gold Member" :
                             profile.usme_memb_name === "VIP" ? "VIP Member" :
                               profile.usme_memb_name === "WIZARD" ? "Wizard Member" :
-                                "None"
+                                <em>{"None"}</em>
                       }
                     </span>
                   </div>
                   {/* Type Agency */}
                   <div className="flex flex-wrap">
-                    <span className={styles.formProfile + "text-left w-50"}>
+                    <span className={styles.formProfile}>
                       {
                         profile.user_type === "T" ? "Travel Agency" :
                           profile.user_type === "C" ? "Company Agency" :
                             profile.user_type === "I" ? "Individual Agency" :
-                              "None"
+                              <em>{"None"}</em>
                       }
                     </span>
-                      
                   </div>
                 </Box>
               </Box>
             </Box>
             <Box className="w-full md:w-1/2">
-              <Box className="grid col-1 bg-white">
-                <Box className="max-w-4xl space-y-3 pb-4">
+              <Box className="grid bg-white">
+                <Box className="max-w-4xl space-y-3">
                   {/* Email */}
                   <div className="flex flex-wrap">
-                    <span className={styles.formProfile + "text-left w-50"}>
+                    <span className={styles.formProfile}>
                       {profile.user_email ? (
                         <span>
-                          {profile.user_email} <label className="font-normal text-orange-900">(default)</label>
+                          {profile.user_email} <label className="font-normal text-orange-900"><em>(default)</em></label>
                         </span>
                       ) : (
-                        "None"
+                        <em>{"None"}</em>
                       )}
                     </span>
                   </div>
                   {/* Phone Number */}
                   <div className="flex flex-wrap">
-                    <span className={styles.formProfile + "text-left w-50"}>
+                    <span className={styles.formProfile}>
                       {profile.user_phone_number ? (
                         <span>
-                          {profile.user_phone_number} <label className="font-normal text-orange-900">(active)</label>
+                          {profile.user_phone_number} <label className="font-normal text-orange-900"><em>(active)</em></label>
                         </span>
                       ) : (
-                        "None"
+                        <em>{"None"}</em>
                       )}
                     </span>
                   </div>
                 </Box>
               </Box>
-              <Box className="flex items-end">
-                <button
-                  className="shadow-lg w-28 py-1 px-1  mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
-                  onClick={() => handleEdit()}
-                >
-                  <p className="normal-case font-normal">{<EditIcon className="h-4 w-4" />}&nbsp;{"Edit"}</p>
-                </button>
-              </Box>
+              <div className="">
+                <Box className="grid place-content-end">
+                  <button
+                    className="shadow-lg w-24 py-1 px-1  mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                    onClick={() => handleEdit()}
+                  >
+                    <p className="normal-case font-normal">{<EditIcon className="h-4 w-4 mb-1" />}&nbsp;{"Edit"}</p>
+                  </button>
+                </Box>
+              </div>
             </Box>
           </Box>
           {/* Security */}
-          <div className="mt-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+          <Box className="pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
             <Typography className={styles.textTitleInProfile}>
               Security
             </Typography>
-          </div>
-          <div className="pt-8 flex items-stretch">
+          </Box>
+          <Box className="pt-8 flex">
             <Box className="w-full md:w-1/4 pl-8">
               <Box className="flex items-stretch">
                 <div className="text-left font-normal text-orange-900">
@@ -905,38 +908,35 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                 </div>
               </Box>
             </Box>
-            <div className="w-full md:w-1/4">
-              <Box className="grid col-1 bg-white h-50">
-                <Box className="space-y-3 w-40">
-                  <Input
-                    color="warning"
-                    className="border border-orange-900 bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
-                    readOnly={true}
+            <div className="grid w-full md:w-1/4">
+              <Box className="flex items-end bg-white h-50">
+                <Input
+                    disabled={true}
+                    className="border w-32 bg-gray-100 text-center text-gray-400 hover:bg-gray-200 hover:text-gray-600 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75"
                     size="middle"
                     type="text"
                     value="**********************"
                   />
-                </Box>
               </Box>
             </div>
-            <div className="w-full md:w-1/2">
-              <Box className="flex items-stretch">
+            <div className="grid w-full md:w-1/2 mr-8">
+              <Box className="place-self-end">
                 <button
-                  className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                  className="shadow-lg w-24 py-1 px-1 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
                   onClick={() => handleEditPassword()}
                 >
-                  <p className="normal-case font-normal">{<EditIcon className="h-4 w-4   " />}&nbsp;{"Edit"}</p>
+                  <p className="normal-case font-normal">{<EditIcon className="h-4 w-4 mb-1" />}&nbsp;{"Edit"}</p>
                 </button>
               </Box>
             </div>
-          </div>
+          </Box>
           {/* Points & Members */}
-          <div className="mt-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+          <Box className="mt-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
             <Typography className={styles.textTitleInProfile}>
               Points & Members
             </Typography>
-          </div>
-          <div className="pl-8 pt-8 pr-8">
+          </Box>
+          <Box className="pl-8 pt-8 pr-8">
             <Tabs
               onChange={onChangeTab}
               type="card"
@@ -967,7 +967,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                 <Table columns={columnsMembers} dataSource={dataMembers} />
               </Tabs.TabPane>
             </Tabs>
-          </div>
+          </Box>
         </Box>
         <Transition appear show={isOpenEdit} as={Fragment}>
           <Dialog as="div" className="relative z-10" onClose={closeModalEdit}>
