@@ -47,12 +47,14 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     dispatchProfile(doUserRequest(userId));
   },[]);
   
+  // Profile General
   useEffect(() => {
     if (userMe && userMe.results) {
       setProfile(userMe.results[0]);
     }
   })
   
+  // Upload Photo
   const routerEditPhoto = useRouter();
   const handleUpload = async () => {
     setUploading(true);
@@ -80,7 +82,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
   };
 
   // define useState API POST users
-  let [DataUserEdit, setDataUserEdit] = useState({
+  const [DataUserEdit, setDataUserEdit] = useState({
     userId: null,
     userFullName: null,
     userCompanyName: null,
@@ -103,6 +105,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     usproAddr: 1
   });
 
+  // useSelector : Profile
   const user = useSelector((state: any) => state.usersReducers.user);
 
   // getHelper for display in form
@@ -175,6 +178,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     usproAddr : 1
   };
  
+  // Dispacth Edit Profile
   const dispatchEdit = useDispatch();
 
   // useState : modals Edit user
@@ -235,7 +239,10 @@ const Profile: NextPage<Props> = ({ dirs }) => {
       setDataUserEdit({...DataUserEdit, [data] : event.target.value});
   }
 
+  // useRouter Edit Profile
   const routerEdit = useRouter()
+
+  // useDispatch Update Profile
   const dispatchUpdate = useDispatch();
   
   // function handle submit form edit users (API POST users)
@@ -280,9 +287,6 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     uspaPasswordhash: "",
     uspaConfirmPasswordhash:"",
   };
- 
-  
-  const dispatchEditPassword = useDispatch();
 
   // useState : modals Edit user
   const [isOpenEditPassword, setIsOpenEditPassword] = useState(false)
@@ -324,7 +328,10 @@ const Profile: NextPage<Props> = ({ dirs }) => {
       setDataUserEdit({...DataUserEdit, [data] : event.target.value});
   }
 
+  // useRouter Edit Password
   const routerEditPassword = useRouter();
+
+  // useDispatch Update Password
   const dispatchUpdatePassword = useDispatch();
   
   // function handle submit form edit users (API POST users)
@@ -340,21 +347,25 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     setSubmitting(false);
   };
 
+  // Show-Hidden Current Password
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const handleMouseDownCurrentPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
 
+  // Show-Hidden New Password
   const [showPassword, setShowPassword] = useState(false);
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
 
+  // Show-Hidden Confirm New Password
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const handleMouseDownConfirmPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
 
+  //  On Change Tab Bonus Points & Members
   const onChangeTab = (key: string) => {
     console.log(key);
   };
@@ -369,7 +380,6 @@ const Profile: NextPage<Props> = ({ dirs }) => {
       }
     }
   });
-
   const [BonusPoints, setBonusPoints]: any = useState([]);
   useEffect(() => {
     if (profileBP.length > 0) {
@@ -406,7 +416,6 @@ const Profile: NextPage<Props> = ({ dirs }) => {
       }
     }
   });
-
   const [Members, setMembers]: any = useState([]);
   useEffect(() => {
     if (profileMemb.length > 0) {
@@ -436,10 +445,12 @@ const Profile: NextPage<Props> = ({ dirs }) => {
   type DataIndexMembers = keyof DataTypeMembers;
   const dataMembers: DataTypeMembers[] = Members;
 
+  // Search data in by column Tables
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef<InputRef>(null);
 
+  // Handle Search data in by column BonusPoints Table
   const handleSearchBonusPoints = (
     selectedKeys: string[],
     confirm: (param?: FilterConfirmProps) => void,
@@ -450,11 +461,13 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     setSearchedColumn(dataIndex);
   };
 
+  // Handle Reset (search) data in by column BonusPoints Table
   const handleResetBonusPoints = (clearFilters: () => void) => {
     clearFilters();
     setSearchText('');
   };
 
+  // Handle Search data in by column Members Table
   const handleSearchMembers = (
     selectedKeys: string[],
     confirm: (param?: FilterConfirmProps) => void,
@@ -465,11 +478,13 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     setSearchedColumn(dataIndex);
   };
 
+  // Handle Reset (search) data in by column BonusPoints Table
   const handleResetMembers = (clearFilters: () => void) => {
     clearFilters();
     setSearchText('');
   };
 
+  // Get Column Search - BonusPoints
   const getColumnSearchPropsBonusPoints = (dataIndex: DataIndexBonusPoints): ColumnType<DataTypeBonusPoints> => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
       <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
@@ -546,6 +561,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
       ),
   });
 
+  // column BonusPoints
   const columnsBonusPoints: ColumnsType<DataTypeBonusPoints> = [
     {
       title: 'Created On',
@@ -589,6 +605,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     },
   ];
 
+  // Get Column Search - Members
   const getColumnSearchPropsMembers = (dataIndex: DataIndexMembers): ColumnType<DataTypeMembers> => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
       <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
@@ -665,6 +682,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
       ),
   });
 
+  // Column Members
   const columnsMembers: ColumnsType<DataTypeMembers> = [
     {
       title: 'Promote Date',
@@ -891,6 +909,8 @@ const Profile: NextPage<Props> = ({ dirs }) => {
               <Box className="grid col-1 bg-white h-50">
                 <Box className="space-y-3 w-40">
                   <Input
+                    color="warning"
+                    className="border border-orange-900 bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
                     readOnly={true}
                     size="middle"
                     type="text"
