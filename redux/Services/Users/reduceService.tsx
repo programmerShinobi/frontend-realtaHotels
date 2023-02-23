@@ -4,7 +4,7 @@ const getAll = async () => {
     try {
         const result:any = await axios.get("/users");
         if (!result) {
-            throw new Error("Axios get problem")
+            throw new Error("Axios get problem");
         }
         return result;
     } catch (error:any) {
@@ -16,7 +16,7 @@ const getId = async (id:number) => {
     try {
         const result:any = await axios.get(`/users/findOneJoinAllUser/${id}`);
         if (!result) {
-            throw new Error("Axios get problem")
+            throw new Error("Axios get problem");
         }
         return result;
     } catch (error:any) {
@@ -28,7 +28,7 @@ const create = async (data:any) => {
     try {
         const result:any = await axios.post("/users/createAllJoinToUsers", data);
         if (!result) {
-            throw new Error("Axios post problem")
+            throw new Error("Axios post problem");
         }
         return result;
     } catch (error:any) {
@@ -41,7 +41,7 @@ const update = async (data:any) => {
     try {
         const result:any = await axios.put(`/users/updateAllJoinToUsers/${id}`, data);
         if (!result) {
-            throw new Error("Axios put problem")
+            throw new Error("Axios put problem");
         }
         return result;
     } catch (error:any) {
@@ -54,7 +54,7 @@ const updatePhoto = async (data:any) => {
     try {
         const result:any = await axios.put(`/userprofiles/userPhotoProfiles/${id}`, data);
         if (!result) {
-            throw new Error("Axios put problem")
+            throw new Error("Axios put problem");
         }
         return result;
     } catch (error:any) {
@@ -66,7 +66,7 @@ const remove = async (id:number) => {
     try {
         const result:any = await axios.delete(`/users/deleteAllJoinToUsers/${id}`);
         if (!result) {
-            throw new Error("Axios delete problem")
+            throw new Error("Axios delete problem");
         }
         return result;
     } catch (error:any) {
@@ -78,7 +78,7 @@ const login = async (data:any) => {
     try {
         const result:any = await axios.post("auth/login", data);
         if (!result) {
-            throw new Error("Axios post problem")
+            throw new Error("Axios post problem");
         }
         return result;
     } catch (error:any) {
@@ -90,7 +90,7 @@ const register = async (data:any) => {
     try {
         const result:any = await axios.post("auth/register", data);
         if (!result) {
-            throw new Error("Axios post problem")
+            throw new Error("Axios post problem");
         }
         return result;
     } catch (error:any) {
@@ -102,7 +102,7 @@ const getAllRoles = async () => {
     try {
         const result:any = await axios.get("/roles");
         if (!result) {
-            throw new Error("Axios get problem")
+            throw new Error("Axios get problem");
         }
         return result;
     } catch (error:any) {
@@ -114,7 +114,7 @@ const getIdRole = async (id:number) => {
     try {
         const result:any = await axios.get(`/roles/${id}`);
         if (!result) {
-            throw new Error("Axios get problem")
+            throw new Error("Axios get problem");
         }
         return result;
     } catch (error:any) {
@@ -126,7 +126,7 @@ const createRole = async (data:any) => {
     try {
         const result:any = await axios.post("/roles", data);
         if (!result) {
-            throw new Error("Axios post problem")
+            throw new Error("Axios post problem");
         }
         return result;
     } catch (error:any) {
@@ -139,7 +139,7 @@ const updateRole = async (data:any) => {
     try {
         const result: any = await axios.put(`/roles/${id}`, data);
         if (!result) {
-            throw new Error("Axios put problem")
+            throw new Error("Axios put problem");
         }
         return result;
     } catch (error:any) {
@@ -151,7 +151,20 @@ const removeRole = async (id:number) => {
     try {
         const result:any = await axios.delete(`/roles/${id}`);
         if (!result) {
-            throw new Error("Axios delete problem")
+            throw new Error("Axios delete problem");
+        }
+        return result;
+    } catch (error:any) {
+        return error.message;
+    }
+}
+
+const changePassword = async (data:any) => {
+    const id = parseInt(data.userId);
+    try {
+        const result:any = await axios.put(`/auth/changePassword/${id}`, data);
+        if (!result) {
+            throw new Error("Axios put problem");
         }
         return result;
     } catch (error:any) {
@@ -172,7 +185,8 @@ const ReduceService:any = {
     getIdRole,
     createRole,
     updateRole,
-    removeRole
+    removeRole,
+    changePassword
 }
 
 export default ReduceService;

@@ -278,3 +278,26 @@ export const doDeleteRolesFailed:any = (payload:any):any => {
         payload
     }
 }
+
+export const doChangePassword:any = (id:number, payload:any):any => {
+    return {
+        type: ActionType.CHANGE_PASSWORD,
+        id,
+        payload
+    }
+}
+
+export const doChangePasswordSucceed: any = (payload: any): any => {
+    return {
+        type: ActionType.CHANGE_PASSWORD_SUCCEED,
+        payload
+    }
+}
+
+
+export const doChangePasswordFailed:any = (payload:any):any => {
+    return {
+        type: ActionType.CHANGE_PASSWORD_FAILED,
+        payload
+    }
+}

@@ -3,7 +3,7 @@ import React, { useState, useEffect, Fragment, useRef } from 'react'
 import axios from "axios";
 import fs from "fs/promises";
 import path from "path";
-import { doUpdatePhotoUsers, doUserRequest, doUpdateUsers, doUsersRequest } from "@/redux/Actions/Users/reduceActions";
+import { doUpdatePhotoUsers, doUserRequest, doUpdateUsers, doUsersRequest, doChangePassword } from "@/redux/Actions/Users/reduceActions";
 import { useDispatch, useSelector } from "react-redux";
 import LayoutAdmin from "@/components/Layout/LayoutAdmin";
 import { Box, FormControl, Grid, IconButton, InputAdornment, InputBase, InputLabel, MenuItem, OutlinedInput, Select, Tooltip, Typography } from "@mui/material"
@@ -52,7 +52,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
       setProfile(userMe.results[0]);
     }
   })
-
+  
   const routerEditPhoto = useRouter();
   const handleUpload = async () => {
     setUploading(true);
@@ -281,6 +281,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     uspaConfirmPasswordhash:"",
   };
  
+  
   const dispatchEditPassword = useDispatch();
 
   // useState : modals Edit user
@@ -330,8 +331,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
   const handleFormSubmitEditPassword = (values: any, { setSubmitting }: any) => {
     setSubmitting(true);
     const userId = localStorage.getItem('userId');
-    dispatchUpdatePassword(doUpdateUsers(userId, values));
-
+    dispatchUpdatePassword(doChangePassword(userId, values));
     setTimeout(() => {
       setIsOpenEdit(false);
       dispatchProfile(doUserRequest(userId));
@@ -359,20 +359,16 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     console.log(key);
   };
 
-  // Bonus Points & Members
+  // Bonus Points
   useEffect(() => {
-    const displayedUserBP: any = userMe.results;
-    if (displayedUserBP) {
-      setProfileBP(displayedUserBP);
+    if (userMe && userMe.results) {
+      console.info(userMe.results)
+      const displayedUserBP: any = userMe.results;
+      if (displayedUserBP) {
+        setProfileBP(displayedUserBP);
+      }
     }
-  })
-
-  useEffect(() => {
-    const displayedUserMemb: any = userMe.results;
-    if (displayedUserMemb) {
-      setProfileMemb(displayedUserMemb);
-    }
-  })
+  });
 
   const [BonusPoints, setBonusPoints]: any = useState([]);
   useEffect(() => {
@@ -400,6 +396,16 @@ const Profile: NextPage<Props> = ({ dirs }) => {
   }
   type DataIndexBonusPoints = keyof DataTypeBonusPoints;
   const dataBonusPoints: DataTypeBonusPoints[] = BonusPoints;
+
+  // Members
+  useEffect(() => {
+    if (userMe && userMe.results) {
+      const displayedUserMemb: any = userMe.results;
+      if (displayedUserMemb) {
+        setProfileMemb(displayedUserMemb);
+      }
+    }
+  });
 
   const [Members, setMembers]: any = useState([]);
   useEffect(() => {
@@ -1281,7 +1287,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                       as="h3"
                       className="text-lg font-medium leading-6 text-black"
                     >
-                      Edit User
+                      Edit Password
                     </Dialog.Title>
                     <br></br>
                     <Formik
@@ -1331,7 +1337,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                               }}
                               label="Current Password"
                               onBlur={handleBlur}
-                              onChange={(event) => { eventHandlerEdit('uspaCurrentPasswordhash')(event); handleChange(event) }}
+                              onChange={(event) => { eventHandlerEditPassword('uspaCurrentPasswordhash')(event); handleChange(event) }}
                               value={values.uspaCurrentPasswordhash}
                               name="uspaCurrentPasswordhash"
                               error={!!touched.uspaCurrentPasswordhash && !!errors.uspaCurrentPasswordhash}
@@ -1361,7 +1367,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                               }}
                               label="New Password"
                               onBlur={handleBlur}
-                              onChange={(event) => { eventHandlerEdit('uspaPasswordhash')(event); handleChange(event) }}
+                              onChange={(event) => { eventHandlerEditPassword('uspaPasswordhash')(event); handleChange(event) }}
                               value={values.uspaPasswordhash}
                               name="uspaPasswordhash"
                               error={!!touched.uspaPasswordhash && !!errors.uspaPasswordhash}
@@ -1391,7 +1397,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                               }}
                               label="Re-type Password"
                               onBlur={handleBlur}
-                              onChange={(event) => { eventHandlerEdit('uspaConfirmPasswordhash')(event); handleChange(event) }}
+                              onChange={(event) => { eventHandlerEditPassword('uspaConfirmPasswordhash')(event); handleChange(event) }}
                               value={values.uspaConfirmPasswordhash}
                               name="uspaConfirmPasswordhash"
                               error={!!touched.uspaConfirmPasswordhash && !!errors.uspaConfirmPasswordhash}

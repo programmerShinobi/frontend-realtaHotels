@@ -100,6 +100,13 @@ function usersReducers(state = initialState, action:any) {
                 users: state.users.filter((users:any) => users.id !== action.payload.id)
             }
 
+        case ActionType.CHANGE_PASSWORD:
+            return { ...state };
+        case ActionType.CHANGE_PASSWORD_SUCCEED:
+            return applyChangePassword(state, action);
+        case ActionType.CHANGE_PASSWORD_FAILED:
+            return applyChangePassword(state, action);
+        
         default:
             return { ...state, users: action.payload }
     }
@@ -144,5 +151,17 @@ const applyUpdateRoles = (state:any, action:any) => {
     });
 }
 
+const applyChangePassword = (state:any, action:any) => {
+    return state.user.results.map((users: any) => {
+        if (users.userId === state.user.results.userId) {
+            return {
+                ...state,
+                ...state.user.results
+            }
+        } else {
+            return state
+        }
+    });
+}
 
 export default usersReducers

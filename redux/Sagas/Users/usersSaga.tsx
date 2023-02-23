@@ -1,6 +1,6 @@
 import { call, put } from "redux-saga/effects";
 import ReduceService from "@/redux/Services/Users/reduceService";
-import { doAddRolesFailed, doAddRolesSucceed, doAddUsersFailed, doAddUsersSucceed, doDeleteRolesFailed, doDeleteRolesSucceed, doDeleteUsersFailed, doDeleteUsersSucceed, doLoginFailed, doLoginSucceed, doRegisterFailed, doRegisterSucceed, doRoleRequestFailed, doRoleRequestSucceed, doRolesRequestFailed, doRolesRequestSucceed, doUpdatePhotoUsersFailed, doUpdatePhotoUsersSucceed, doUpdateRolesFailed, doUpdateRolesSucceed, doUpdateUsersFailed, doUpdateUsersSucceed, doUserRequestFailed, doUserRequestSucceed, doUsersRequestFailed, doUsersRequestSucceed } from '../../Actions/Users/reduceActions';
+import { doAddRolesFailed, doAddRolesSucceed, doAddUsersFailed, doAddUsersSucceed, doChangePasswordFailed, doChangePasswordSucceed, doDeleteRolesFailed, doDeleteRolesSucceed, doDeleteUsersFailed, doDeleteUsersSucceed, doLoginFailed, doLoginSucceed, doRegisterFailed, doRegisterSucceed, doRoleRequestFailed, doRoleRequestSucceed, doRolesRequestFailed, doRolesRequestSucceed, doUpdatePhotoUsersFailed, doUpdatePhotoUsersSucceed, doUpdateRolesFailed, doUpdateRolesSucceed, doUpdateUsersFailed, doUpdateUsersSucceed, doUserRequestFailed, doUserRequestSucceed, doUsersRequestFailed, doUsersRequestSucceed } from '../../Actions/Users/reduceActions';
 
 function* handleUsers():any  {
     try {
@@ -122,7 +122,6 @@ function* handleUpdateRoles(action: any): any  {
     }
 }
 
-
 function* handleDelRoles(action:any):any  {
     try {
         const result = yield call(ReduceService.removeRole, action.payload);
@@ -133,4 +132,29 @@ function* handleDelRoles(action:any):any  {
     }
 }
 
-export { handleUsers, handleUser, handleAddUsers, handleDelUsers, handleUpdateUsers, handleUpdatePhotoUsers, handleLoginUsers, handleRegisterUsers, handleRoles, handleRole, handleAddRoles, handleUpdateRoles, handleDelRoles }
+function* handleChangePassword(action:any):any  {
+    try {
+        const result = yield call(ReduceService.changePassword, action.payload);
+        yield put(doChangePasswordSucceed(result));
+    }
+    catch (error:any) {
+        yield put(doChangePasswordFailed(error));
+    }
+}
+
+export {
+    handleUsers,
+    handleUser,
+    handleAddUsers,
+    handleDelUsers,
+    handleUpdateUsers,
+    handleUpdatePhotoUsers,
+    handleLoginUsers,
+    handleRegisterUsers,
+    handleRoles,
+    handleRole,
+    handleAddRoles,
+    handleUpdateRoles,
+    handleDelRoles,
+    handleChangePassword
+}
