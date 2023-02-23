@@ -15,7 +15,6 @@ import { Form, Formik } from 'formik';
 import styles from '../../styles/ContentProfile.module.css';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import SaveIcon from '@mui/icons-material/Save';
-// import Input from '@mui/material/Input';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -53,76 +52,6 @@ const Profile: NextPage<Props> = ({ dirs }) => {
       setProfile(userMe.results[0]);
     }
   })
-
-  useEffect(() => {
-    const displayedUserBP: any = userMe.results;
-    if (displayedUserBP) {
-      setProfileBP(displayedUserBP);
-    }
-  })
-
-  useEffect(() => {
-    const displayedUserMemb: any = userMe.results;
-    if (displayedUserMemb) {
-      setProfileMemb(displayedUserMemb);
-    }
-  })
-
-  const [BonusPoints, setBonusPoints]: any = useState([]);
-  useEffect(() => {
-    if (profileBP.length > 0) {
-      const reducedBonusPoints = profileBP.reduce((accumulator:any, current:any) => {
-        const index = accumulator.findIndex((item:any) => item.key === current.ubpo_user_id && item.createdOn === moment(current.ubpo_create_on).format("DD-MMM-YYYY") && item.type[0] === current.ubpo_bonus_type);
-        if (index === -1) {
-          accumulator.push({
-            key: current.ubpo_user_id,
-            createdOn: moment(current.ubpo_create_on).format("DD-MMM-YYYY"),
-            type: [current.ubpo_bonus_type],
-            point: parseInt(current.ubpo_total_points),
-          });
-        }
-        return accumulator;
-      }, []);
-      setBonusPoints(reducedBonusPoints);
-    }
-  }, [profileBP]);
-  interface DataTypeBonusPoints {
-    key: string;
-    createdOn: string;
-    point: number;
-    type: string[];
-  }
-  type DataIndexBonusPoints = keyof DataTypeBonusPoints;
-  const dataBonusPoints: DataTypeBonusPoints[] = BonusPoints;
-
-  const [Members, setMembers]: any = useState([]);
-  useEffect(() => {
-    if (profileMemb.length > 0) {
-      const reducedMembers = profileMemb.reduce((accumulator:any, current:any) => {
-        const index = accumulator.findIndex((item:any) => item.key === current.usme_user_id && item.promoteDate === moment(current.usme_promote_date).format("DD-MMM-YYYY") && item.type[0] === current.usme_memb_name && item.status[0] === current.usme_type);
-        if (index === -1) {
-          accumulator.push({
-            key: current.usme_user_id,
-            promoteDate: moment(current.usme_promote_date).format("DD-MMM-YYYY"),
-            type: [current.usme_memb_name],
-            point: parseInt(current.usme_points),
-            status:[current.usme_type]
-          });
-        }
-        return accumulator;
-      }, []);
-      setMembers(reducedMembers);
-    }
-  }, [profileMemb]);
-  interface DataTypeMembers {
-    key: string;
-    promoteDate: string;
-    type: string[];
-    point: number;
-    status: string[];
-  }
-  type DataIndexMembers = keyof DataTypeMembers;
-  const dataMembers: DataTypeMembers[] = Members;
 
   const routerEditPhoto = useRouter();
   const handleUpload = async () => {
@@ -403,7 +332,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
       setIsOpenEdit(false);
       dispatchProfile(doUserRequest(userId));
       routerEditPassword.reload();
-    }, 3000);
+    }, 500);
     setSubmitting(false);
   };
 
@@ -420,6 +349,77 @@ const Profile: NextPage<Props> = ({ dirs }) => {
   const onChangeTab = (key: string) => {
     console.log(key);
   };
+
+  // Bonus Points & Members
+  useEffect(() => {
+    const displayedUserBP: any = userMe.results;
+    if (displayedUserBP) {
+      setProfileBP(displayedUserBP);
+    }
+  })
+
+  useEffect(() => {
+    const displayedUserMemb: any = userMe.results;
+    if (displayedUserMemb) {
+      setProfileMemb(displayedUserMemb);
+    }
+  })
+
+  const [BonusPoints, setBonusPoints]: any = useState([]);
+  useEffect(() => {
+    if (profileBP.length > 0) {
+      const reducedBonusPoints = profileBP.reduce((accumulator:any, current:any) => {
+        const index = accumulator.findIndex((item:any) => item.key === current.ubpo_user_id && item.createdOn === moment(current.ubpo_create_on).format("DD-MMM-YYYY") && item.type[0] === current.ubpo_bonus_type);
+        if (index === -1) {
+          accumulator.push({
+            key: current.ubpo_user_id,
+            createdOn: moment(current.ubpo_create_on).format("DD-MMM-YYYY"),
+            type: [current.ubpo_bonus_type],
+            point: parseInt(current.ubpo_total_points),
+          });
+        }
+        return accumulator;
+      }, []);
+      setBonusPoints(reducedBonusPoints);
+    }
+  }, [profileBP]);
+  interface DataTypeBonusPoints {
+    key: string;
+    createdOn: string;
+    point: number;
+    type: string[];
+  }
+  type DataIndexBonusPoints = keyof DataTypeBonusPoints;
+  const dataBonusPoints: DataTypeBonusPoints[] = BonusPoints;
+
+  const [Members, setMembers]: any = useState([]);
+  useEffect(() => {
+    if (profileMemb.length > 0) {
+      const reducedMembers = profileMemb.reduce((accumulator:any, current:any) => {
+        const index = accumulator.findIndex((item:any) => item.key === current.usme_user_id && item.promoteDate === moment(current.usme_promote_date).format("DD-MMM-YYYY") && item.type[0] === current.usme_memb_name && item.status[0] === current.usme_type);
+        if (index === -1) {
+          accumulator.push({
+            key: current.usme_user_id,
+            promoteDate: moment(current.usme_promote_date).format("DD-MMM-YYYY"),
+            type: [current.usme_memb_name],
+            point: parseInt(current.usme_points),
+            status:[current.usme_type]
+          });
+        }
+        return accumulator;
+      }, []);
+      setMembers(reducedMembers);
+    }
+  }, [profileMemb]);
+  interface DataTypeMembers {
+    key: string;
+    promoteDate: string;
+    type: string[];
+    point: number;
+    status: string[];
+  }
+  type DataIndexMembers = keyof DataTypeMembers;
+  const dataMembers: DataTypeMembers[] = Members;
 
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
