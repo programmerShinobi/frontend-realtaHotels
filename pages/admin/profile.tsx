@@ -772,7 +772,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
             </Typography>
           </Box>
           <Box className="pl-8 pb-8 pr-8 flex items-start">
-            <Box className="w-full md:w-1/4 justify-center">
+            <Box className="w-full md:w-1/4 justify-center ">
               <Box className="flex justify-center ">
                 <label>
                   <center>
@@ -818,9 +818,9 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                 </Box>
               )}
             </Box>
-            <Box className="w-full md:w-1/4">
+            <Box className="w-full md:w-1/4 pb-9">
               <Box className="grid bg-white">
-                <Box className="max-w-4xl space-y-3 mb-6">
+                <Box className="max-w-4xl space-y-2 mb-6">
                   {/* Full Name */}
                   <div className="flex flex-wrap">
                     <span className={styles.formProfile}>{profile.user_full_name ? profile.user_full_name : <em>{"None"}</em>}</span>
@@ -853,7 +853,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
             </Box>
             <Box className="w-full md:w-1/2">
               <Box className="grid bg-white">
-                <Box className="max-w-4xl space-y-3">
+                <Box className="max-w-4xl space-y-2">
                   {/* Email */}
                   <div className="flex flex-wrap">
                     <span className={styles.formProfile}>
@@ -880,7 +880,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                   </div>
                 </Box>
               </Box>
-              <div className="">
+              <div className={styles.PTbuttonEditProfile}>
                 <Box className="grid place-content-end">
                   <button
                     className="shadow-lg w-24 py-1 px-1  mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
