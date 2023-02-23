@@ -7,7 +7,7 @@ export default function LayoutSignUpEmployee({ children }:any) {
         <div className="mx-auto sm:mx-0">
           <div className={styles.logoLayout}></div>
           <div className={styles.cardLogin}>
-                {children}
+            {children}
           </div>
         </div>
       </div>
