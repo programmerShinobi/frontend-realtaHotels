@@ -1,6 +1,6 @@
 import { all, takeEvery } from "redux-saga/effects";
 import ActionType from "../Constant/Users/ActionType";
-import { handleAddRoles, handleAddUsers, handleDelRoles, handleDelUsers, handleLoginUsers, handleRegisterUsers, handleRole, handleRoles, handleUpdatePhotoUsers, handleUpdateRoles, handleUpdateUsers, handleUser, handleUsers } from "./Users/usersSaga";
+import { handleAddRoles, handleAddUsers, handleChangePassword, handleDelRoles, handleDelUsers, handleLoginUsers, handleRegisterUsers, handleRole, handleRoles, handleUpdatePhotoUsers, handleUpdateRoles, handleUpdateUsers, handleUser, handleUsers } from "./Users/usersSaga";
 
 function* watchAll():any{
     yield all([
@@ -20,7 +20,7 @@ function* watchAll():any{
         takeEvery(ActionType.ADD_ROLES, handleAddRoles),
         takeEvery(ActionType.UPDATE_ROLES, handleUpdateRoles),
         takeEvery(ActionType.DEL_ROLES, handleDelRoles),
-        
+        takeEvery(ActionType.CHANGE_PASSWORD, handleChangePassword),
         //HR
 
         //Hotels
