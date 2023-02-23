@@ -45,3 +45,15 @@
         width: auto;
     }
 }
+
+.PTbuttonEditProfile {
+    position: relative;
+    padding-top: 60px;
+}
+
+@media (max-width: 812px) {
+    .PTbuttonEditProfile {
+        position: relative;
+        padding-top: 0px;
+    }
+}
