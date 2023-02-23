@@ -127,7 +127,9 @@ const Profile: NextPage<Props> = ({ dirs }) => {
       return (touched && errors ? errors : "enter your birth");
     } else if (field == "status") {
       return (touched && errors ? errors : "enter your marital status");
-    }
+    } else if (field == "usroRole") {
+      return (touched && errors ? errors : "enter your role");
+    } 
   }
 
   // phone regExp
@@ -146,7 +148,8 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     usproJobTitle : yup.string().required("required"),
     usproMaritalStatus : yup.string().required("required"),
     usproGender : yup.string().required("required"),
-    usproAddr : yup.number().required("required"),
+    usproAddr: yup.number().required("required"),
+    usroRole : yup.number().required("required"),
   });
 
   // function initialValue field from table users
@@ -255,14 +258,15 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     if (field == "currentPassword") {
       return (touched && errors ? errors : "enter your current password");
     } else if(field == "password") {
-      return (touched && errors ? errors : "enter your password");
+      return (touched && errors ? errors : "enter your new password");
     }  else if(field == "confirmPassword") {
       return (touched && errors ? errors : "enter your confirm password");
     }
   }
 
   // check all validasi required & etc
-  const checkoutSchemaPassword:any = yup.object().shape({
+  const checkoutSchemaPassword: any = yup.object().shape({
+    uspaCurrentPasswordhash: yup.string().required("required"),
     uspaPasswordhash: yup.string().required("required"),
     uspaConfirmPasswordhash: yup.string()
       .oneOf([yup.ref('uspaPasswordhash'), null], 'Passwords must match')
@@ -271,9 +275,10 @@ const Profile: NextPage<Props> = ({ dirs }) => {
 
   // function initialValue field from table users
   const initialValuesPassword: any = {
-    userId:null,
+    userId: null,
+    uspaCurrentPasswordhash:"",
     uspaPasswordhash: "",
-
+    uspaConfirmPasswordhash:"",
   };
  
   const dispatchEditPassword = useDispatch();
@@ -304,8 +309,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
               openModalEditPassword();
               setDataUserEdit({
                 ...DataUserEdit,
-                userId: displayedUser.user_id,
-                uspaPasswordhash: displayedUser.uspa_passwordhash
+                userId: displayedUser.user_id
               });
             }
           }
@@ -334,6 +338,11 @@ const Profile: NextPage<Props> = ({ dirs }) => {
       routerEditPassword.reload();
     }, 500);
     setSubmitting(false);
+  };
+
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const handleMouseDownCurrentPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
   };
 
   const [showPassword, setShowPassword] = useState(false);
@@ -725,17 +734,17 @@ const Profile: NextPage<Props> = ({ dirs }) => {
         <p className="text-gray-700 text-3xl mb-7 font-bold">Profile</p>
         <Box className="grid shadow-md rounded-xl bg-white pb-8">
           {/* General */}
-          <div className="mt-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+          <Box className="mt-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
             <Typography className={styles.textTitleInProfile}>
               General
             </Typography>
-          </div>
-          <div className="pt-5 pl-8 text-left font-normal text-orange-900">
+          </Box>
+          <Box className="pt-5 pl-8 text-left font-normal text-orange-900">
             <Typography className={styles.textLabelInProfile}>
               This information will be display, so be careful what you share
             </Typography>
-          </div>
-          <div className="flex items-stretch">
+          </Box>
+          <Box className="flex items-end">
             <Box className="w-full md:w-1/4 justify-center">
               <Box className="flex justify-center pt-5">
                 <label>
@@ -783,9 +792,9 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                 </Box>
               )}
             </Box>
-            <div className="w-full md:w-1/4">
+            <Box className="w-full md:w-1/4">
               <Box className="grid col-1 bg-white h-50">
-                <Box className="max-w-4xl pt-3 space-y-3 pb-3">
+                <Box className="max-w-4xl space-y-3 pb-12">
                   {/* Full Name */}
                   <div className="flex flex-wrap">
                     <span className={styles.formProfile + "text-left w-50"}>{profile.user_full_name ? profile.user_full_name : "None"}</span>
@@ -816,32 +825,46 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                   </div>
                 </Box>
               </Box>
-            </div>
-            <div className="w-full md:w-1/4">
+            </Box>
+            <Box className="w-full md:w-1/2">
               <Box className="grid col-1 bg-white">
-                <Box className="max-w-4xl pr-5 pt-3 space-y-3 pb-3">
+                <Box className="max-w-4xl space-y-3 pb-4">
                   {/* Email */}
                   <div className="flex flex-wrap">
-                    <span className={styles.formProfile + "text-left w-50"}>{profile.user_email ? profile.user_email + " (default)" : "None"}</span>
+                    <span className={styles.formProfile + "text-left w-50"}>
+                      {profile.user_email ? (
+                        <span>
+                          {profile.user_email} <label className="font-normal text-orange-900">(default)</label>
+                        </span>
+                      ) : (
+                        "None"
+                      )}
+                    </span>
                   </div>
                   {/* Phone Number */}
                   <div className="flex flex-wrap">
-                    <span className={styles.formProfile + "text-left w-50"}>{profile.user_phone_number ? profile.user_phone_number + " (active)" : "None"}</span>
+                    <span className={styles.formProfile + "text-left w-50"}>
+                      {profile.user_phone_number ? (
+                        <span>
+                          {profile.user_phone_number} <label className="font-normal text-orange-900">(active)</label>
+                        </span>
+                      ) : (
+                        "None"
+                      )}
+                    </span>
                   </div>
                 </Box>
               </Box>
-            </div>
-            <div className="w-full md:w-1/4">
-              <Box className="flex items-stretch pt-32">
+              <Box className="flex items-end">
                 <button
-                  className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                  className="shadow-lg w-28 py-1 px-1  mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
                   onClick={() => handleEdit()}
                 >
-                  <p className="normal-case font-normal">{<EditIcon className="h-4 w-4   " />}&nbsp;{"Edit"}</p>
+                  <p className="normal-case font-normal">{<EditIcon className="h-4 w-4" />}&nbsp;{"Edit"}</p>
                 </button>
               </Box>
-            </div>
-          </div>
+            </Box>
+          </Box>
           {/* Security */}
           <div className="mt-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
             <Typography className={styles.textTitleInProfile}>
@@ -870,9 +893,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                 </Box>
               </Box>
             </div>
-            <div className="w-full md:w-1/4">
-            </div>
-            <div className="w-full md:w-1/4">
+            <div className="w-full md:w-1/2">
               <Box className="flex items-stretch">
                 <button
                   className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
@@ -1069,6 +1090,33 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                               sx={{ gridColumn: "span 4" }}
                             />
 
+                            {/* usroRole */}
+                            <FormControl size="small" color="warning" variant="standard" sx={{ gridColumn: "span 4" }} error={!!touched.usroRole && !!errors.usroRole}>
+                              <InputLabel id="usroRole" >Role</InputLabel>
+                              <Select
+                                disabled={false}
+                                fullWidth
+                                color="warning"
+                                variant="standard"
+                                className="form-control"
+                                label="Role"
+                                onBlur={handleBlur}                             
+                                onChange={(event) => {eventHandlerEdit('usroRole')(event); handleChange(event)}}
+                                value={values.usroRole?values.usroRole:values.usroRole=DataUserEdit.usroRole}
+                                name="usroRole"
+                                error={!!touched.usroRole && !!errors.usroRole}
+                                // helperText={getHelperText(touched.usroRole, errors.usroRole)}
+                            >
+                                <MenuItem value=''><em>none</em></MenuItem>
+                                <MenuItem value={1}>Guest</MenuItem>
+                                <MenuItem value={2}>Manager</MenuItem>
+                                <MenuItem value={3}>Office Boy</MenuItem>
+                                <MenuItem value={4}>Admin</MenuItem>
+                                <MenuItem value={5}>User</MenuItem>
+                            </Select>
+                            {!!touched.usroRole && !!errors.usroRole && <span className='text-red-600 text-xs pt-1'>{getHelperText(touched.usroRole, errors.usroRole, "usroRole")}</span>}
+                            </FormControl>
+                            
                             {/* ---------------------------------------------------- */}
                           
                             {/* usproNationalId */}
@@ -1123,8 +1171,8 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                                 <MenuItem value='M'>Male</MenuItem>
                                 <MenuItem value='F'>Female</MenuItem>
                               </Select>
+                              {!!touched.usproGender && !!errors.usproGender && <span className='text-red-600 text-xs pt-1'>{getHelperText(touched.usproGender, errors.usproGender, "usproGender")}</span>}
                             </FormControl>
-                              {!!touched.usproGender && !!errors.usproGender && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.usproGender, errors.usproGender, "usproGender")}</span>}
 
                             {/* usproBirth */}
                             <TextField
@@ -1161,8 +1209,8 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                                 <MenuItem value='S'>Single</MenuItem>
                                 <MenuItem value='M'>Married</MenuItem>
                               </Select>
+                              {!!touched.usproMaritalStatus && !!errors.usproMaritalStatus && <span className='text-red-600 text-xs pt-1'>{getHelperText(touched.usproMaritalStatus, errors.usproMaritalStatus, "status")}</span>}
                             </FormControl>
-                              {!!touched.usproMaritalStatus && !!errors.usproMaritalStatus && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.usproMaritalStatus, errors.usproMaritalStatus, "status")}</span>}
 
                             {/* usproAddr */}
 
@@ -1261,6 +1309,36 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                               value={values.userId = DataUserEdit.userId}
                             />
 
+                            {/* uspaCurrentPasswordhash */}
+                            <TextField
+                              size="small"
+                              fullWidth
+                              color="warning"
+                              variant="standard"
+                              type={showCurrentPassword ? 'text' : 'password'}
+                              InputProps={{
+                                endAdornment: (
+                                  <InputAdornment position="end">
+                                    <IconButton
+                                      aria-label="toggle password visibility"
+                                      onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                                      onMouseDown={handleMouseDownCurrentPassword}
+                                    >
+                                      {showCurrentPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                  </InputAdornment>
+                                ),
+                              }}
+                              label="Current Password"
+                              onBlur={handleBlur}
+                              onChange={(event) => { eventHandlerEdit('uspaCurrentPasswordhash')(event); handleChange(event) }}
+                              value={values.uspaCurrentPasswordhash}
+                              name="uspaCurrentPasswordhash"
+                              error={!!touched.uspaCurrentPasswordhash && !!errors.uspaCurrentPasswordhash}
+                              helperText={getHelperTextPassword(touched.uspaCurrentPasswordhash, errors.uspaCurrentPasswordhash, "currentPassword")}
+                              sx={{ gridColumn: "span 4" }}
+                            />
+
                             {/* uspaPasswordhash */}
                             <TextField
                               size="small"
@@ -1281,7 +1359,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                                   </InputAdornment>
                                 ),
                               }}
-                              label="Password"
+                              label="New Password"
                               onBlur={handleBlur}
                               onChange={(event) => { eventHandlerEdit('uspaPasswordhash')(event); handleChange(event) }}
                               value={values.uspaPasswordhash}
@@ -1311,7 +1389,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                                   </InputAdornment>
                                 ),
                               }}
-                              label="Confirm Passoword"
+                              label="Re-type Password"
                               onBlur={handleBlur}
                               onChange={(event) => { eventHandlerEdit('uspaConfirmPasswordhash')(event); handleChange(event) }}
                               value={values.uspaConfirmPasswordhash}
