@@ -327,7 +327,7 @@ export default function UsersUsers() {
       </Head>
       <LayoutAdmin>
 
-      <p className="text-gray-700 text-3xl mb-8 font-bold">Users / Users</p>
+      <p className="text-gray-700 text-3xl mb-7 font-bold">Users / Users</p>
       <ButtonGroup className="align-middle bg-gray">
         <Button
             type="button"

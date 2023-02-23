@@ -722,210 +722,206 @@ const Profile: NextPage<Props> = ({ dirs }) => {
   return (
     <>
       <LayoutAdmin>
-        <div className="overflow-y-auto">
-          <p className="text-gray-700 text-3xl mb-6 font-bold">Profile</p>
-          <div className="w-full md:w-full p-3">
-            <Box className="grid shadow-md rounded-xl bg-white pb-8">
-              {/* General */}
-              <div className="mt-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
-                <Typography className={styles.textTitleInProfile}>
-                  General
-                </Typography>
-              </div>
-              <div className="pt-5 pl-8 text-left font-normal text-orange-900">
-                <Typography className={styles.textLabelInProfile}>
-                  This information will be display, so be careful what you share
-                </Typography>
-              </div>
-              <div className="flex items-stretch">
-                <Box className="w-full md:w-1/4 justify-center">
-                  <Box className="flex justify-center pt-5">
-                    <label>
-                      <center>
-                        <Input
-                          type="file"
-                          hidden
-                          onChange={({ target }) => {
-                            if (target.files) {
-                              const file = target.files[0];
-                              setSelectedImage(URL.createObjectURL(file));
-                              setSelectedFile(file);
-                            }
-                          }}
-                        />
-                      </center>
-                      <Box className="flex justify-center h-28 w-28 cursor-pointer">
-                        {selectedImage ? (
-                          <img src={selectedImage} alt="" />
-                        ) : (
-                          <img src={"/images/" + profile.uspro_photo}/>
-                        )}
-                      </Box>
-                    </label>
-                  </Box>
-                  {selectedImage ? (
-                    <Box className="flex justify-center">
-                      <button
-                        className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
-                        onClick={handleUpload}
-                        disabled={uploading}
-                        style={{ opacity: uploading ? ".5" : "1" }}>
-                        <p className="normal-case font-normal">{uploading ? <CloudSyncIcon /> : <CloudUploadIcon className="h-5 w-5  " />}&nbsp;{"Upload"}</p>
-                      </button>
-                    </Box>
-                  ) : (
-                    <Box className="flex justify-center">
-                      <button
-                        className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
-                        
-                        disabled={true}
-                        style={{ opacity: uploading ? ".5" : "1" }}>
-                        <p className="normal-case font-normal">{uploading ? <CloudSyncIcon /> : <CloudUploadIcon className="h-5 w-5  " />}&nbsp;{"Upload"}</p>
-                      </button>
-                    </Box>
-                  )}
-                </Box>
-                <div className="w-full md:w-1/4">
-                  <Box className="grid col-1 bg-white h-50">
-                    <Box className="max-w-4xl pt-3 space-y-3 pb-3">
-                      {/* Full Name */}
-                      <div className="flex flex-wrap">
-                        <span className={styles.formProfile + "text-left w-50"}>{profile.user_full_name ? profile.user_full_name : "None"}</span>
-                      </div>
-                      {/* Memb. Name */}
-                      <div className="flex flex-wrap">
-                        <span className={styles.formProfile + "text-left w-50"}>
-                          {
-                            profile.usme_memb_name === "SILVER" ? "Silver Member" :
-                              profile.usme_memb_name === "GOLD" ? "Gold Member" :
-                                profile.usme_memb_name === "VIP" ? "VIP Member" :
-                                  profile.usme_memb_name === "WIZARD" ? "Wizard Member" :
-                                    "None"
-                          }
-                        </span>
-                      </div>
-                      {/* Type Agency */}
-                      <div className="flex flex-wrap">
-                        <span className={styles.formProfile + "text-left w-50"}>
-                          {
-                            profile.user_type === "T" ? "Travel Agency" :
-                              profile.user_type === "C" ? "Company Agency" :
-                                profile.user_type === "I" ? "Individual Agency" :
-                                  "None"
-                          }
-                        </span>
-                          
-                      </div>
-                    </Box>
-                  </Box>
-                </div>
-                <div className="w-full md:w-1/4">
-                  <Box className="grid col-1 bg-white">
-                    <Box className="max-w-4xl pr-5 pt-3 space-y-3 pb-3">
-                      {/* Email */}
-                      <div className="flex flex-wrap">
-                        <span className={styles.formProfile + "text-left w-50"}>{profile.user_email ? profile.user_email + " (default)" : "None"}</span>
-                      </div>
-                      {/* Phone Number */}
-                      <div className="flex flex-wrap">
-                        <span className={styles.formProfile + "text-left w-50"}>{profile.user_phone_number ? profile.user_phone_number + " (active)" : "None"}</span>
-                      </div>
-                    </Box>
-                  </Box>
-                </div>
-                <div className="w-full md:w-1/4">
-                  <Box className="flex items-stretch pt-32">
-                    <button
-                      className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
-                      onClick={() => handleEdit()}
-                    >
-                      <p className="normal-case font-normal">{<EditIcon className="h-4 w-4   " />}&nbsp;{"Edit"}</p>
-                    </button>
-                  </Box>
-                </div>
-              </div>
-              {/* Security */}
-              <div className="mt-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
-                <Typography className={styles.textTitleInProfile}>
-                  Security
-                </Typography>
-              </div>
-              <div className="pt-5 flex items-stretch">
-                <Box className="w-full md:w-1/4 pl-8">
-                  <Box className="flex items-stretch">
-                    <div className="text-left font-normal text-orange-900">
-                      <Typography className={styles.textLabelInProfile}>
-                        Change password
-                      </Typography>
-                    </div>
-                  </Box>
-                </Box>
-                <div className="w-full md:w-1/4">
-                  <Box className="grid col-1 bg-white h-50">
-                    <Box className="space-y-3 w-40">
-                      <OutlinedInput
-                        readOnly={true}
-                        size="small"
-                        type="text"
-                        value="**********************"
-                      />
-                    </Box>
-                  </Box>
-                </div>
-                <div className="w-full md:w-1/4">
-                </div>
-                <div className="w-full md:w-1/4">
-                  <Box className="flex items-stretch">
-                    <button
-                      className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
-                      onClick={() => handleEditPassword()}
-                    >
-                      <p className="normal-case font-normal">{<EditIcon className="h-4 w-4   " />}&nbsp;{"Edit"}</p>
-                    </button>
-                  </Box>
-                </div>
-              </div>
-              {/* Points & Members */}
-              <div className="mt-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
-                <Typography className={styles.textTitleInProfile}>
-                  Points & Members
-                </Typography>
-              </div>
-              <div className="pl-8 pt-8 pr-8">
-                <Tabs
-                  onChange={onChangeTab}
-                  type="card"
-                  tabBarGutter={8}
-                >
-                  <Tabs.TabPane
-                    tab={
-                      <div
-                        className="font-bold  items-center text-orange-900"
-                      >
-                        Bonus Points
-                      </div>
-                    }
-                    key="1"
-                  >
-                    <Table columns={columnsBonusPoints} dataSource={dataBonusPoints} />
-                  </Tabs.TabPane>
-                  <Tabs.TabPane
-                    tab={
-                      <div
-                        className="font-bold items-center text-orange-900"
-                      >
-                        Members
-                      </div>
-                    }
-                    key="2"
-                  >
-                    <Table columns={columnsMembers} dataSource={dataMembers} />
-                  </Tabs.TabPane>
-                </Tabs>
-              </div>
-            </Box>
+        <p className="text-gray-700 text-3xl mb-7 font-bold">Profile</p>
+        <Box className="grid shadow-md rounded-xl bg-white pb-8">
+          {/* General */}
+          <div className="mt-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+            <Typography className={styles.textTitleInProfile}>
+              General
+            </Typography>
           </div>
-        </div>
+          <div className="pt-5 pl-8 text-left font-normal text-orange-900">
+            <Typography className={styles.textLabelInProfile}>
+              This information will be display, so be careful what you share
+            </Typography>
+          </div>
+          <div className="flex items-stretch">
+            <Box className="w-full md:w-1/4 justify-center">
+              <Box className="flex justify-center pt-5">
+                <label>
+                  <center>
+                    <Input
+                      type="file"
+                      hidden
+                      onChange={({ target }) => {
+                        if (target.files) {
+                          const file = target.files[0];
+                          setSelectedImage(URL.createObjectURL(file));
+                          setSelectedFile(file);
+                        }
+                      }}
+                    />
+                  </center>
+                  <Box className="flex justify-center h-28 w-28 cursor-pointer">
+                    {selectedImage ? (
+                      <img src={selectedImage} alt="" />
+                    ) : (
+                      <img src={"/images/" + profile.uspro_photo}/>
+                    )}
+                  </Box>
+                </label>
+              </Box>
+              {selectedImage ? (
+                <Box className="flex justify-center">
+                  <button
+                    className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                    onClick={handleUpload}
+                    disabled={uploading}
+                    style={{ opacity: uploading ? ".5" : "1" }}>
+                    <p className="normal-case font-normal">{uploading ? <CloudSyncIcon /> : <CloudUploadIcon className="h-5 w-5  " />}&nbsp;{"Upload"}</p>
+                  </button>
+                </Box>
+              ) : (
+                <Box className="flex justify-center">
+                  <button
+                    className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                    
+                    disabled={true}
+                    style={{ opacity: uploading ? ".5" : "1" }}>
+                    <p className="normal-case font-normal">{uploading ? <CloudSyncIcon /> : <CloudUploadIcon className="h-5 w-5  " />}&nbsp;{"Upload"}</p>
+                  </button>
+                </Box>
+              )}
+            </Box>
+            <div className="w-full md:w-1/4">
+              <Box className="grid col-1 bg-white h-50">
+                <Box className="max-w-4xl pt-3 space-y-3 pb-3">
+                  {/* Full Name */}
+                  <div className="flex flex-wrap">
+                    <span className={styles.formProfile + "text-left w-50"}>{profile.user_full_name ? profile.user_full_name : "None"}</span>
+                  </div>
+                  {/* Memb. Name */}
+                  <div className="flex flex-wrap">
+                    <span className={styles.formProfile + "text-left w-50"}>
+                      {
+                        profile.usme_memb_name === "SILVER" ? "Silver Member" :
+                          profile.usme_memb_name === "GOLD" ? "Gold Member" :
+                            profile.usme_memb_name === "VIP" ? "VIP Member" :
+                              profile.usme_memb_name === "WIZARD" ? "Wizard Member" :
+                                "None"
+                      }
+                    </span>
+                  </div>
+                  {/* Type Agency */}
+                  <div className="flex flex-wrap">
+                    <span className={styles.formProfile + "text-left w-50"}>
+                      {
+                        profile.user_type === "T" ? "Travel Agency" :
+                          profile.user_type === "C" ? "Company Agency" :
+                            profile.user_type === "I" ? "Individual Agency" :
+                              "None"
+                      }
+                    </span>
+                      
+                  </div>
+                </Box>
+              </Box>
+            </div>
+            <div className="w-full md:w-1/4">
+              <Box className="grid col-1 bg-white">
+                <Box className="max-w-4xl pr-5 pt-3 space-y-3 pb-3">
+                  {/* Email */}
+                  <div className="flex flex-wrap">
+                    <span className={styles.formProfile + "text-left w-50"}>{profile.user_email ? profile.user_email + " (default)" : "None"}</span>
+                  </div>
+                  {/* Phone Number */}
+                  <div className="flex flex-wrap">
+                    <span className={styles.formProfile + "text-left w-50"}>{profile.user_phone_number ? profile.user_phone_number + " (active)" : "None"}</span>
+                  </div>
+                </Box>
+              </Box>
+            </div>
+            <div className="w-full md:w-1/4">
+              <Box className="flex items-stretch pt-32">
+                <button
+                  className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                  onClick={() => handleEdit()}
+                >
+                  <p className="normal-case font-normal">{<EditIcon className="h-4 w-4   " />}&nbsp;{"Edit"}</p>
+                </button>
+              </Box>
+            </div>
+          </div>
+          {/* Security */}
+          <div className="mt-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+            <Typography className={styles.textTitleInProfile}>
+              Security
+            </Typography>
+          </div>
+          <div className="pt-8 flex items-stretch">
+            <Box className="w-full md:w-1/4 pl-8">
+              <Box className="flex items-stretch">
+                <div className="text-left font-normal text-orange-900">
+                  <Typography className={styles.textLabelInProfile}>
+                    Change password
+                  </Typography>
+                </div>
+              </Box>
+            </Box>
+            <div className="w-full md:w-1/4">
+              <Box className="grid col-1 bg-white h-50">
+                <Box className="space-y-3 w-40">
+                  <OutlinedInput
+                    readOnly={true}
+                    size="small"
+                    type="text"
+                    value="**********************"
+                  />
+                </Box>
+              </Box>
+            </div>
+            <div className="w-full md:w-1/4">
+            </div>
+            <div className="w-full md:w-1/4">
+              <Box className="flex items-stretch">
+                <button
+                  className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                  onClick={() => handleEditPassword()}
+                >
+                  <p className="normal-case font-normal">{<EditIcon className="h-4 w-4   " />}&nbsp;{"Edit"}</p>
+                </button>
+              </Box>
+            </div>
+          </div>
+          {/* Points & Members */}
+          <div className="mt-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+            <Typography className={styles.textTitleInProfile}>
+              Points & Members
+            </Typography>
+          </div>
+          <div className="pl-8 pt-8 pr-8">
+            <Tabs
+              onChange={onChangeTab}
+              type="card"
+              tabBarGutter={8}
+            >
+              <Tabs.TabPane
+                tab={
+                  <div
+                    className="font-bold  items-center text-orange-900"
+                  >
+                    Bonus Points
+                  </div>
+                }
+                key="1"
+              >
+                <Table columns={columnsBonusPoints} dataSource={dataBonusPoints} />
+              </Tabs.TabPane>
+              <Tabs.TabPane
+                tab={
+                  <div
+                    className="font-bold items-center text-orange-900"
+                  >
+                    Members
+                  </div>
+                }
+                key="2"
+              >
+                <Table columns={columnsMembers} dataSource={dataMembers} />
+              </Tabs.TabPane>
+            </Tabs>
+          </div>
+        </Box>
         <Transition appear show={isOpenEdit} as={Fragment}>
           <Dialog as="div" className="relative z-10" onClose={closeModalEdit}>
             <Transition.Child
