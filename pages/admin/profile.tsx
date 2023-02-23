@@ -861,9 +861,9 @@ const Profile: NextPage<Props> = ({ dirs }) => {
             <div className="w-full md:w-1/4">
               <Box className="grid col-1 bg-white h-50">
                 <Box className="space-y-3 w-40">
-                  <OutlinedInput
+                  <Input
                     readOnly={true}
-                    size="small"
+                    size="middle"
                     type="text"
                     value="**********************"
                   />
