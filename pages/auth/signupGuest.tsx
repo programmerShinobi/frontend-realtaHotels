@@ -5,7 +5,7 @@ import { Box, Button, InputLabel, InputAdornment, IconButton, Typography, FormCo
 import TextField from '@mui/material/TextField';
 import { Form, Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
-import { doRegister } from '@/redux/Actions/Users/reduceActions';
+import { doRegister, doRegisterGuest } from '@/redux/Actions/Users/reduceActions';
 import { useRouter } from 'next/router';
 import usersReducers from '@/redux/Reducers/Users/usersReducer';
 import styles from '../../styles/FormSignUpGuest.module.css'
@@ -14,6 +14,8 @@ import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 import LayoutSignUpGuest from '@/components/Layout/LayoutSignUpGuest';
 import sendWA from '@/utils/sendWA';
 import moment from 'moment';
+import Cookies from 'js-cookie';
+import axios from 'axios';
 
 export default function SignUpGuest() {
   // use Router
@@ -52,51 +54,77 @@ export default function SignUpGuest() {
   
   // Mengambil state usersReducers dari store redux
   const isRegister = useSelector((state: any) => state.usersReducers.users);
-  const [isSend, setIsSend] = useState<boolean>(false);
   
+  const [fullPhoneNumber, setFullPhoneNumber] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
   // function handle submit form add new users (API POST users)
   const handleFormSubmit = async (values: any, { setSubmitting }: any) => {
     const now = await moment(new Date).format("YYYYMMDD");
-    const phoneNumber = await values.countryCode+values.userPhoneNumber;
+    
+    const phoneNumber = await values.countryCode + values.userPhoneNumber;
+    await Cookies.set('isPhoneNumber', phoneNumber);
+    
     const password = await 'GuesT!' + now + values.userPhoneNumber;
-    await localStorage.setItem('isPhoneNumber', phoneNumber);
-    await localStorage.setItem('isPassword', password);
-    await setIsSend(true);
-    // await dispatch(doRegister({
-    //   ...values,
-    //   uspaPasswordhash: password,
-    //   userPhoneNumber: fullPhoneNumber,
-    // }));
+    await Cookies.set('isPassword', password);
+      
+    await dispatch(doRegisterGuest({
+      ...values,
+      uspaPasswordhash: password,
+      userPhoneNumber: fullPhoneNumber,
+    }));
     
     // Memeriksa apakah user sudah login
-    // if (isRegister.message == 'Register Successfully') {
-    //   await router.push('/auth/signin');
-    // }
+    if (await isRegister.message == 'Register Successfully') {
+        router.reload();
+    }
   };
 
-  if (isSend) {
-    setIsSend(false);
-    router.reload();
-    // window.location.reload();
-  }
+  useEffect(() => {
+    const isPhoneNumber: any = Cookies.get("isPhoneNumber");
+    const isPassword: any = Cookies.get("isPassword");
+    setFullPhoneNumber(isPhoneNumber)
+    setPassword(isPassword)
+  });
 
-  sendWA();
-  
+  // const fullPhoneNumber = '+6282121991992';
+  const apiKey = '9699c055d1ea2d9ce1ca02e22adf36ef69f6fc2a'; // API KEY Anda
+  const idDevice = '5580'; // ID DEVICE yang di SCAN (Sebagai pengirim)
+  const url = 'https://api.watsap.id/send-message'; // URL API
+  const noHp = fullPhoneNumber; // No.HP yang dikirim (No.HP Penerima)
+  const pesan = `Welcome to Realta Hotels. Your login access with password is :\n${password}`; // Pesan yang dikirim
+
+  const dataPost = {
+    'id_device': idDevice,
+    'api-key': apiKey,
+    'no_hp': noHp,
+    'pesan': pesan
+  };
+
+  console.info(dataPost);
+
+  axios.post(url, dataPost, {
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      // 'Cookie': document.cookie
+    }
+  }).then((response: any) => {
+    // Cookies.remove('isPhoneNumber');
+    // Cookies.remove('isPassword');
+    console.info(response.data);
+  })
+  .catch((error:any) => {
+    console.info(error);
+  });
+
   // getHelper for display in form
-  const getHelperText = (touched:any, errors:any, field:any) => {
-    if (field == "email") {
-      return (touched && errors ? errors : "enter your email");
-    } else if(field == "password") {
-      return (touched && errors ? errors : "enter your password");
-    }  else if(field == "confirmPassword") {
-      return (touched && errors ? errors : "enter your confirm password");
-    } else if(field == "phone") {
+  const getHelperText = (touched: any, errors: any, field: any) => {
+    if (field == "phone") {
       return (touched && errors ? errors : "enter your phone numb.");
-    } else if(field == "fullname") {
-      return (touched && errors ? errors : "enter your full name");
     }
   }
-
   // Phone Extension
   const phoneExtension = [
     { value: '+62', label: '+62', },

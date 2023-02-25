@@ -21,7 +21,7 @@ export default function SignIn() {
   
   // define useState API POST users
   const [DataUser, setDataUser] = useState({
-    userEmail: null,
+    userEmailOrPhone: null,
     userPassword: null,
   });
   
@@ -76,13 +76,13 @@ export default function SignIn() {
 
   // check all validasi required & etc
   const checkoutSchema:any = yup.object().shape({
-    userEmail: yup.string().required("required"),
+    userEmailOrPhone: yup.string().required("required"),
     userPassword: yup.string().required("required")
   });
 
   // function initialValue field from table users
   const initialValues: any = {
-    userEmail: "",
+    userEmailOrPhone: "",
     userPassword: "",
   };
 
@@ -139,11 +139,11 @@ export default function SignIn() {
                     type="text"
                     placeholder='Phone or Email'
                     onBlur={handleBlur}
-                    onChange={(event) => {eventHandlerAdd('userEmail')(event); handleChange(event)}}
-                    value={values.userEmail}
-                    name="userEmail"
-                    error={!!touched.userEmail && !!errors.userEmail}
-                    helperText={getHelperText(touched.userEmail, errors.userEmail, "email")}
+                    onChange={(event) => {eventHandlerAdd('userEmailOrPhone')(event); handleChange(event)}}
+                    value={values.userEmailOrPhone}
+                    name="userEmailOrPhone"
+                    error={!!touched.userEmailOrPhone && !!errors.userEmailOrPhone}
+                    helperText={getHelperText(touched.userEmailOrPhone, errors.userEmailOrPhone, "email")}
                     sx={{ gridColumn: "span 9" }}
                   />
                   <InputLabel

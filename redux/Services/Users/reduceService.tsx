@@ -98,6 +98,18 @@ const register = async (data:any) => {
     }
 }
 
+const registerGuest = async (data:any) => {
+    try {
+        const result:any = await axios.post("auth/registerGuest", data);
+        if (!result) {
+            throw new Error("Axios post problem");
+        }
+        return result;
+    } catch (error:any) {
+        return error.message;
+    }
+}
+
 const getAllRoles = async () => {
     try {
         const result:any = await axios.get("/roles");
@@ -181,6 +193,7 @@ const ReduceService:any = {
     updatePhoto,
     login,
     register,
+    registerGuest,
     getAllRoles,
     getIdRole,
     createRole,

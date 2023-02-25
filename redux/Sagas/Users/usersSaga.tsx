@@ -1,6 +1,6 @@
 import { call, put } from "redux-saga/effects";
 import ReduceService from "@/redux/Services/Users/reduceService";
-import { doAddRolesFailed, doAddRolesSucceed, doAddUsersFailed, doAddUsersSucceed, doChangePasswordFailed, doChangePasswordSucceed, doDeleteRolesFailed, doDeleteRolesSucceed, doDeleteUsersFailed, doDeleteUsersSucceed, doLoginFailed, doLoginSucceed, doRegisterFailed, doRegisterSucceed, doRoleRequestFailed, doRoleRequestSucceed, doRolesRequestFailed, doRolesRequestSucceed, doUpdatePhotoUsersFailed, doUpdatePhotoUsersSucceed, doUpdateRolesFailed, doUpdateRolesSucceed, doUpdateUsersFailed, doUpdateUsersSucceed, doUserRequestFailed, doUserRequestSucceed, doUsersRequestFailed, doUsersRequestSucceed } from '../../Actions/Users/reduceActions';
+import { doAddRolesFailed, doAddRolesSucceed, doAddUsersFailed, doAddUsersSucceed, doChangePasswordFailed, doChangePasswordSucceed, doDeleteRolesFailed, doDeleteRolesSucceed, doDeleteUsersFailed, doDeleteUsersSucceed, doLoginFailed, doLoginSucceed, doRegisterFailed, doRegisterGuestFailed, doRegisterGuestSucceed, doRegisterSucceed, doRoleRequestFailed, doRoleRequestSucceed, doRolesRequestFailed, doRolesRequestSucceed, doUpdatePhotoUsersFailed, doUpdatePhotoUsersSucceed, doUpdateRolesFailed, doUpdateRolesSucceed, doUpdateUsersFailed, doUpdateUsersSucceed, doUserRequestFailed, doUserRequestSucceed, doUsersRequestFailed, doUsersRequestSucceed } from '../../Actions/Users/reduceActions';
 
 function* handleUsers():any  {
     try {
@@ -82,6 +82,16 @@ function* handleRegisterUsers(action:any):any {
     }
 }
 
+function* handleRegisterUsersGuest(action:any):any {
+    try {
+        const result = yield call(ReduceService.registerGuest, action.payload);
+        yield put(doRegisterGuestSucceed(result.data));
+    }
+    catch (error:any) {
+        yield put(doRegisterGuestFailed(error));
+    }
+}
+
 function* handleRoles():any  {
     try {
         const result:any = yield call(ReduceService.getAllRoles);
@@ -151,6 +161,7 @@ export {
     handleUpdatePhotoUsers,
     handleLoginUsers,
     handleRegisterUsers,
+    handleRegisterUsersGuest,
     handleRoles,
     handleRole,
     handleAddRoles,

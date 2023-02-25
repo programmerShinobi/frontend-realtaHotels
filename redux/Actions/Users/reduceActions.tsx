@@ -172,6 +172,27 @@ export const doRegisterFailed:any = (payload:any):any => {
     }
 }
 
+export const doRegisterGuest:any = (payload:any):any => {
+    return {
+        type: ActionType.REGISTER_GUEST,
+        payload
+    }
+}
+
+export const doRegisterGuestSucceed:any = (payload:any):any => {
+    return {
+        type: ActionType.REGISTER_GUEST_SUCCEED,
+        payload
+    }
+}
+
+export const doRegisterGuestFailed:any = (payload:any):any => {
+    return {
+        type: ActionType.REGISTER_GUEST_FAILED,
+        payload
+    }
+}
+
 export const doRolesRequest:any = ():any => {
     return {
         type: ActionType.GET_ROLES
