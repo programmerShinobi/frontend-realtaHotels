@@ -14,6 +14,8 @@ import styles from '../../styles/FormSignIn.module.css';
 import LayoutSignIn from '@/components/Layout/LayoutSignIn';
 import { doLogin } from '@/redux/Actions/Users/reduceActions';
 import Cookies from 'js-cookie';
+import ToastIndicator from '@/components/Indicator/ToastIndicator';
+import "react-toastify/dist/ReactToastify.css";
 
 export default function SignIn() {
   // use Router
@@ -50,20 +52,23 @@ export default function SignIn() {
       localStorage.setItem('userFullName', isLogin.userdata[0].user_full_name);
       Cookies.set('userId', isLogin.userdata[0].user_id);
       if (isLogin.userdata[0].usro_role_id == 1) {        // Guest
+        ToastIndicator("success", "You have successfully logged in");
         router.push('/guest');
       } else if (isLogin.userdata[0].usro_role_id == 2) { // Manager
+        ToastIndicator("success", "You have successfully logged in");
         router.push('/manager');
       } else if (isLogin.userdata[0].usro_role_id == 3) { // Office Boy
+        ToastIndicator("success", "You have successfully logged in");
         router.push('/ob');
       } else if (isLogin.userdata[0].usro_role_id == 4) { // Admin
+        ToastIndicator("success", "You have successfully logged in");
         router.push('/admin');
       } else if (isLogin.userdata[0].usro_role_id == 5) { // Staff
+        ToastIndicator("success", "You have successfully logged in");
         router.push('/staff');
       }
     }
   };
-
-  console.info()
 
   // getHelper for display in form
   const getHelperText = (touched:any, errors:any, field:any) => {

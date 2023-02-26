@@ -14,7 +14,6 @@ import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 import LayoutSignUpGuest from '@/components/Layout/LayoutSignUpGuest';
 import sendWA from '@/utils/sendWA';
 import moment from 'moment';
-import Cookies from 'js-cookie';
 import axios from 'axios';
 
 export default function SignUpGuest() {
@@ -54,23 +53,283 @@ export default function SignUpGuest() {
   
   // Mengambil state usersReducers dari store redux
   const isRegister = useSelector((state: any) => state.usersReducers.users);
-  
-  // function handle submit form add new users (API POST users)
-  const handleFormSubmit = async (values: any, { setSubmitting }: any) => { 
-    const phoneNumber = await values.countryCode + values.userPhoneNumber;
 
-    await dispatch(doRegisterGuest({
-      ...values,
-      uspaPasswordhash: phoneNumber,
-      userPhoneNumber: phoneNumber,
-    }));
+  // function handle submit form add new users (API POST users)
+  // const handleFormSubmit = async (values: any, { setSubmitting }: any) => {
+  //   const phoneNumber = await values.countryCode + values.userPhoneNumber;
+  //   const now = await moment(new Date).format("YYYYMMDD");
+  //   const password = await 'GuesT!' + now + values.userPhoneNumber;
+
+  //   // await window.addEventListener('beforeunload', function(event) {
+  //     localStorage.setItem('isPhoneNumber', phoneNumber);
+  //     localStorage.setItem('isPassword', password);
+  //   // });
+
+  //   // await dispatch(doRegisterGuest({
+  //     //   ...values,
+  //     //   uspaPasswordhash: password,
+  //   //   userPhoneNumber: phoneNumber,
+  //   // }));
+  //   // Memeriksa apakah user sudah login
     
-    // Memeriksa apakah user sudah login
-    if (await isRegister.message == 'Register Successfully') {
-        router.push('/auth/signin');
+  //   await setTimeout(() => {
+  //     // router.reload();
+  //   }, 1000);
+
+  //   if (await isRegister.message == 'Register Successfully') {
+  //       router.reload();
+  //   }
+  // };
+
+
+  ///---------------------------------------------------------------------- LAST -----------------
+
+
+  // const [phoneNumber, setPhoneNumber] = useState<any>("");
+  // const [password, setPassword] = useState<any>("");
+
+  // const handleFormSubmit = async ( values: any, { setSubmitting }: any) => {
+  //   const phoneNumber = await values.countryCode + values.userPhoneNumber;
+  //   const now = await moment(new Date).format("YYYYMMDD");
+  //   const password = await 'GuesT!' + now + values.userPhoneNumber;
+
+  //   // Register user here
+  //   await dispatch(doRegisterGuest({
+  //     ...values,
+  //     uspaPasswordhash: password,
+  //     userPhoneNumber: phoneNumber,
+  //   }));
+
+  //   // Set localStorage items
+  //   await localStorage.setItem('isPhoneNumber', phoneNumber);
+  //   await localStorage.setItem('isPassword', password);
+
+  //   await setTimeout(() => {
+  //     router.reload();
+  //   }, 1000);
+  // };
+
+  //   const isPhoneNumber = localStorage.getItem('isPhoneNumber');
+  //   const isPassword = localStorage.getItem('isPassword');
+  //   if (isPhoneNumber || isPassword) {
+  //     setPhoneNumber(isPhoneNumber);
+  //     setPassword(isPassword);
+  //   }
+
+  //   const sender = '6281212499837'; // No.Hp Pengirim
+  //   const apiKey = 'jTYnHBlDlPrzM0EFEidotthE2Xnv18'; // API KEY Anda
+  //   const url = 'https://server.wa-bisnis.com/send-message'; // URL API
+  //   const receiver = phoneNumber; // No.HP Penerima
+  //   const pesan = `Welcome to Realta Hotels. Your login access with password is :\n${password}`; // Pesan yang dikirim
+  
+  //   const data = {
+  //     api_key: apiKey,
+  //     sender: sender,
+  //     number: receiver,
+  //     message: pesan,
+  //   };
+  
+  //   // console.info(data);
+  
+  //   axios.post(url, JSON.stringify(data), {
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'Access-Control-Allow-Origin': '*'
+  //     },
+  //   }).then(response => {
+  //     localStorage.removeItem('isPhoneNumber');
+  //     localStorage.removeItem('isPassword');
+  //     console.info(response.data);
+  //     router.push('/auth/signupGuest')
+  //   }).catch(error => {
+  //     console.error(error);
+  //   }); 
+
+  // -----------------------------------------------------------------------
+  
+  const getStoredValue = (key: string): string => {
+    if (typeof window === "object") {
+      const storedValue = localStorage.getItem(key);
+      return storedValue ? storedValue : "";
+    } else {
+      return "";
     }
   };
+  console.info(typeof window);
+  const [phoneNumber, setPhoneNumber] = useState<any>([]);
+  const [password, setPassword] = useState<any>([]);
 
+  const handleFormSubmit = async (values: any, { setSubmitting }: any) => {
+    const phoneNumber = await values.countryCode + values.userPhoneNumber;
+    const now = await moment(new Date()).format("YYYYMMDD");
+    const password = await "GuesT!" + now + values.userPhoneNumber;
+
+    // Register user here
+    await dispatch(
+      doRegisterGuest({
+        ...values,
+        uspaPasswordhash: password,
+        userPhoneNumber: phoneNumber,
+      })
+    );
+
+
+    // Set localStorage items
+    useEffect(() => {
+      localStorage.setItem("phoneNumber", phoneNumber);
+    }, [phoneNumber]);
+
+    useEffect(() => {
+      localStorage.setItem("password", password);
+    }, [password]);
+
+    await setPhoneNumber(phoneNumber);
+    await setPassword(password);
+
+    await setTimeout(() => {
+      router.reload();
+    }, 1000);
+  };
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedPhoneNumber = localStorage.getItem("phoneNumber");
+      if (storedPhoneNumber) {
+        setPhoneNumber(storedPhoneNumber);
+      }
+    }
+  }, []);
+
+
+    useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedPassword = localStorage.getItem("password");
+      if (storedPassword) {
+        setPassword(storedPassword);
+      }
+    }
+  }, []);
+
+    const sender = '6281212499837'; // No.Hp Pengirim
+    const apiKey = 'jTYnHBlDlPrzM0EFEidotthE2Xnv18'; // API KEY Anda
+    const url = 'https://server.wa-bisnis.com/send-message'; // URL API
+    const receiver = phoneNumber; // No.HP Penerima
+    const pesan = `Welcome to Realta Hotels. Your login access with password is :\n${password}`; // Pesan yang dikirim
+  
+    const data = {
+      api_key: apiKey,
+      sender: sender,
+      number: receiver,
+      message: pesan,
+    };
+  
+    // console.info(data);
+  
+    axios.post(url, data, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
+    }).then(response => {
+      localStorage.removeItem('isPhoneNumber');
+      localStorage.removeItem('isPassword');
+      console.info(response.data);
+      router.push('/auth/signupGuest')
+    }).catch(error => {
+      console.error(error);
+    }); 
+
+  
+  // ----------------------------------------------------------------------
+  
+  
+  
+  // const [phoneNumber, setPhoneNumber] = useState<any>("");
+  // const [password, setPassword] = useState<any>("");
+
+  // const handleFormSubmit = async (values: any, { setSubmitting }: any) => {
+  //   const phoneNumber = await values.countryCode + values.userPhoneNumber;
+  //   const now = await moment(new Date).format("YYYYMMDD");
+  //   const password = await "GuesT!" + now + values.userPhoneNumber;
+
+  //   // Register user here
+  //   await dispatch(
+  //     doRegisterGuest({
+  //       ...values,
+  //       uspaPasswordhash: password,
+  //       userPhoneNumber: phoneNumber,
+  //     })
+  //   );
+
+  //   // Set cookies with expiration date
+  //   document.cookie = `isPhoneNumber=${phoneNumber};expires=${new Date(
+  //     new Date().getTime() + 24 * 60 * 60 * 1000
+  //   ).toUTCString()};path=/`;
+
+  //   document.cookie = `isPassword=${password};expires=${new Date(
+  //     new Date().getTime() + 24 * 60 * 60 * 1000
+  //   ).toUTCString()};path=/`;
+
+  //   await setPhoneNumber(phoneNumber);
+  //   await setPassword(password);
+
+  //   await setTimeout(() => {
+  //     router.reload();
+  //   }, 1000);
+  // };
+
+  // useEffect(() => {
+  //   const cookies = document.cookie.split("; ");
+  //   let phoneNumber = "";
+  //   let password = "";
+
+  //   for (let i = 0; i < cookies.length; i++) {
+  //     const cookie = cookies[i].split("=");
+  //     if (cookie[0] === "isPhoneNumber") {
+  //       phoneNumber = cookie[1];
+  //     }
+  //     if (cookie[0] === "isPassword") {
+  //       password = cookie[1];
+  //     }
+  //   }
+
+  //   setPhoneNumber(phoneNumber);
+  //   setPassword(password);
+  // }, []);
+
+  // const sender = "6281212499837"; // No.Hp Pengirim
+  // const apiKey = "jTYnHBlDlPrzM0EFEidotthE2Xnv18"; // API KEY Anda
+  // const url = "https://server.wa-bisnis.com/send-message"; // URL API
+  // const receiver = phoneNumber; // No.HP Penerima
+  // const pesan = `Welcome to Realta Hotels. Your login access with password is :\n${password}`; // Pesan yang dikirim
+
+  // const data = {
+  //   api_key: apiKey,
+  //   sender: sender,
+  //   number: receiver,
+  //   message: pesan,
+  // };
+
+  // axios
+  //   .post(url, JSON.stringify(data), {
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "Access-Control-Allow-Origin": "*",
+  //     },
+  //   })
+  //   .then((response) => {
+  //     // Delete cookies after use
+  //     document.cookie = "isPhoneNumber=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;";
+  //     document.cookie = "isPassword=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;";
+
+  //     console.info(response.data);
+  //     router.push("/auth/signupGuest");
+  //   })
+  //   .catch((error) => {
+  //     console.error(error);
+  //   });
+
+  
   // getHelper for display in form
   const getHelperText = (touched: any, errors: any, field: any) => {
     if (field == "phone") {
@@ -183,7 +442,8 @@ export default function SignUpGuest() {
   const handletoLogin = () => {
     router.push('/auth/signin');
   };
-  
+
+
   return (
     <Box>
       <Head>
@@ -293,3 +553,4 @@ export default function SignUpGuest() {
     </Box>
   );
 }
+

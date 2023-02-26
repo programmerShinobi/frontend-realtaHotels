@@ -15,7 +15,6 @@ import LayoutSignUpGuest from '@/components/Layout/LayoutSignUpGuest';
 import sendWA from '@/utils/sendWA';
 import moment from 'moment';
 import Cookies from 'js-cookie';
-import axios from 'axios';
 
 export default function SignUpGuest() {
   // use Router
@@ -54,20 +53,22 @@ export default function SignUpGuest() {
   
   // Mengambil state usersReducers dari store redux
   const isRegister = useSelector((state: any) => state.usersReducers.users);
-  
-  // function handle submit form add new users (API POST users)
-  const handleFormSubmit = async (values: any, { setSubmitting }: any) => { 
-    const phoneNumber = await values.countryCode + values.userPhoneNumber;
 
+  // function handle submit form add new users (API POST users)
+  const handleFormSubmit = async (values: any, { setSubmitting }: any) => {
+    const phoneNumber = await values.countryCode + values.userPhoneNumber;
+    const now = await moment(new Date).format("YYYYMMDD");
+    const password = await 'GuesT!' + now + values.userPhoneNumber;
+    await Cookies.set('isPhoneNumber', phoneNumber);
+    await Cookies.set('isPassword', password);
     await dispatch(doRegisterGuest({
       ...values,
-      uspaPasswordhash: phoneNumber,
+      uspaPasswordhash: password,
       userPhoneNumber: phoneNumber,
     }));
-    
     // Memeriksa apakah user sudah login
     if (await isRegister.message == 'Register Successfully') {
-        router.push('/auth/signin');
+        router.reload();
     }
   };
 
@@ -184,6 +185,7 @@ export default function SignUpGuest() {
     router.push('/auth/signin');
   };
   
+  sendWA();
   return (
     <Box>
       <Head>

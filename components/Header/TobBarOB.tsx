@@ -12,6 +12,8 @@ import { Button } from "@mui/material";
 import { doLogin } from "@/redux/Actions/Users/reduceActions";
 import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
+import ToastIndicator from "../Indicator/ToastIndicator";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function TopBarOB({ showNav, setShowNav }:any) {
   const router = useRouter();
@@ -21,6 +23,7 @@ export default function TopBarOB({ showNav, setShowNav }:any) {
   const dispatch:any = useDispatch();
 
   const handleLogout = () => {
+    ToastIndicator("info", "You have logged out");
     dispatch(doLogin());
     localStorage.removeItem('token');
     localStorage.removeItem('roleId');
