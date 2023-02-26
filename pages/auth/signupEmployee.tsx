@@ -58,10 +58,7 @@ export default function SignUpEmployee() {
 
   // function handle submit form add new users (API POST users)
   const handleFormSubmit = (values: any, { setSubmitting }: any) => {
-    console.info(values);
-    // dispatch(doRegister(values));
     const fullPhoneNumber = `${values.countryCode}${values.userPhoneNumber}`;
-    console.info(fullPhoneNumber);
     dispatch(doRegister({ ...values, userPhoneNumber: fullPhoneNumber }));
 
     // Memeriksa apakah user sudah login

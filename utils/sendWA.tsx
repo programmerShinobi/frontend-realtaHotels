@@ -1,48 +1,47 @@
 import axios from 'axios';
-import Cookies from 'js-cookie';
+import { toString } from 'lodash';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-// const sendWA = () => {
-const sendWA = (fullPhoneNumber:any, password:any, cookie:any) => {
+export default function sendWA () {
   // const fullPhoneNumber = '+6282121991992';
   // const password = 'GuesT!2023021982121991992';
 
-  // const [fullPhoneNumber, setFullPhoneNumber]:any = useState([]);
-  // const [password, setPassword]:any = useState([]);
+  const [fullPhoneNumber, setFullPhoneNumber] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
-    const apiKey = '9699c055d1ea2d9ce1ca02e22adf36ef69f6fc2a'; // API KEY Anda
-    const idDevice = '5580'; // ID DEVICE yang di SCAN (Sebagai pengirim)
-    const url = 'https://api.watsap.id/send-message'; // URL API
-    const noHp = fullPhoneNumber; // No.HP yang dikirim (No.HP Penerima)
-    const pesan = `Welcome to Realta Hotels. For login access, your password is : 
-    ${password}`; // Pesan yang dikirim
-  
-    const dataPost = {
-      'id_device': idDevice,
-      'api-key': apiKey,
-      'no_hp': noHp,
-      'pesan': pesan
-    };
-  
-  console.info(dataPost);
+  const isPhoneNumber = toString(localStorage.getItem('isPhoneNumber'));
+  const isPassword = toString(localStorage.getItem('isPassword'));
+  setFullPhoneNumber(isPhoneNumber);
+  setPassword(isPassword);
 
-    axios.post(url, dataPost, {
-      headers: {
-        'Content-Type': 'application/json',
-         'Accept': 'application/json',
-        // 'Access-Control-Allow-Origin': '*',
-        'Cookie': cookie
-      }
-    })
-    .then((response: any) => {
-      // Cookies.remove('isPhoneNumber');
-      // Cookies.remove('isPassword');
+  const sender = '+6281212499837'; // No.Hp Pengirim
+  const apiKey = 'jTYnHBlDlPrzM0EFEidotthE2Xnv18'; // API KEY Anda
+  const url = 'https://server.wa-bisnis.com/send-message'; // URL API
+  const receiver = fullPhoneNumber; // No.HP Penerima
+  const pesan = `Welcome to Realta Hotels. Your login access with password is :\n${password}`; // Pesan yang dikirim
+
+  const data = {
+    api_key: apiKey,
+    sender: sender,
+    number: receiver,
+    message: pesan,
+  };
+
+  console.info(data);
+
+  axios.post(url, data, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }).then(response => {
+      const router = useRouter();
+      localStorage.removeItem('isPhoneNumber');
+      localStorage.removeItem('isPassword');
       console.info(response.data);
-    })
-    .catch((error:any) => {
-      console.info(error);
-    });
-  
+      router.push('/auth/signin');
+  }).catch(error => {
+    console.error(error);
+  }); 
 };
 
-export default sendWA;
