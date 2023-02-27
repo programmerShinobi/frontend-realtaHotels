@@ -6,7 +6,9 @@ export default function LayoutSignIn({ children }:any) {
     <>
       <div className="bgLayout">
         <div className="mx-auto sm:mx-0">
-          <div className={styles.logoLayout}></div>
+          <center>
+            <div className={styles.logoLayout}></div>
+          </center>
           <div className={styles.cardLogin}>
                 {children}
           </div>

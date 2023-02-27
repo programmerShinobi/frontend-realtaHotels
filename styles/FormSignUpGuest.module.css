@@ -15,7 +15,7 @@
     justify-content: center;
     place-items: center;
     justify-self: center;
-    text-justify:auto;
+    text-justify: auto;
 }
 
 .textLabelInFormLogin {
@@ -23,17 +23,16 @@
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
-    line-height: 35px;
+    line-height: 50px;
     text-align: left;
 }
 
 .formIntputLogin {
     font-family: 'Poppins';
-    font-style:normal;
+    font-style: normal;
     font-weight: 100;
     font-size: 14px;
     line-height: 12px;
     border: gray;
     width: auto;
 }
-
