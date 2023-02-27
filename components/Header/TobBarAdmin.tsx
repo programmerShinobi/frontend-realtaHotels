@@ -12,10 +12,17 @@ import { Button } from "@mui/material";
 import { doLogin } from "@/redux/Actions/Users/reduceActions";
 import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
+import * as React from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import ToastIndicator from "../Indicator/ToastIndicator";
-import "react-toastify/dist/ReactToastify.css";
 
-export default function TopBarAdmin({ showNav, setShowNav }:any) {
+interface ToastIndicatorProps {
+  status: string;
+  message: string;
+}
+
+export default function TopBarAdmin({ showNav, setShowNav }: any) {
   const router = useRouter();
   const userFullName: any = localStorage.getItem('userFullName');
   const userPhoto: any = localStorage.getItem('userPhoto');
@@ -44,7 +51,7 @@ export default function TopBarAdmin({ showNav, setShowNav }:any) {
   const dispatch:any = useDispatch();
   
   const handleLogout = () => {
-    ToastIndicator("info", "You have logged out");
+    ToastIndicator({status: 'info', message: 'You have logged out'});
     dispatch(doLogin());
     localStorage.removeItem('token');
     localStorage.removeItem('roleId');

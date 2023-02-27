@@ -5,20 +5,16 @@
 .logoLayout {
     background: url('/assets/logo-realtaHotel.png') no-repeat;
     background-size: contain;
-    position: fixed;
+    position: relative;
     height: 15rem;
     width: 15rem;
-    left: 50%;
-    top: 25%;
-    transform: translate(-50%, -50%);
+    margin-top: 1%;
     overflow: hidden;
 }
 
 .cardLogin {
-    position: fixed;
+    position: relative;
     width: auto;
     height: auto;
-    left: 50%;
-    top: 55%;
-    transform: translate(-50%, -50%);  
+    transform: translate(0%, -25%)
 }
