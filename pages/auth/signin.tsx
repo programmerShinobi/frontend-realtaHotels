@@ -19,11 +19,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ToastIndicator from '@/components/Indicator/ToastIndicator';
 
-interface ToastIndicatorProps {
-  status: string;
-  message: string;
-}
-
 export default function SignIn() {
   // use Router
   const router = useRouter();

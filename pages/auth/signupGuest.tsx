@@ -13,6 +13,9 @@ import styles from '../../styles/FormSignUpGuest.module.css'
 import { KeyIcon } from '@heroicons/react/24/solid';
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 import LayoutSignUpGuest from '@/components/Layout/LayoutSignUpGuest';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import ToastIndicator from '@/components/Indicator/ToastIndicator';
 
 export default function SignUpGuest() {
   // use Router
@@ -63,8 +66,13 @@ export default function SignUpGuest() {
     }));
     
     // Memeriksa apakah user sudah login
-    if (await isRegister.message == 'Register Successfully') {
-        router.push('/auth/signin');
+    if (await isRegister.message == 'Register Successfully' && !isRegister.savedUser.message) {
+      ToastIndicator({status: 'success', message: 'You have successfully registered'});  
+      router.push('/auth/signin');
+    } else if (isRegister.savedUser.message == 'duplicate key value violates unique constraint \"u_user_phone_number\"') {;
+      ToastIndicator({status: 'warning', message: 'Your phone number has been registered'});
+    } else {
+      ToastIndicator({status: 'warning', message: 'Check your phone number again'});
     }
   };
 
