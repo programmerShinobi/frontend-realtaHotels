@@ -17,12 +17,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ToastIndicator from "../Indicator/ToastIndicator";
 
-
-interface ToastIndicatorProps {
-  status: string;
-  message: string;
-}
-
 export default function TopBarGuest({ showNav, setShowNav }:any) {
   const router = useRouter();
   const userFullName: any = localStorage.getItem("userFullName");
@@ -31,8 +25,7 @@ export default function TopBarGuest({ showNav, setShowNav }:any) {
   const dispatch:any = useDispatch();
 
   const handleLogout = () => {
-    const toastProps: ToastIndicatorProps = {status: 'info', message: 'You have logged out'};
-    ToastIndicator(toastProps);
+    ToastIndicator({status: 'info', message: 'You have logged out'});
     dispatch(doLogin());
     localStorage.removeItem('token');
     localStorage.removeItem('roleId');

@@ -17,11 +17,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ToastIndicator from "../Indicator/ToastIndicator";
 
-interface ToastIndicatorProps {
-  status: string;
-  message: string;
-}
-
 export default function TopBarAdmin({ showNav, setShowNav }: any) {
   const router = useRouter();
   const userFullName: any = localStorage.getItem('userFullName');
