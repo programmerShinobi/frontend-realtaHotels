@@ -36,6 +36,7 @@ interface Props {
 }
 
 const Profile: NextPage<Props> = ({ dirs }) => {
+  const [selectPhoto, setSelectPhoto] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedFile, setSelectedFile] = useState<File>();
@@ -58,10 +59,10 @@ const Profile: NextPage<Props> = ({ dirs }) => {
   })
   
   // Upload Photo
-  const routerEditPhoto = useRouter();
   const handleUpload = async () => {
     setUploading(true);
-    try {
+    setSelectPhoto(false);
+    // try {
       if (!selectedFile) return;
       const formData = new FormData();
       formData.append("myImage", selectedFile);
@@ -72,16 +73,34 @@ const Profile: NextPage<Props> = ({ dirs }) => {
         usproPhoto: "Admin_" + selectedFile.name
       }
       
-      dispatchEditPhoto(doUpdatePhotoUsers(userId, isDataUpload));
-      dispatchEdit(doUserRequest(userId));
-      localStorage.setItem('profilePhotoMe', isDataUpload.usproPhoto);
       setTimeout(() => {
-        routerEditPhoto.reload();
-      }, 500);
-    } catch (error: any) {
-      console.log(error.message);
+        setUploading(false);
+        dispatchEditPhoto(doUpdatePhotoUsers(userId, isDataUpload));
+        dispatchProfile(doUserRequest(userId));
+        localStorage.setItem('profilePhotoMe', isDataUpload.usproPhoto);
+        ToastIndicator({ status: 'success', message: 'You have successfully profile photo updated' });
+      }, 1000);
+    // } catch (error: any) {
+    //   console.log(error.message);
+    // }
+  };
+
+  // Select file : photo
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const url = event.target?.result as string;
+        setSelectedImage(url);
+        setSelectedFile(file);
+        setSelectPhoto(true);
+        setTimeout(() => {
+          // handleUpload();
+        }, 2000);
+      };
+      reader.readAsDataURL(file);
     }
-    setUploading(false);
   };
 
   // define useState API POST users
@@ -250,18 +269,17 @@ const Profile: NextPage<Props> = ({ dirs }) => {
   
   // function handle submit form edit users (API POST users)
   const handleFormSubmitEdit = (values: any, { setSubmitting }: any) => {
-    setSubmitting(true);
+    // setSubmitting(true);
     const userId = localStorage.getItem('userId');
     dispatchUpdate(doUpdateUsers(userId, values));
     
     setTimeout(() => {
       setIsOpenEdit(false);
       dispatchProfile(doUserRequest(userId));
-      routerEdit.reload();
       ToastIndicator({status: 'success', message: 'You have successfully general updated'});
       localStorage.setItem('userFullNameNew', values.userFullName);
     }, 500);
-    setSubmitting(false);
+    // setSubmitting(false);
   };
 
   // getHelper for display in form
@@ -371,10 +389,9 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     const userId = localStorage.getItem('userId');
     dispatchUpdatePassword(doChangePassword(userId, values));
     setTimeout(() => {
-      setIsOpenEdit(false);
+      setIsOpenEditPassword(false);
       dispatchProfile(doUserRequest(userId));
       ToastIndicator({status: 'success', message: 'You have successfully security updated'});
-      routerEditPassword.reload();
     }, 500);
     setSubmitting(false);
   };
@@ -405,7 +422,6 @@ const Profile: NextPage<Props> = ({ dirs }) => {
   // Bonus Points
   useEffect(() => {
     if (userMe && userMe.results) {
-      console.info(userMe.results)
       const displayedUserBP: any = userMe.results;
       if (displayedUserBP) {
         setProfileBP(displayedUserBP);
@@ -785,7 +801,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
       ),
     },
   ];
-
+  
   return (
     <>
       <LayoutAdmin>
@@ -807,7 +823,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
               <Box className="flex justify-center ">
                 <label>
                   <center>
-                    <Input
+                    {/* <input
                       type="file"
                       hidden
                       onChange={({ target }) => {
@@ -817,6 +833,11 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                           setSelectedFile(file);
                         }
                       }}
+                    /> */}
+                    <Input
+                      hidden
+                      type="file"
+                      onChange={handleFileSelect}
                     />
                   </center>
                   <Box className="flex justify-center h-28 w-28 cursor-pointer">
@@ -828,7 +849,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                   </Box>
                 </label>
               </Box>
-              {selectedImage ? (
+              {selectedImage&&selectPhoto ? (
                 <Box className="flex justify-center">
                   <button
                     className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"

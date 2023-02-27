@@ -119,9 +119,9 @@ function usersReducers(state = initialState, action:any) {
     }
 }
 
-const applyUpdateUsers = (state:any, action:any) => {
-    return state.users.results.map((users:any) => {
-        if (users.userId === state.user.results.userId) {
+const applyUpdateUsers = (state: any, action: any) => {
+    return state.user.results.map((user:any) => {
+        if (user.user_id === state.user.results.user_id) {
             return {
                 ...state,
                 ...state.user.results
@@ -132,9 +132,9 @@ const applyUpdateUsers = (state:any, action:any) => {
     });
 }
 
-const applyUpdatePhotoUsers = (state:any, action:any) => {
-    return state.users.results.map((users:any) => {
-        if (users.userId === state.user.results.userId) {
+const applyUpdatePhotoUsers = (state: any, action: any) => {
+    return state.user.results.map((user:any) => {
+        if (user.usproId === action.payload.data.results.usproId) {
             return {
                 ...state,
                 ...state.user.results
@@ -159,8 +159,8 @@ const applyUpdateRoles = (state:any, action:any) => {
 }
 
 const applyChangePassword = (state:any, action:any) => {
-    return state.user.results.map((users: any) => {
-        if (users.userId === state.user.results.userId) {
+    return state.user.results.map((user: any) => {
+        if (user.user_id === state.user.results.user_id) {
             return {
                 ...state,
                 ...state.user.results

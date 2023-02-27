@@ -30,7 +30,7 @@ export default function TopBarAdmin({ showNav, setShowNav }: any) {
   } else if (userPhoto) { 
     myPhoto = userPhoto;
   } else {
-    myPhoto = "user.png"
+    myPhoto = "user.png";
   }
 
   let myName: any; 
