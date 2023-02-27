@@ -21,6 +21,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CloudSyncIcon from '@mui/icons-material/CloudSync';
 import EditIcon from '@mui/icons-material/Edit';
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import moment from "moment";
 import { useRouter } from "next/router";
 import { InputRef, Tabs, Tag, Button, Input, Space, Table } from "antd";
@@ -28,6 +29,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import type { ColumnsType, ColumnType } from 'antd/es/table';
 import type { FilterConfirmProps } from 'antd/es/table/interface';
 import Highlighter from 'react-highlight-words';
+import ToastIndicator from "@/components/Indicator/ToastIndicator";
 
 interface Props {
   dirs: string[];
@@ -251,13 +253,14 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     setSubmitting(true);
     const userId = localStorage.getItem('userId');
     dispatchUpdate(doUpdateUsers(userId, values));
-
+    
     setTimeout(() => {
       setIsOpenEdit(false);
       dispatchProfile(doUserRequest(userId));
       routerEdit.reload();
+      ToastIndicator({status: 'success', message: 'You have successfully general updated'});
       localStorage.setItem('userFullNameNew', values.userFullName);
-    }, 3000);
+    }, 500);
     setSubmitting(false);
   };
 
@@ -272,10 +275,37 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     }
   }
 
+  const passwordChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
+  
+  function generatePassword(length:any) {
+    let password = "";
+    for (let i = 0; i < length; i++) {
+      password += passwordChars.charAt(Math.floor(Math.random() * passwordChars.length));
+    }
+    return password;
+  }
+
+  // Password
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+ 
+  function validatePassword(password:any) {
+    return passwordRegex.test(password);
+  }
+
+  let password = generatePassword(12);
+
+  while (!validatePassword(password)) {
+    password = generatePassword(12);
+  }
+
+  // const [password, setPassword] = useState("");
+
+  // setPassword(generatePassword(12));
+
   // check all validasi required & etc
   const checkoutSchemaPassword: any = yup.object().shape({
     uspaCurrentPasswordhash: yup.string().required("required"),
-    uspaPasswordhash: yup.string().required("required"),
+    uspaPasswordhash: yup.string().required("required").test("password-validation", "Password must be at least 8 characters and contain at least one lowercase letter, one uppercase letter, one number, and one symbol", validatePassword),
     uspaConfirmPasswordhash: yup.string()
       .oneOf([yup.ref('uspaPasswordhash'), null], 'Passwords must match')
       .required('required'),
@@ -343,6 +373,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     setTimeout(() => {
       setIsOpenEdit(false);
       dispatchProfile(doUserRequest(userId));
+      ToastIndicator({status: 'success', message: 'You have successfully security updated'});
       routerEditPassword.reload();
     }, 500);
     setSubmitting(false);
@@ -993,14 +1024,29 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                   leaveFrom="opacity-100 scale-100"
                   leaveTo="opacity-0 scale-95"
                 >
-                  <Dialog.Panel className="w-full max-w-md transform max-h-96 overflow-y-auto rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Panel className="grid transform max-h-96 overflow-y-auto rounded-xl bg-white text-left  shadow-xl transition-all">
                     <Dialog.Title
                       as="h3"
-                      className="text-lg font-medium leading-6 text-black"
+                      className="pl-8 pr-8 sticky top-0 flex justify-between font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-900 text-orange-100 hover:bg-orange-800 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75"
                     >
-                      Edit User
+                      <Typography className={styles.textTitleInProfileEdit}>
+                        Edit General
+                      </Typography>
+                      <button
+                        onClick={closeModalEdit}
+                        type="button"
+                        className="rounded-md font-bold shadow-md h-fit py-1 px-1  items-end bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                        <HighlightOffIcon width={4} height={4} />
+                      </button>
                     </Dialog.Title>
-                    <br></br>
+                    <Dialog.Title
+                      as="h3"
+                      className="pl-8 mb-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                    >
+                      <Typography className={styles.textTitleInProfileEdit}>
+                        General
+                      </Typography>
+                    </Dialog.Title>
                     <Formik
                       onSubmit={handleFormSubmitEdit}
                       initialValues={initialValues}
@@ -1015,10 +1061,12 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                         handleSubmit,
                       }) => (
                         <Form onSubmit={handleSubmit}>
-                          <Box
+                          {/* Edit General */}
+                          <Box 
+                            className="pl-8 pr-8 pb-8"
                             display="grid"
                             gap="30px"
-                            gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+                            gridTemplateColumns="repeat(8, minmax(0, 1fr))"
                           >
                             <TextField
                               hidden
@@ -1040,6 +1088,23 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                               name="userFullName"
                               error={!!touched.userFullName && !!errors.userFullName}
                               helperText={getHelperText(touched.userFullName, errors.userFullName, "fullName")}
+                              sx={{ gridColumn: "span 4" }}
+                            />
+
+                            {/* Email */}
+                            <TextField
+                              size="small"
+                              fullWidth
+                              color="warning"
+                              variant="standard"
+                              type="email"
+                              label="Email"
+                              onBlur={handleBlur}
+                              onChange={(event) => { eventHandlerEdit('userEmail')(event); handleChange(event) }}
+                              value={values.userEmail ? values.userEmail : values.userEmail = DataUserEdit.userEmail}
+                              name="userEmail"
+                              error={!!touched.userEmail && !!errors.userEmail}
+                              helperText={getHelperText(touched.userEmail, errors.userEmail, "email")}
                               sx={{ gridColumn: "span 4" }}
                             />
 
@@ -1065,40 +1130,6 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                             </FormControl>
                               {!!touched.userType && !!errors.userType && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.userType, errors.userType,"userType")}</span>}
 
-                            {/* PhoneNumber */}
-                            <TextField
-                              size="small"
-                              fullWidth
-                              color="warning"
-                              variant="standard"
-                              type="text"
-                              label="Phone Number"
-                              onBlur={handleBlur}
-                              onChange={(event) => { eventHandlerEdit('userPhoneNumber')(event); handleChange(event) }}
-                              value={values.userPhoneNumber ? values.userPhoneNumber : values.userPhoneNumber = DataUserEdit.userPhoneNumber}
-                              name="userPhoneNumber"
-                              error={!!touched.userPhoneNumber && !!errors.userPhoneNumber}
-                              helperText={getHelperText(touched.userPhoneNumber, errors.userPhoneNumber, "phone")}
-                              sx={{ gridColumn: "span 4" }}
-                            />
-
-                            {/* Email */}
-                            <TextField
-                              size="small"
-                              fullWidth
-                              color="warning"
-                              variant="standard"
-                              type="email"
-                              label="Email"
-                              onBlur={handleBlur}
-                              onChange={(event) => { eventHandlerEdit('userEmail')(event); handleChange(event) }}
-                              value={values.userEmail ? values.userEmail : values.userEmail = DataUserEdit.userEmail}
-                              name="userEmail"
-                              error={!!touched.userEmail && !!errors.userEmail}
-                              helperText={getHelperText(touched.userEmail, errors.userEmail, "email")}
-                              sx={{ gridColumn: "span 4" }}
-                            />
-                            
                             {/* CompanyName */}
                             <TextField
                               size="small"
@@ -1113,6 +1144,23 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                               name="userCompanyName"
                               error={!!touched.userCompanyName && !!errors.userCompanyName}
                               helperText={getHelperText(touched.userCompanyName, errors.userCompanyName, "companyName")}
+                              sx={{ gridColumn: "span 4" }}
+                            />
+
+                            {/* PhoneNumber */}
+                            <TextField
+                              size="small"
+                              fullWidth
+                              color="warning"
+                              variant="standard"
+                              type="text"
+                              label="Phone Number"
+                              onBlur={handleBlur}
+                              onChange={(event) => { eventHandlerEdit('userPhoneNumber')(event); handleChange(event) }}
+                              value={values.userPhoneNumber ? values.userPhoneNumber : values.userPhoneNumber = DataUserEdit.userPhoneNumber}
+                              name="userPhoneNumber"
+                              error={!!touched.userPhoneNumber && !!errors.userPhoneNumber}
+                              helperText={getHelperText(touched.userPhoneNumber, errors.userPhoneNumber, "phone")}
                               sx={{ gridColumn: "span 4" }}
                             />
 
@@ -1142,8 +1190,23 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                             </Select>
                             {!!touched.usroRole && !!errors.usroRole && <span className='text-red-600 text-xs pt-1'>{getHelperText(touched.usroRole, errors.usroRole, "usroRole")}</span>}
                             </FormControl>
-                            
-                            {/* ---------------------------------------------------- */}
+                          </Box>
+                          {/* ---------------------------------------------------- */}
+                          <Dialog.Title
+                            as="h3"
+                            className="pl-8 mb-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                          >
+                            <Typography className={styles.textTitleInProfileEdit}>
+                              Profile
+                            </Typography>
+                          </Dialog.Title>
+                          {/* Edit Profile */}
+                          <Box 
+                            className="pl-8 pr-8 pb-8"
+                            display="grid"
+                            gap="30px"
+                            gridTemplateColumns="repeat(8, minmax(0, 1fr))"
+                          >
                           
                             {/* usproNationalId */}
                             <TextField
@@ -1162,6 +1225,23 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                               sx={{ gridColumn: "span 4" }}
                             />
 
+                            {/* usproBirth */}
+                            <TextField
+                              size="small"
+                              fullWidth
+                              color="warning"
+                              variant="standard"
+                              type="date"
+                              label="Birth"
+                              onBlur={handleBlur}
+                              onChange={(event) => { eventHandlerEdit('usproBirth')(event); handleChange(event) }}
+                              value={values.usproBirth ? values.usproBirth : values.usproBirth = DataUserEdit.usproBirth}
+                              name="usproBirth"
+                              error={!!touched.usproBirth && !!errors.usproBirth}
+                              helperText={getHelperText(touched.usproBirth, errors.usproBirth, "usproBirth")}
+                              sx={{ gridColumn: "span 4" }}
+                            />
+
                             {/* usproJobTitle */}
                             <TextField
                               size="small"
@@ -1176,7 +1256,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                               name="usproJobTitle"
                               error={!!touched.usproJobTitle && !!errors.usproJobTitle}
                               helperText={getHelperText(touched.usproJobTitle, errors.usproJobTitle, "jobTitle")}
-                              sx={{ gridColumn: "span 4" }}
+                              sx={{ gridColumn: "span 8" }}
                             />
 
                             {/* usproGender */}
@@ -1199,23 +1279,6 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                               </Select>
                               {!!touched.usproGender && !!errors.usproGender && <span className='text-red-600 text-xs pt-1'>{getHelperText(touched.usproGender, errors.usproGender, "usproGender")}</span>}
                             </FormControl>
-
-                            {/* usproBirth */}
-                            <TextField
-                              size="small"
-                              fullWidth
-                              color="warning"
-                              variant="standard"
-                              type="date"
-                              label="Birth"
-                              onBlur={handleBlur}
-                              onChange={(event) => { eventHandlerEdit('usproBirth')(event); handleChange(event) }}
-                              value={values.usproBirth ? values.usproBirth : values.usproBirth = DataUserEdit.usproBirth}
-                              name="usproBirth"
-                              error={!!touched.usproBirth && !!errors.usproBirth}
-                              helperText={getHelperText(touched.usproBirth, errors.usproBirth, "usproBirth")}
-                              sx={{ gridColumn: "span 4" }}
-                            />
 
                             {/* usproMaritalStatus */}
                             <FormControl color="warning" size="small" variant="standard" sx={{ gridColumn: "span 4" }}>
@@ -1241,31 +1304,19 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                             {/* usproAddr */}
 
                           </Box>
-
-                          <Box display="flex" justifyContent="center" mt="20px">
-                            <Box display="flex">
-                              <button
-                                type="reset"
-                                color="warning"
-                                className="rounded-md bg-yellow-100 text-yellow-500 border-warning-500 first-line:bg-opacity-20 px-4 py-2 text-sm font-normal  hover:bg-opacity-30 focus:outline-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                                <RefreshIcon width={15} height={15} />
-                              </button>
-                            </Box>
-                            <Box display="flex" pl="100px">
+                          <Box className="flex flex-row-reverse pb-8">
+                            <Box className='pr-8'>
                               <button
                                 type="submit"
-                                color="warning"
-                                className="rounded-md bg-green-100 text-green-500 border-warning-500 first-line:bg-opacity-20 px-4 py-2 text-sm font-normal  hover:bg-opacity-30 focus:outline-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                                <SaveIcon width={15} height={15} />
+                                className="rounded-md font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                                <SaveIcon width={4} height={4} />{' Save'}
                               </button>
                             </Box>
-                            <Box display="flex" pl="100px">
+                            <Box className='pr-4'>
                               <button
-                                onClick={closeModalEdit}
-                                type="button"
-                                color="error"
-                                className="rounded-md bg-red-100 text-red-500 border-error-500 first-line:bg-opacity-20 px-4 py-2 text-sm font-normal  hover:bg-opacity-30 focus:outline-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                                <XMarkIcon width={20} height={20} />
+                                type="reset"
+                                className="rounded-md font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                                <RefreshIcon width={4} height={4} />{' Cancle'}
                               </button>
                             </Box>
                           </Box>
@@ -1302,12 +1353,20 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                   leaveFrom="opacity-100 scale-100"
                   leaveTo="opacity-0 scale-95"
                 >
-                  <Dialog.Panel className="w-full max-w-md transform max-h-96 overflow-y-auto rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Panel className="w-full max-w-md transform max-h-96 overflow-y-auto rounded-xl bg-white text-left align-middle shadow-xl transition-all">
                     <Dialog.Title
                       as="h3"
-                      className="text-lg font-medium leading-6 text-black"
+                      className="pl-8 pr-8 sticky top-0 flex justify-between font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-900 text-orange-100 hover:bg-orange-800 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75"
                     >
-                      Edit Password
+                      <Typography className={styles.textTitleInProfileEdit}>
+                        Change Password
+                      </Typography>
+                      <button
+                        onClick={closeModalEditPassword}
+                        type="button"
+                        className="rounded-md font-bold shadow-md h-fit py-1 px-1  items-end bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                        <HighlightOffIcon width={4} height={4} />
+                      </button>
                     </Dialog.Title>
                     <br></br>
                     <Formik
@@ -1325,6 +1384,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                       }) => (
                         <Form onSubmit={handleSubmit}>
                           <Box
+                            className="pl-8 pr-8 pb-8"
                             display="grid"
                             gap="30px"
                             gridTemplateColumns="repeat(4, minmax(0, 1fr))"
@@ -1426,30 +1486,19 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                             />
                           </Box>
 
-                          <Box display="flex" justifyContent="center" mt="20px">
-                            <Box display="flex">
-                              <button
-                                type="reset"
-                                color="warning"
-                                className="rounded-md bg-yellow-100 text-yellow-500 border-warning-500 first-line:bg-opacity-20 px-4 py-2 text-sm font-normal  hover:bg-opacity-30 focus:outline-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                                <RefreshIcon width={15} height={15} />
-                              </button>
-                            </Box>
-                            <Box display="flex" pl="100px">
+                          <Box className="flex flex-row-reverse pb-8">
+                            <Box className='pr-8'>
                               <button
                                 type="submit"
-                                color="warning"
-                                className="rounded-md bg-green-100 text-green-500 border-warning-500 first-line:bg-opacity-20 px-4 py-2 text-sm font-normal  hover:bg-opacity-30 focus:outline-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                                <SaveIcon width={15} height={15} />
+                                className="rounded-md font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                                <SaveIcon width={4} height={4} />{' Save'}
                               </button>
                             </Box>
-                            <Box display="flex" pl="100px">
+                            <Box className='pr-4'>
                               <button
-                                onClick={closeModalEditPassword}
-                                type="button"
-                                color="error"
-                                className="rounded-md bg-red-100 text-red-500 border-error-500 first-line:bg-opacity-20 px-4 py-2 text-sm font-normal  hover:bg-opacity-30 focus:outline-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                                <XMarkIcon width={20} height={20} />
+                                type="reset"
+                                className="rounded-md font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                                <RefreshIcon width={4} height={4} />{' Cancle'}
                               </button>
                             </Box>
                           </Box>

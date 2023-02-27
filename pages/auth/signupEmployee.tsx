@@ -260,7 +260,6 @@ export default function SignUpEmployee() {
 
   // setPassword(generatePassword(12));
 
-  
   const checkoutSchema = yup.object().shape({
     userFullName: yup.string().required("required"),
     userEmail: yup.string().email("invalid email").required("required"),
