@@ -12,7 +12,7 @@ const WithAuth = <P extends object>(WrappedComponent: NextPage<P>) => {
       const token: any = localStorage.getItem('token');
       if (!token) {
         setIsToken(null)
-        router.push('auth/signin');
+        router.push('users/signin');
       }
       else {
         setIsToken(token);

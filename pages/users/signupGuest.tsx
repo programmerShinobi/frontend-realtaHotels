@@ -12,7 +12,7 @@ import usersReducers from '@/redux/Reducers/Users/usersReducer';
 import styles from '../../styles/FormSignUpGuest.module.css'
 import { KeyIcon } from '@heroicons/react/24/solid';
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
-import LayoutSignUpGuest from '@/components/Layout/LayoutSignUpGuest';
+import LayoutSignUpGuest from '@/components/Layout/users/LayoutSignUpGuest';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ToastIndicator from '@/components/Indicator/ToastIndicator';

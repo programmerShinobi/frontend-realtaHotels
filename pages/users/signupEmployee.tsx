@@ -14,7 +14,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import styles from '../../styles/FormSignUpEmployee.module.css'
 import { KeyIcon } from '@heroicons/react/24/solid';
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
-import LayoutSignUpEmployee from '@/components/Layout/LayoutSignUpEmployee';
+import LayoutSignUpEmployee from '@/components/Layout/users/LayoutSignUpEmployee';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ToastIndicator from '@/components/Indicator/ToastIndicator';
