@@ -1,32 +1,90 @@
-Roles :
-1 : guest --------> landing page (
-                    home, 
-                    about,
-                    facility, 
-                    hotels
-                  )
-
-2 manager ------> dashboard
-
-3 office boy  --> task module (
-                    hotel,
-                    resto
-                  )
+ROLES : {
+  1 : guest {
+    * 
+  }
   
-4 admin --------> main module (
-                  users, 
-                  human resources, 
-                  hotel, 
-                  booking, 
-                  resto, 
-                  payment, 
-                  purchasing
-                ) 
+  2 : manager {
+    *
+  }
+  
+  3 : office boy {
+    *
+  }
+    
+  4 : admin {
+    * app
+    * hr
+    * booking
+    * resto
+    * payment
+    * purchasing
+  }
+  
+  5 : staff {
+    *
+  } 
+}
 
-5 user  --------> landing page with transaction (
-                  home, 
-                  about,
-                  facility, 
-                  hotels
-                )
-
+------------
+PATHNAME : {
+  - users : {
+    * signupEmployee      : /users/signupEmployee
+    * signupGuest         : /users/signupGuest
+    * signIn              : /users/signin
+  }
+  
+  - app : {
+    * users  
+      ~ profile           : /app/users/profile
+      ~ booking           : /app/users/booking
+      ~ accounts          : /app/users/accounts
+    * master : {
+      ~ locations         : /app/master/locations
+      ~ policy            : /app/master/policy
+      ~ category group    : /app/master/category
+      ~ price items       : /app/master/priceItems
+      ~ service task      : /app/master/serviceTask
+    }
+    * hotels : {
+      ~ hotels            : /app/hotels
+      ~ facilities        : /app/hotels/facilities
+      ~ reviews           : /app/hotels/reviews
+    }
+  }
+  
+  - hr : {
+    * department          : /hr/department
+    * employee            : /hr/employee
+    * workOrder           : /hr/workorder
+    * purchasing : {
+      ~ vendor            : /hr/purchasing/vendor
+      ~ stock             : /hr/purchasing/stock
+      ~ purchasing order  : /hr/purchasing/listOrder
+    }
+  }
+  
+  - booking : {
+    * guest               : /booking
+    * room                : /booking/room
+    * invoice             : /booking/room/:id/invoice
+  }
+    
+  - resto : {
+    * resto               : /resto
+    * menus               : /resto/menus  
+    * order               : /resto/guest:id/order
+    * bill                : /resto/guest:id/bill
+  }
+  
+  - payment : {
+    * bank                : /payment/bank
+    * fintech             : /payment/fintech
+    * accounts            : /payment/accounts
+    * topup               : /payment/topup
+    * transaction         : /payment/transaction
+  }
+  
+  - purchasing : {
+    * gallery             : /purchasing/gallery
+  }
+}
