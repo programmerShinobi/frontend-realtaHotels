@@ -3,12 +3,15 @@ import {
   Bars3CenterLeftIcon,
   PencilIcon,
   ChevronDownIcon,
+  ChevronUpIcon,
+  ChevronRightIcon,
 } from "@heroicons/react/24/solid";
-import { BellIcon, CheckIcon } from "@heroicons/react/24/outline";
+import { HomeIcon  } from "@heroicons/react/24/solid";
 import { Menu, Transition, Popover } from "@headlessui/react";
 import { useRouter } from "next/router";
+import HouseRoundedIcon from '@mui/icons-material/HouseRounded';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Button } from "@mui/material";
+import { Box, Button, Card, Typography } from "@mui/material";
 import { doLogin } from "@/redux/Actions/Users/reduceActions";
 import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
@@ -16,7 +19,8 @@ import * as React from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ToastIndicator from "../Indicator/ToastIndicator";
-
+import Link from "next/link";
+import styles from '../../styles/TopBarProfile.module.css';
 export default function TopBarAdmin({ showNav, setShowNav }: any) {
   const router = useRouter();
   const userFullName: any = localStorage.getItem('userFullName');
@@ -56,7 +60,7 @@ export default function TopBarAdmin({ showNav, setShowNav }: any) {
     localStorage.removeItem('userFullNameNew');
     localStorage.removeItem('userPhoto');
     Cookies.remove('userId');
-    router.push('/auth/signin');
+    router.push('/users/signin');
   };
 
   const handleEditProfile = () => {
@@ -64,142 +68,137 @@ export default function TopBarAdmin({ showNav, setShowNav }: any) {
   };
 
   return (
-    <div
-      className={`fixed w-full h-16 flex justify-between items-center transition-all duration-[400ms] ${showNav ? "pl-56" : ""
-        }`}
-    >
-      <div className="pl-4 md:pl-16">
-        <Bars3CenterLeftIcon
-          className="h-8 w-8 text-gray-700 cursor-pointer"
-          onClick={() => setShowNav(!showNav)}
-        />
-      </div>
-      <div className="flex items-center pr-4 md:pr-16">
-        <Popover className="relative">
-          <Popover.Button className="outline-none mr-5 md:mr-8 cursor-pointer text-gray-700">
-            <BellIcon className="h-6 w-6" />
-          </Popover.Button>
-          <Transition
-            as={Fragment}
-            enter="transition ease-out duration-100"
-            enterFrom="transform scale-95"
-            enterTo="transform scale-100"
-            leave="transition ease-in duration=75"
-            leaveFrom="transform scale-100"
-            leaveTo="transform scale-95"
-          >
-            <Popover.Panel className="absolute -right-16 sm:right-4 z-50 mt-2 bg-white shadow-sm rounded max-w-xs sm:max-w-sm w-screen">
-              <div className="relative p-3">
-                <div className="flex justify-between items-center w-full">
-                  <p className="text-gray-700 font-medium">Notifications</p>
-                  <a className="text-sm text-orange-500" href="#">
-                    Mark all as read
-                  </a>
-                </div>
-                <div className="mt-4 grid gap-4 grid-cols-1 overflow-hidden">
-                  <div className="flex">
-                    <div className="rounded-full shrink-0 bg-green-200 h-8 w-8 flex items-center justify-center">
-                      <CheckIcon className="h-4 w-4 text-green-600" />
-                    </div>
-                    <div className="ml-4">
-                      <p className="font-medium text-gray-700">
-                        Notification Title
-                      </p>
-                      <p className="text-sm text-gray-500 truncate">
-                        Test Notification text for design
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex">
-                    <div className="rounded-full shrink-0 bg-green-200 h-8 w-8 flex items-center justify-center">
-                      <CheckIcon className="h-4 w-4 text-green-600" />
-                    </div>
-                    <div className="ml-4">
-                      <p className="font-medium text-gray-700">
-                        Notification Title
-                      </p>
-                      <p className="text-sm text-gray-500 truncate">
-                        Test Notification text for design
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex">
-                    <div className="rounded-full shrink-0 bg-green-200 h-8 w-8 flex items-center justify-center">
-                      <CheckIcon className="h-4 w-4 text-green-600" />
-                    </div>
-                    <div className="ml-4">
-                      <p className="font-medium text-gray-700">
-                        Notification Title
-                      </p>
-                      <p className="text-sm text-gray-500 truncate">
-                        Test Notification text for design
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex">
-                    <div className="rounded-full shrink-0 bg-green-200 h-8 w-8 flex items-center justify-center">
-                      <CheckIcon className="h-4 w-4 text-green-600" />
-                    </div>
-                    <div className="ml-4">
-                      <p className="font-medium text-gray-700">
-                        Notification Title
-                      </p>
-                      <p className="text-sm text-gray-500 truncate">
-                        Test Notification text for design
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Popover.Panel>
-          </Transition>
-        </Popover>
-        <Menu as="div" className="relative inline-block text-left">
-          <div>
-            <Menu.Button className="inline-flex w-full justify-center items-center">
+    <div>
+      <div className="bg-white shadow-lg">
+        <div className="fixed text-orange-900 hover:bg-orange-100 bg-orange-100 hover:text-orange-500 w-full h-16 mb-16 flex justify-between items-center transition-all duration-[400ms]">
+          <div className="pl-8">
+            <div className="flex justify-center mt-6 mb-5">
               <picture>
                 <img
-                  src={"/images/"+myPhoto}
-                  className="rounded-full h-8 md:mr-4 border-2 border-white shadow-sm"
-                  alt="profile picture"
+                  className="w-56 h-auto"
+                  src="/assets/logo-realtaHotel.png"
+                  alt="logo"
                 />
               </picture>
-              <span className="hidden md:block font-medium text-gray-700">
-                {myName}
-              </span>
-              <ChevronDownIcon className="ml-2 h-4 w-4 text-gray-700" />
-            </Menu.Button>
+            </div>
           </div>
-          <Transition
-            as={Fragment}
-            enter="transition ease-out duration-100"
-            enterFrom="transform scale-95"
-            enterTo="transform scale-100"
-            leave="transition ease-in duration=75"
-            leaveFrom="transform scale-100"
-            leaveTo="transform scale-95"
-          >
-            <Menu.Items className="absolute right-0 w-auto z-50 mt-2 origin-top-right bg-white rounded-md shadow-2xl">
-              <div className="p-1 flex flex-col-left">
-                <Menu.Item>
-                  <Button
-                    className="shadow-lg pl-3 px-4 py-2 mx-auto rounded-md items-center bg-orange-100 text-left text-sm font-medium normal-case text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
-                    onClick={handleEditProfile}>
-                    <PencilIcon className="h-4 w-4 mr-2" />{"Profile"}
-                  </Button>
-                </Menu.Item>
-                <Menu.Item >
-                  <Button
-                    className="shadow-lg pl-3 px-4 py-2 ml-1 mx-auto rounded-md items-center bg-orange-100 text-left text-sm font-medium normal-case text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
-                    onClick={handleLogout}>
-                    <LogoutIcon className="h-4 w-4 mr-2" />{"Logout"}
-                  </Button>
-                </Menu.Item>
+          <div className="flex items-center pr-4 md:pr-16">
+            <Menu as="div" className="relative inline-block text-left">
+              <div>
+                <Menu.Button className="inline-flex w-full justify-center items-center">
+                  <picture>
+                    <img
+                      src={"/images/"+myPhoto}
+                      className="rounded-full h-8 md:mr-4 border-2 border-white shadow-xl"
+                      alt="profile picture"
+                    />
+                  </picture>
+                  <span className="hidden md:block font-medium text-gray-700">
+                    {myName}
+                  </span>
+                  <ChevronDownIcon className="ml-2 h-4 w-4 text-gray-700" />
+                </Menu.Button>
               </div>
-            </Menu.Items>
-          </Transition>
-        </Menu>
+              <Transition
+                as={Fragment}
+                enter="transition ease-out duration-100"
+                enterFrom="transform scale-95"
+                enterTo="transform scale-100"
+                leave="transition ease-in duration=75"
+                leaveFrom="transform scale-100"
+                leaveTo="transform scale-95"
+              >
+                <Menu.Items className="absolute right-0 w-auto z-50 mt-2 origin-top-right bg-white rounded-md shadow-2xl">
+                  <div className="p-1 flex flex-col-left">
+                    <Menu.Item>
+                      <Button
+                        className="shadow-lg pl-3 px-4 py-2 mx-auto rounded-md items-center bg-orange-100 text-left text-sm font-medium normal-case text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                        onClick={handleEditProfile}>
+                        <PencilIcon className="h-4 w-4 mr-2" />{"Profile"}
+                      </Button>
+                    </Menu.Item>
+                    <Menu.Item >
+                      <Button
+                        className="shadow-lg pl-3 px-4 py-2 ml-1 mx-auto rounded-md items-center bg-orange-100 text-left text-sm font-medium normal-case text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                        onClick={handleLogout}>
+                        <LogoutIcon className="h-4 w-4 mr-2" />{"Logout"}
+                      </Button>
+                    </Menu.Item>
+                  </div>
+                </Menu.Items>
+              </Transition>
+            </Menu>
+          </div>
+        </div>
+        <div className="pb-16">
+        </div>
       </div>
-    </div >
+      <div className="static w-full h-8 pt-2 justify-center ">
+        <div className="flex flex-row">
+          <div className="ml-10 mr-5 text-orange-900 w-5">
+            <HomeIcon className="h-5 w-5 " />
+          </div>
+          <div className="w-auto">
+            <Link href="#">
+              <div
+                className={`text-lef text-sm font-medium cursor-pointer flex items-left transition-colors ${router.pathname == "/app"
+                  ? " text-orange-500"
+                  : "text-orange-900 hover:text-orange-500"
+                  }`}
+              >
+                <div>
+                  <p>Home</p>
+                </div>
+                <ChevronRightIcon
+                  className={`h-5 w-5 text-orange-500`}
+                />
+              </div>
+            </Link>
+          </div>
+          <div className=" w-auto">
+            <Link href="#">
+              <div
+                className={`text-left text-sm font-medium cursor-pointer flex items-left transition-colors ${router.pathname == "/app/users/profile"
+                  ? " text-orange-500"
+                  : "text-orange-900 hover:text-orange-500"
+                  }`}
+              >
+                <div>
+                  <p>Profile</p>
+                </div>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </div>
+      <hr className="w-full shadow-lg bg-orange-900 mt-2 h-1"/>
+      <div className="static w-full h-10  bg-white">
+        <div className="w-auto ml-10">
+          <div className={`
+              text-left flex items-left transition-colors
+               text-orange-900 hover:text-orange-500
+              `}>
+                <div>
+                  <Typography className={styles.textTitleInProfile}>
+                    My Profile
+                  </Typography>
+                </div>
+              </div>
+          </div>
+      </div>
+      <div
+        className={`fixed w-full h-16 pb-4 flex justify-between items-center transition-all duration-[400ms] ${showNav ? "pl-56" : ""
+          }`}
+      >
+        <div className="pl-4 mt-4 md:pl-16">
+          <div className="card bg-white rounded-md shadow-xl" >
+          <Bars3CenterLeftIcon
+            className="h-8 w-8 text-gray-700 cursor-pointer"
+            onClick={() => setShowNav(!showNav)}
+          />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
