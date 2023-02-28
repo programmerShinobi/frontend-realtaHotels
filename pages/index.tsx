@@ -1,30 +1,32 @@
 import Head from 'next/head';
-import { Box, InputLabel } from "@mui/material";
-import Link from "next/link";
 import { useRouter } from 'next/router';
-import Layout from '@/components/Layout/Layout';
+import React from 'react'
+import Layout from '@/components/Layout';
+import { Box, Typography } from "@mui/material"
+import styles from '../styles/ContentHome.module.css';
 
 export default function Home() {
-const router = useRouter();
   return (
-    <Box>
+    <>
       <Head>
         <title>Home</title>
       </Head>
       <Layout>
-      <section className='Wmx-auto my-auto gap-3 rounded-xl' >
-        <div className="title">
-          <h1 className='text-orange-600 text-3xl font-bold pb-2 '>--- Realta Hotels ---</h1>
-          <p className=' mx-auto my-auto text-gray-400 text-sm pb-3 '>HOME</p>
-        </div>
-        <InputLabel
-          className='text-center text-gray-400 text-sm'
-          sx={{ gridColumn: "span 4" }}
-        >
-          <Link   href={'/users/signin'} className='text-orange-500'>Sign In</Link> | <Link   href={'/users/signupEmployee'} className='text-orange-500'> Sign Up</Link>
-        </InputLabel>
-      </section>
+        <Box className="grid shadow-md rounded-xl bg-white pb-8">
+          {/* Home */}
+          <Box className="m-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+            <Typography className={styles.textTitleInProfile}>
+              Home
+            </Typography>
+          </Box>
+          <Box className="pl-8 pr-8 text-left font-normal text-orange-900">
+            <Typography className={styles.textLabelInProfile}>
+              This information will be display, so be careful what you share ...
+            </Typography>
+          </Box>
+        </Box>
+
       </Layout>
-    </Box>
+    </>
   );
 }
