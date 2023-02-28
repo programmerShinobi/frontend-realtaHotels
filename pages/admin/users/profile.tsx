@@ -3,16 +3,15 @@ import React, { useState, useEffect, Fragment, useRef } from 'react'
 import axios from "axios";
 import fs from "fs/promises";
 import path from "path";
-import { doUpdatePhotoUsers, doUserRequest, doUpdateUsers, doUsersRequest, doChangePassword } from "@/redux/Actions/Users/reduceActions";
 import { useDispatch, useSelector } from "react-redux";
 import LayoutAdmin from "@/components/Layout/LayoutAdmin";
-import { Box, FormControl, Grid, IconButton, InputAdornment, InputBase, InputLabel, MenuItem, OutlinedInput, Select, Tooltip, Typography } from "@mui/material"
+import { doChangePassword, doUpdatePhotoUsers, doUpdateUsers, doUserRequest } from "@/redux/Actions/Users/reduceActions";
+import { Box, FormControl, IconButton, InputAdornment, InputLabel, MenuItem, Select, Typography } from "@mui/material"
 import { Dialog, Transition } from '@headlessui/react'
 import * as yup from "yup";
-import { XMarkIcon } from '@heroicons/react/24/solid';
 import TextField from '@mui/material/TextField';
 import { Form, Formik } from 'formik';
-import styles from '../../styles/ContentProfile.module.css';
+import styles from '../../../styles/ContentProfile.module.css';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import SaveIcon from '@mui/icons-material/Save';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -29,7 +28,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import type { ColumnsType, ColumnType } from 'antd/es/table';
 import type { FilterConfirmProps } from 'antd/es/table/interface';
 import Highlighter from 'react-highlight-words';
-import ToastIndicator from "@/components/Indicator/ToastIndicator";
+import ToastIndicator from "../../../components/Indicator/ToastIndicator";
 
 interface Props {
   dirs: string[];
