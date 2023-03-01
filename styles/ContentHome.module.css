@@ -28,9 +28,9 @@
     flex: none;
     order: 0;
     flex-grow: 0;
-    align-items: center;
-    justify-content: left;
-    text-justify: left;
+    align-items:stretch;
+    justify-content:center;
+    text-justify:auto;
     margin-top: 8;
 }
 
