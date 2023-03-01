@@ -89,7 +89,7 @@ export default function HeaderAppUsers({ showNav, setShowNav }: any) {
   const dispatch:any = useDispatch();
   
   const handleLogout = async () => {
-    await router.push('/users/signin');
+    await router.push('/users/login');
     await dispatch(doLogin());
     await localStorage.removeItem('token');
     await localStorage.removeItem('roleId');

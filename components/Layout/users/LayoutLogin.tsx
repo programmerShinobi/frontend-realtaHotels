@@ -1,9 +1,9 @@
-import Header from "../Header";
+import HeaderLogin from "@/components/Header/login";
 
-const Layout = ({ children }:any) => {
+const LayoutLogin = ({ children }:any) => {
   return (
     <>
-      <Header/>
+      <HeaderLogin/>
       <main
         className={`transition-all duration-[400ms]`}
       >
@@ -13,4 +13,4 @@ const Layout = ({ children }:any) => {
   );
 }
 
-export default Layout;
+export default LayoutLogin;

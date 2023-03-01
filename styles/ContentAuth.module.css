@@ -1,0 +1,77 @@
+.textTitleInAuth {
+    display: flex;
+    width: auto;
+    height: 36px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 20px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    align-items: center;
+    justify-content: left;
+    text-justify: left;
+    margin-top: 8;
+}
+
+.textTitleInAuthEdit {
+    display: flex;
+    width: 281px;
+    height: 36px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 18px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    justify-items:center;
+    justify-content:center;
+    text-justify:distribute;
+    margin-top: 8;
+}
+
+.textLabelInAuth {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 35px;
+    text-align: justify;
+}
+
+.formAuth {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 100;
+    font-size: 14px;
+    border: gray;
+    width: auto;
+}
+
+@media (max-width: 600px) {
+    .formAuth {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 100;
+        font-size: 12px;
+        line-height: 21px;
+        padding-bottom: 10px;
+        width: auto;
+    }
+}
+
+.PTbuttonEditAuth {
+    position: relative;
+    padding-top: 60px;
+}
+
+@media (max-width: 812px) {
+    .PTbuttonEditAuth {
+        position: relative;
+        padding-top: 0px;
+    }
+}
