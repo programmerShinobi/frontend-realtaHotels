@@ -121,7 +121,7 @@ export default function HeaderAppUsers({ showNav, setShowNav }: any) {
               </picture>
             </div>
           </div>
-          <div className="flex items-center pr-4 md:pr-16">
+          <div className="flex items-center pr-4 md:pr-8">
             <Menu as="div" className="relative inline-block text-left">
               <div>
                 <Menu.Button className="inline-flex w-full justify-center items-center">
@@ -214,15 +214,15 @@ export default function HeaderAppUsers({ showNav, setShowNav }: any) {
       <div className="static w-full h-10  bg-white">
         <div className="w-auto ml-10">
           <div className={`
-              text-left flex items-left transition-colors
-               text-orange-900 hover:text-orange-500
-              `}>
-                <div>
-                  <Typography className={styles.textTitleInProfile}>
-                    My Profile
-                  </Typography>
-                </div>
+            text-left flex items-left transition-colors
+              text-orange-900 hover:text-orange-500
+            `}>
+              <div>
+                <Typography className={styles.textTitleInProfile}>
+                  My Profile
+                </Typography>
               </div>
+            </div>
           </div>
       </div>
       <div

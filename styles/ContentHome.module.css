@@ -1,6 +1,6 @@
-.textTitleInProfile {
+.textTitleInHome {
     display: flex;
-    width: 281px;
+    width: auto;
     height: 36px;
     font-family: 'Poppins';
     font-style: normal;
@@ -16,7 +16,7 @@
     margin-top: 8;
 }
 
-.textTitleInProfileEdit {
+.textTitleInHomeEdit {
     display: flex;
     width: 281px;
     height: 36px;
@@ -28,22 +28,22 @@
     flex: none;
     order: 0;
     flex-grow: 0;
-    align-items:stretch;
+    justify-items:center;
     justify-content:center;
-    text-justify:auto;
+    text-justify:distribute;
     margin-top: 8;
 }
 
-.textLabelInProfile {
+.textLabelInHome {
     font-family: 'Poppins';
     font-style: normal;
     font-weight: 500;
     font-size: 16px;
     line-height: 35px;
-    text-align: left;
+    text-align: justify;
 }
 
-.formProfile {
+.formHome {
     font-family: 'Poppins';
     font-style: normal;
     font-weight: 100;
@@ -53,7 +53,7 @@
 }
 
 @media (max-width: 600px) {
-    .formProfile {
+    .formHome {
         font-family: 'Poppins';
         font-style: normal;
         font-weight: 100;
@@ -64,13 +64,13 @@
     }
 }
 
-.PTbuttonEditProfile {
+.PTbuttonEditHome {
     position: relative;
     padding-top: 60px;
 }
 
 @media (max-width: 812px) {
-    .PTbuttonEditProfile {
+    .PTbuttonEditHome {
         position: relative;
         padding-top: 0px;
     }
