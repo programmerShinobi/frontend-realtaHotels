@@ -46,7 +46,7 @@ export default function Header({ showNav, setShowNav }: any) {
               </picture>
             </div>
           </div>
-          <div className="flex items-center pr-4 md:pr-8">
+          <div className="flex items-center pr-8 md:pr-8">
             <Menu as="div" className="relative inline-block text-left">
               <div>
                 <Menu.Button className="inline-flex w-full justify-center items-center">
