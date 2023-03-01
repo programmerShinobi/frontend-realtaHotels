@@ -57,7 +57,7 @@ export default function HeaderAppUsers({ showNav, setShowNav }: any) {
   let myPhoto: any; 
   if (profilePhotoMe) {
     myPhoto = profilePhotoMe;
-  } else if (userPhoto) { 
+  } else if (userPhoto !='null') { 
     myPhoto = userPhoto;
   } else {
     myPhoto = "user.png";
@@ -66,10 +66,10 @@ export default function HeaderAppUsers({ showNav, setShowNav }: any) {
   let myName: any; 
   if (profileNameMe) {
     myName = profileNameMe;
-  } else if (userFullName) { 
+  } else if (userFullName != 'null') { 
     myName = userFullName;
-  } else {
-    myName = "";
+  }  else {
+    myName = "Unknown";
   }
 
   let myRole: any; 

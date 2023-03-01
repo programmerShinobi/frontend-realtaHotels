@@ -35,6 +35,7 @@ import LayoutAppUsersManager from "@/components/Layout/app/users/manager/LayoutA
 import LayoutAppUsersOB from "@/components/Layout/app/users/ob/LayoutAppUsersOB";
 import LayoutAppUsersStaff from "@/components/Layout/app/users/staff/LayoutAppUsersStaff";
 import { set } from "lodash";
+import FormItemLabel from "antd/es/form/FormItemLabel";
 
 interface Props {
   dirs: string[];
@@ -620,17 +621,21 @@ const Profile: NextPage<Props> = ({ dirs }) => {
       render: (_, { type }) => (
         <>
           {type.map((isType) => {
-            let color = isType.length < 5 ? 'geekblue' : 'green';
-            if (isType === 'P') {
-              color = 'orange';
-            } else if (isType === 'R') {
-              color = 'geekblue'
+            if (isType) {
+              let color = isType.length < 5 ? 'geekblue' : 'green';
+              if (isType === 'P') {
+                color = 'orange';
+              } else if (isType === 'R') {
+                color = 'geekblue'
+              }
+              return (
+                <Tag color={color} key={isType}>
+                  {isType=='P'?'PROMOTE':'RATING'}
+                </Tag>
+              );
+            } else {
+              
             }
-            return (
-              <Tag color={color} key={isType}>
-                {isType=='P'?'PROMOTE':'RATING'}
-              </Tag>
-            );
           })}
         </>
       ),
@@ -742,21 +747,23 @@ const Profile: NextPage<Props> = ({ dirs }) => {
       render: (_, { type }) => (
         <>
           {type.map((isType) => {
-            let color = isType.length < 5 ? 'geekblue' : 'green';
-            if (isType === 'WIZARD') {
-              color = 'green';
-            } else if (isType === 'VIP') {
-              color = 'purple';
-            } else if (isType === 'GOLD') {
-              color = 'gold';
-            } else if (isType === 'SILVER') {
-              color = 'gray';
+            if (isType) {
+              let color = isType.length < 5 ? 'geekblue' : 'green';
+              if (isType === 'WIZARD') {
+                color = 'green';
+              } else if (isType === 'VIP') {
+                color = 'purple';
+              } else if (isType === 'GOLD') {
+                color = 'gold';
+              } else if (isType === 'SILVER') {
+                color = 'gray';
+              }
+              return (
+                <Tag color={color} key={isType}>
+                  {isType.toUpperCase()}
+                </Tag>
+              );
             }
-            return (
-              <Tag color={color} key={isType}>
-                {isType.toUpperCase()}
-              </Tag>
-            );
           })}
         </>
       ),
@@ -779,15 +786,17 @@ const Profile: NextPage<Props> = ({ dirs }) => {
       render: (_, { status }) => (
         <>
           {status.map((isStatus) => {
-            let color = isStatus.length > 5 ? 'geekblue' : 'green';
-            if (isStatus === 'expired') {
-              color = 'volcano';
+            if (isStatus) {
+              let color = isStatus.length > 5 ? 'geekblue' : 'green';
+              if (isStatus === 'expired') {
+                color = 'volcano';
+              }
+              return (
+                <Tag color={color} key={isStatus}>
+                  {isStatus.toUpperCase()}
+                </Tag>
+              );
             }
-            return (
-              <Tag color={color} key={isStatus}>
-                {isStatus.toUpperCase()}
-              </Tag>
-            );
           })}
         </>
       ),
@@ -845,7 +854,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                       {selectedImage ? (
                         <img src={selectedImage} alt="" />
                       ) : (
-                        <img src={"/images/" + profile.uspro_photo}/>
+                        <img src={profile.uspro_photo!='null'?"/images/user.png":"/images/" + profile.uspro_photo}/>
                       )}
                     </Box>
                   </label>
@@ -876,7 +885,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                   <Box className="max-w-4xl space-y-2 mb-6">
                     {/* Full Name */}
                     <div className="flex flex-wrap">
-                      <span className={styles.formProfile}>{profile.user_full_name ? profile.user_full_name : <em>{"None"}</em>}</span>
+                      <span className={styles.formProfile}>{profile.user_full_name ? profile.user_full_name : <em className="text-gray-300">{"Full Name (None)"}</em>}</span>
                     </div>
                     {/* Memb. Name */}
                     <div className="flex flex-wrap">
@@ -886,7 +895,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                             profile.usme_memb_name === "GOLD" ? "Gold Member" :
                               profile.usme_memb_name === "VIP" ? "VIP Member" :
                                 profile.usme_memb_name === "WIZARD" ? "Wizard Member" :
-                                  <em>{"None"}</em>
+                                  <em className="text-gray-300">{"Member (None)"}</em>
                         }
                       </span>
                     </div>
@@ -897,7 +906,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                           profile.user_type === "T" ? "Travel Agency" :
                             profile.user_type === "C" ? "Company Agency" :
                               profile.user_type === "I" ? "Individual Agency" :
-                                <em>{"None"}</em>
+                                <em className="text-gray-300">{"Agency (None)"}</em>
                         }
                       </span>
                     </div>
@@ -915,7 +924,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                             {profile.user_email} <label className="font-normal text-orange-900"><em>(default)</em></label>
                           </span>
                         ) : (
-                          <em>{"None"}</em>
+                          <em className="text-gray-300">{"Email (None)"}</em>
                         )}
                       </span>
                     </div>
@@ -927,7 +936,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                             {profile.user_phone_number} <label className="font-normal text-orange-900"><em>(active)</em></label>
                           </span>
                         ) : (
-                          <em>{"None"}</em>
+                          <em className="text-gray-300">{"Phone (None)"}</em>
                         )}
                       </span>
                     </div>
@@ -1581,7 +1590,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                       {selectedImage ? (
                         <img src={selectedImage} alt="" />
                       ) : (
-                        <img src={"/images/" + profile.uspro_photo}/>
+                        <img src={profile.uspro_photo!='null'?"/images/user.png":"/images/" + profile.uspro_photo}/>
                       )}
                     </Box>
                   </label>
@@ -1612,7 +1621,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                   <Box className="max-w-4xl space-y-2 mb-6">
                     {/* Full Name */}
                     <div className="flex flex-wrap">
-                      <span className={styles.formProfile}>{profile.user_full_name ? profile.user_full_name : <em>{"None"}</em>}</span>
+                      <span className={styles.formProfile}>{profile.user_full_name ? profile.user_full_name : <em className="text-gray-300">{"Full Name (None)"}</em>}</span>
                     </div>
                     {/* Memb. Name */}
                     <div className="flex flex-wrap">
@@ -1622,7 +1631,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                             profile.usme_memb_name === "GOLD" ? "Gold Member" :
                               profile.usme_memb_name === "VIP" ? "VIP Member" :
                                 profile.usme_memb_name === "WIZARD" ? "Wizard Member" :
-                                  <em>{"None"}</em>
+                                  <em className="text-gray-300">{"Member (None)"}</em>
                         }
                       </span>
                     </div>
@@ -1633,7 +1642,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                           profile.user_type === "T" ? "Travel Agency" :
                             profile.user_type === "C" ? "Company Agency" :
                               profile.user_type === "I" ? "Individual Agency" :
-                                <em>{"None"}</em>
+                                <em className="text-gray-300">{"Agency (None)"}</em>
                         }
                       </span>
                     </div>
@@ -1651,7 +1660,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                             {profile.user_email} <label className="font-normal text-orange-900"><em>(default)</em></label>
                           </span>
                         ) : (
-                          <em>{"None"}</em>
+                          <em className="text-gray-300">{"Email (None)"}</em>
                         )}
                       </span>
                     </div>
@@ -1663,7 +1672,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                             {profile.user_phone_number} <label className="font-normal text-orange-900"><em>(active)</em></label>
                           </span>
                         ) : (
-                          <em>{"None"}</em>
+                          <em className="text-gray-300">{"Phone (None)"}</em>
                         )}
                       </span>
                     </div>
@@ -2317,7 +2326,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                       {selectedImage ? (
                         <img src={selectedImage} alt="" />
                       ) : (
-                        <img src={"/images/" + profile.uspro_photo}/>
+                        <img src={profile.uspro_photo!='null'?"/images/user.png":"/images/" + profile.uspro_photo}/>
                       )}
                     </Box>
                   </label>
@@ -2348,7 +2357,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                   <Box className="max-w-4xl space-y-2 mb-6">
                     {/* Full Name */}
                     <div className="flex flex-wrap">
-                      <span className={styles.formProfile}>{profile.user_full_name ? profile.user_full_name : <em>{"None"}</em>}</span>
+                      <span className={styles.formProfile}>{profile.user_full_name ? profile.user_full_name : <em className="text-gray-300">{"Full Name (None)"}</em>}</span>
                     </div>
                     {/* Memb. Name */}
                     <div className="flex flex-wrap">
@@ -2358,7 +2367,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                             profile.usme_memb_name === "GOLD" ? "Gold Member" :
                               profile.usme_memb_name === "VIP" ? "VIP Member" :
                                 profile.usme_memb_name === "WIZARD" ? "Wizard Member" :
-                                  <em>{"None"}</em>
+                                  <em className="text-gray-300">{"Member (None)"}</em>
                         }
                       </span>
                     </div>
@@ -2369,7 +2378,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                           profile.user_type === "T" ? "Travel Agency" :
                             profile.user_type === "C" ? "Company Agency" :
                               profile.user_type === "I" ? "Individual Agency" :
-                                <em>{"None"}</em>
+                                <em className="text-gray-300">{"Agency (None)"}</em>
                         }
                       </span>
                     </div>
@@ -2387,7 +2396,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                             {profile.user_email} <label className="font-normal text-orange-900"><em>(default)</em></label>
                           </span>
                         ) : (
-                          <em>{"None"}</em>
+                          <em className="text-gray-300">{"Email (None)"}</em>
                         )}
                       </span>
                     </div>
@@ -2399,7 +2408,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                             {profile.user_phone_number} <label className="font-normal text-orange-900"><em>(active)</em></label>
                           </span>
                         ) : (
-                          <em>{"None"}</em>
+                          <em className="text-gray-300">{"Phone (None)"}</em>
                         )}
                       </span>
                     </div>
@@ -3053,7 +3062,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                       {selectedImage ? (
                         <img src={selectedImage} alt="" />
                       ) : (
-                        <img src={"/images/" + profile.uspro_photo}/>
+                        <img src={profile.uspro_photo!='null'?"/images/user.png":"/images/" + profile.uspro_photo}/>
                       )}
                     </Box>
                   </label>
@@ -3084,7 +3093,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                   <Box className="max-w-4xl space-y-2 mb-6">
                     {/* Full Name */}
                     <div className="flex flex-wrap">
-                      <span className={styles.formProfile}>{profile.user_full_name ? profile.user_full_name : <em>{"None"}</em>}</span>
+                      <span className={styles.formProfile}>{profile.user_full_name ? profile.user_full_name : <em className="text-gray-300">{"Full Name (None)"}</em>}</span>
                     </div>
                     {/* Memb. Name */}
                     <div className="flex flex-wrap">
@@ -3094,7 +3103,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                             profile.usme_memb_name === "GOLD" ? "Gold Member" :
                               profile.usme_memb_name === "VIP" ? "VIP Member" :
                                 profile.usme_memb_name === "WIZARD" ? "Wizard Member" :
-                                  <em>{"None"}</em>
+                                  <em className="text-gray-300">{"Member (None)"}</em>
                         }
                       </span>
                     </div>
@@ -3105,7 +3114,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                           profile.user_type === "T" ? "Travel Agency" :
                             profile.user_type === "C" ? "Company Agency" :
                               profile.user_type === "I" ? "Individual Agency" :
-                                <em>{"None"}</em>
+                                <em className="text-gray-300">{"Agency (None)"}</em>
                         }
                       </span>
                     </div>
@@ -3123,7 +3132,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                             {profile.user_email} <label className="font-normal text-orange-900"><em>(default)</em></label>
                           </span>
                         ) : (
-                          <em>{"None"}</em>
+                          <em className="text-gray-300">{"Email (None)"}</em>
                         )}
                       </span>
                     </div>
@@ -3135,7 +3144,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                             {profile.user_phone_number} <label className="font-normal text-orange-900"><em>(active)</em></label>
                           </span>
                         ) : (
-                          <em>{"None"}</em>
+                          <em className="text-gray-300">{"Phone (None)"}</em>
                         )}
                       </span>
                     </div>
@@ -3789,7 +3798,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                       {selectedImage ? (
                         <img src={selectedImage} alt="" />
                       ) : (
-                        <img src={"/images/" + profile.uspro_photo}/>
+                        <img src={profile.uspro_photo!='null'?"/images/user.png":"/images/" + profile.uspro_photo}/>
                       )}
                     </Box>
                   </label>
@@ -3820,7 +3829,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                   <Box className="max-w-4xl space-y-2 mb-6">
                     {/* Full Name */}
                     <div className="flex flex-wrap">
-                      <span className={styles.formProfile}>{profile.user_full_name ? profile.user_full_name : <em>{"None"}</em>}</span>
+                      <span className={styles.formProfile}>{profile.user_full_name ? profile.user_full_name : <em className="text-gray-300">{"Full Name (None)"}</em>}</span>
                     </div>
                     {/* Memb. Name */}
                     <div className="flex flex-wrap">
@@ -3830,7 +3839,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                             profile.usme_memb_name === "GOLD" ? "Gold Member" :
                               profile.usme_memb_name === "VIP" ? "VIP Member" :
                                 profile.usme_memb_name === "WIZARD" ? "Wizard Member" :
-                                  <em>{"None"}</em>
+                                  <em className="text-gray-300">{"Member (None)"}</em>
                         }
                       </span>
                     </div>
@@ -3841,7 +3850,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                           profile.user_type === "T" ? "Travel Agency" :
                             profile.user_type === "C" ? "Company Agency" :
                               profile.user_type === "I" ? "Individual Agency" :
-                                <em>{"None"}</em>
+                                <em className="text-gray-300">{"Agency (None)"}</em>
                         }
                       </span>
                     </div>
@@ -3859,7 +3868,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                             {profile.user_email} <label className="font-normal text-orange-900"><em>(default)</em></label>
                           </span>
                         ) : (
-                          <em>{"None"}</em>
+                          <em className="text-gray-300">{"Email (None)"}</em>
                         )}
                       </span>
                     </div>
@@ -3871,7 +3880,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                             {profile.user_phone_number} <label className="font-normal text-orange-900"><em>(active)</em></label>
                           </span>
                         ) : (
-                          <em>{"None"}</em>
+                          <em className="text-gray-300">{"Phone (None)"}</em>
                         )}
                       </span>
                     </div>
