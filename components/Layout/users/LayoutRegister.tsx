@@ -1,9 +1,9 @@
-import Header from "../Header";
+import HeaderRegister from "@/components/Header/register";
 
-const Layout = ({ children }:any) => {
+const LayoutRegister = ({ children }:any) => {
   return (
     <>
-      <Header/>
+      <HeaderRegister/>
       <main
         className={`transition-all duration-[400ms]`}
       >
@@ -13,4 +13,4 @@ const Layout = ({ children }:any) => {
   );
 }
 
-export default Layout;
+export default LayoutRegister;
