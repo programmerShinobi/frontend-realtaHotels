@@ -34,6 +34,7 @@ import LayoutAppUsersGuest from "@/components/Layout/app/users/guest/LayoutAppUs
 import LayoutAppUsersManager from "@/components/Layout/app/users/manager/LayoutAppUsersManager";
 import LayoutAppUsersOB from "@/components/Layout/app/users/ob/LayoutAppUsersOB";
 import LayoutAppUsersStaff from "@/components/Layout/app/users/staff/LayoutAppUsersStaff";
+import { set } from "lodash";
 
 interface Props {
   dirs: string[];
@@ -56,16 +57,21 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     dispatch(doUserRequest(userId));
   },[]);
   
+  const router = useRouter();
+
   // Profile General
   useEffect(() => {
-    if (userMe && userMe.results) {
-      setProfile(userMe.results[0]);
-      setProfileBP(userMe.results);
-      setProfileMemb(userMe.results);
+    if (router.isReady) {
+      if (userMe && userMe.results) {
+        setProfile(userMe.results[0]);
+        setProfileBP(userMe.results);
+        setProfileMemb(userMe.results);
+      }
     }
   },[userMe])
 
-  // Upload Photo
+  console.info(profileBP);
+  // Upload Photo 
   const handleUpload = async () => {
     await setUploading(true);
     await setSelectPhoto(false);
@@ -426,8 +432,8 @@ const Profile: NextPage<Props> = ({ dirs }) => {
   interface DataTypeBonusPoints {
     key: string;
     createdOn: string;
-    point: number;
     type: string[];
+    point: number;
   }
   type DataIndexBonusPoints = keyof DataTypeBonusPoints;
   const dataBonusPoints: DataTypeBonusPoints[] = BonusPoints;
