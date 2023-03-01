@@ -61,16 +61,33 @@ const Profile: NextPage<Props> = ({ dirs }) => {
 
   // Profile General
   useEffect(() => {
-    if (router.isReady) {
-      if (userMe && userMe.results) {
-        setProfile(userMe.results[0]);
-        setProfileBP(userMe.results);
-        setProfileMemb(userMe.results);
-      }
+    if (userMe && userMe.results) {
+      setProfile(userMe.results[0]);
     }
   },[userMe])
 
-  console.info(profileBP);
+  // Profile BP
+  useEffect(() => {
+    let id = 0;
+    id += 1;
+    if (id == 1) {
+      const timeoutId = setTimeout(() => {
+        console.info('profileBP')
+        if (userMe && userMe.results) {
+          setProfileBP(userMe.results);
+        }
+      }, 500);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [userMe])
+
+  // Profile Memb
+  useEffect(() => {
+    if (userMe && userMe.results) {
+      setProfileMemb(userMe.results);
+    }
+  },[userMe])
+
   // Upload Photo 
   const handleUpload = async () => {
     await setUploading(true);
@@ -790,7 +807,6 @@ const Profile: NextPage<Props> = ({ dirs }) => {
           <title>My Profile</title>
         </Head>
         <LayoutAppUsers>
-          {/* <p className="text-gray-700 text-3xl mb-7 font-bold">Profile</p> */}
           <Box className="grid shadow-md rounded-xl bg-white pb-8">
             {/* General */}
             <Box className="m-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
@@ -1527,7 +1543,6 @@ const Profile: NextPage<Props> = ({ dirs }) => {
           <title>My Profile</title>
         </Head>
         <LayoutAppUsersGuest>
-          {/* <p className="text-gray-700 text-3xl mb-7 font-bold">Profile</p> */}
           <Box className="grid shadow-md rounded-xl bg-white pb-8">
             {/* General */}
             <Box className="m-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
@@ -2264,7 +2279,6 @@ const Profile: NextPage<Props> = ({ dirs }) => {
           <title>My Profile</title>
         </Head>
         <LayoutAppUsersManager>
-          {/* <p className="text-gray-700 text-3xl mb-7 font-bold">Profile</p> */}
           <Box className="grid shadow-md rounded-xl bg-white pb-8">
             {/* General */}
             <Box className="m-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
@@ -3001,7 +3015,6 @@ const Profile: NextPage<Props> = ({ dirs }) => {
           <title>My Profile</title>
         </Head>
         <LayoutAppUsersOB>
-          {/* <p className="text-gray-700 text-3xl mb-7 font-bold">Profile</p> */}
           <Box className="grid shadow-md rounded-xl bg-white pb-8">
             {/* General */}
             <Box className="m-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
@@ -3738,7 +3751,6 @@ const Profile: NextPage<Props> = ({ dirs }) => {
           <title>My Profile</title>
         </Head>
         <LayoutAppUsersStaff>
-          {/* <p className="text-gray-700 text-3xl mb-7 font-bold">Profile</p> */}
           <Box className="grid shadow-md rounded-xl bg-white pb-8">
             {/* General */}
             <Box className="m-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
