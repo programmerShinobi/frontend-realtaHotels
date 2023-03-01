@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { useState, useEffect, Fragment } from "react";
 import {
   Bars3CenterLeftIcon,
   PencilIcon,
@@ -25,6 +25,28 @@ import Link from "next/link";
 import styles from '../../../../styles/TopBarProfile.module.css';
 
 export default function HeaderAppUsers({ showNav, setShowNav }: any) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  function handleResize() {
+    if (innerWidth <= 640) {
+      setShowNav(false);
+      setIsMobile(true);
+    } else {
+      setShowNav(true);
+      setIsMobile(false);
+    }
+  }
+
+  useEffect(() => {
+    if (typeof window != undefined) {
+      addEventListener("resize", handleResize);
+    }
+
+    return () => {
+      removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const router = useRouter();
   const userFullName: any = localStorage.getItem('userFullName');
   const roleId: any = localStorage.getItem('roleId');
@@ -81,7 +103,7 @@ export default function HeaderAppUsers({ showNav, setShowNav }: any) {
   };
 
   const handleEditProfile = () => {
-    router.push('/admin/users/profile');
+    router.push('/app/users/profile');
   };
 
   return (
@@ -207,7 +229,7 @@ export default function HeaderAppUsers({ showNav, setShowNav }: any) {
         className={`fixed w-full h-16 pb-4 flex justify-between items-center transition-all duration-[400ms] ${showNav ? "pl-56" : ""
           }`}
       >
-        <div className="pl-4 mt-4 md:pl-16">
+        <div className={`mt-4 ${isMobile ? "pl-4" : "md:pl-4"} `}>
           <div className="card bg-white rounded-md shadow-xl" >
           <Bars3CenterLeftIcon
             className="h-8 w-8 text-gray-700 cursor-pointer"
