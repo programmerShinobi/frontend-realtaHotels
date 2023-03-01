@@ -444,7 +444,11 @@ const Profile: NextPage<Props> = ({ dirs }) => {
         }
         return accumulator;
       }, []);
-      setBonusPoints(reducedBonusPoints);
+      if (!reducedBonusPoints[0].key) {
+        setBonusPoints([]);
+      } else {
+        setBonusPoints(reducedBonusPoints);
+      }
     }
   }, [profileBP]);
   interface DataTypeBonusPoints {
@@ -473,7 +477,11 @@ const Profile: NextPage<Props> = ({ dirs }) => {
         }
         return accumulator;
       }, []);
-      setMembers(reducedMembers);
+      if (!reducedMembers[0].key) {
+        setMembers([]);
+      } else {
+        setMembers(reducedMembers);
+      }
     }
   }, [profileMemb]);
   interface DataTypeMembers {
