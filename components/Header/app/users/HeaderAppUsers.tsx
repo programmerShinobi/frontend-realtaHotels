@@ -121,7 +121,7 @@ export default function HeaderAppUsers({ showNav, setShowNav }: any) {
               </picture>
             </div>
           </div>
-          <div className="flex items-center pr-4 md:pr-8">
+          <div className="flex items-center pr-8 md:pr-8">
             <Menu as="div" className="relative inline-block text-left">
               <div>
                 <Menu.Button className="inline-flex w-full justify-center items-center">
@@ -132,7 +132,7 @@ export default function HeaderAppUsers({ showNav, setShowNav }: any) {
                       alt="profile picture"
                     />
                   </picture>
-                  <span className="hidden md:block font-medium text-orange-900">
+                  <span className="hidden md:block font-medium text-orange-900 pr-2">
                     {myName+" | "+myRole}
                   </span>
                   <ChevronDownIcon className="ml-2 h-4 w-4 text-orange-900" />
