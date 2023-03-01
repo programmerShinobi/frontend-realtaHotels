@@ -33,8 +33,8 @@ export default function Header({ showNav, setShowNav }: any) {
 
   return (
     <div>
-      <div className="bg-white shadow-lg">
-        <div className="fixed text-orange-900 hover:bg-orange-100 bg-orange-100 hover:text-orange-500 w-full h-16 mb-16 flex justify-between items-center transition-all duration-[400ms]">
+      <div className="bg-white">
+        <div className="shadow-lg fixed text-orange-900 hover:bg-orange-100 bg-orange-100 hover:text-orange-500 w-full h-16 mb-16 flex justify-between items-center transition-all duration-[400ms]">
           <div className="pl-8">
             <div className="flex justify-center mt-6 mb-5">
               <picture>
