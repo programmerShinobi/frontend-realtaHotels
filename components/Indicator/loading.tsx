@@ -1,9 +1,9 @@
-import React from 'react';
-import NProgress from 'nprogress';
-import { useRouter } from 'next/router';
-import { Backdrop, CircularProgress } from '@mui/material';
+import React from "react";
+import NProgress from "nprogress";
+import { useRouter } from "next/router";
+import { Backdrop, CircularProgress } from "@mui/material";
 
-const LoadingIndicator: React.FC = () => {
+const ComponentsIndicatorLoading: React.FC = () => {
   const router = useRouter();
   const [isMounted, setIsMounted] = React.useState(false);
 
@@ -44,4 +44,4 @@ const LoadingIndicator: React.FC = () => {
   );
 };
 
-export default LoadingIndicator;
+export default ComponentsIndicatorLoading;

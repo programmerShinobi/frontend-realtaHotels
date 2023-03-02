@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react';
-import { toast } from 'react-toastify';
+import React, { useEffect } from "react";
+import { toast } from "react-toastify";
 
-interface ToastIndicatorProps {
+interface ToastProps {
   status: string;
   message: string;
 }
 
-export default function ToastIndicator(props: ToastIndicatorProps) {
+export default function ComponentsIndicatorToast(props: ToastProps) {
     if (props.status === 'success') {
       toast.success(props.message, {
         position: 'bottom-right',

@@ -4,7 +4,7 @@ import '@/styles/globals.css'
 import type { AppProps } from 'next/app';
 import { Provider } from 'react-redux';
 import store from "@/redux/Store";
-import LoadingIndicator from "@/components/Indicator/LoadingIndicator";
+import LoadingIndicator from "@/components/Indicator/loading";
 import NProgress from 'nprogress';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

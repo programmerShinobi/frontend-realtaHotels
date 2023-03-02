@@ -1,6 +1,6 @@
-import styles from '../../../styles/LayoutSignUpEmployee.module.css';
+import styles from '@/styles/LayoutSignUpEmployee.module.css';
 
-export default function LayoutSignUpEmployee({ children }:any) {
+export default function ComponentsLayoutUsersSignUpEmployee({ children }:any) {
   return (
     <>
       <div className="bgLayout">

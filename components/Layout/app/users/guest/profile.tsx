@@ -1,13 +1,13 @@
 import { useState, useEffect, Fragment } from "react";
-import HeaderAppUsers from '../../../../Header/app/users/HeaderAppUsers';
-import SidebarAppUsers from "../../../../Sidebar/app/users/SidebarAppUsers";
 import { Transition } from "@headlessui/react";
 import { useRouter } from "next/router";
 import Custom401 from "@/pages/401";
-import WithAuth from "../../../../Private/withAuth";
-import LoadingIndicator from "../../../../Indicator/LoadingIndicator";
+import LoadingIndicator from "@/components/Indicator/loading";
+import ComponentsPrivateWithAuth from "@/components/Private/withAuth";
+import ComponentsHeaderAppUsersProfile from "@/components/Header/app/users/profile";
+import ComponentsSidebarAppUsersProfile from "@/components/Sidebar/app/users/profile";
 
-const LayoutAppUsersStaff = ({ children }:any) => {
+const ComponentsLayoutAppUsersGuestProfile = ({ children }:any) => {
   const [showNav, setShowNav] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -34,7 +34,7 @@ const LayoutAppUsersStaff = ({ children }:any) => {
   const router = useRouter();
 
   const roleId: any = localStorage.getItem("roleId");
-  if (roleId && roleId != 5) {
+  if (roleId && roleId != 1) {
     router.back();
     return Custom401();
   } else if (!roleId) {
@@ -43,7 +43,7 @@ const LayoutAppUsersStaff = ({ children }:any) => {
 
   return (
     <>
-      <HeaderAppUsers showNav={showNav} setShowNav={setShowNav} />
+      <ComponentsHeaderAppUsersProfile showNav={showNav} setShowNav={setShowNav} />
       <Transition
         as={Fragment}
         show={showNav}
@@ -54,7 +54,7 @@ const LayoutAppUsersStaff = ({ children }:any) => {
         leaveFrom="translate-x-0"
         leaveTo="-translate-x-full"
       >
-        <SidebarAppUsers showNav={showNav}/>
+        <ComponentsSidebarAppUsersProfile showNav={showNav}/>
       </Transition>
       <main
         className={`pt-16 transition-all duration-[400ms] ${showNav && !isMobile ? "pl-56" : ""
@@ -66,4 +66,4 @@ const LayoutAppUsersStaff = ({ children }:any) => {
   );
 }
 
-export default WithAuth(LayoutAppUsersStaff);
+export default ComponentsPrivateWithAuth(ComponentsLayoutAppUsersGuestProfile);

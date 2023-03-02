@@ -20,11 +20,11 @@ import Cookies from "js-cookie";
 import * as React from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import ToastIndicator from "../../../Indicator/ToastIndicator";
+import ToastIndicator from "@/components/Indicator/toast";
 import Link from "next/link";
-import styles from '../../../../styles/TopBarProfile.module.css';
+import styles from '@/styles/TopBarProfile.module.css';
 
-export default function HeaderAppUsers({ showNav, setShowNav }: any) {
+export default function ComponentsHeaderAppUsersProfile({ showNav, setShowNav }: any) {
   const [isMobile, setIsMobile] = useState(false);
 
   function handleResize() {
@@ -89,7 +89,7 @@ export default function HeaderAppUsers({ showNav, setShowNav }: any) {
   const dispatch:any = useDispatch();
   
   const handleLogout = async () => {
-    await router.push('/users/login');
+    await router.push('/users/signin');
     await dispatch(doLogin());
     await localStorage.removeItem('token');
     await localStorage.removeItem('roleId');

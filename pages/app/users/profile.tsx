@@ -1,47 +1,45 @@
-import { GetServerSideProps, NextPage } from "next";
-import React, { useState, useEffect, Fragment, useRef } from 'react'
+import Head from "next/head";
 import axios from "axios";
 import fs from "fs/promises";
 import path from "path";
-import { useDispatch, useSelector } from "react-redux";
-import LayoutAppUsers from "@/components/Layout/app/users/admin/LayoutAppUsersAdmin";
-import { doChangePassword, doUpdatePhotoUsers, doUpdateUsers, doUserRequest } from "@/redux/Actions/Users/reduceActions";
-import { Box, FormControl, IconButton, InputAdornment, InputLabel, MenuItem, Select, Typography } from "@mui/material"
-import { Dialog, Transition } from '@headlessui/react'
-import * as yup from "yup";
-import TextField from '@mui/material/TextField';
-import { Form, Formik } from 'formik';
-import styles from '../../../styles/ContentProfile.module.css';
-import RefreshIcon from '@mui/icons-material/Refresh';
-import SaveIcon from '@mui/icons-material/Save';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import Visibility from '@mui/icons-material/Visibility';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import CloudSyncIcon from '@mui/icons-material/CloudSync';
-import EditIcon from '@mui/icons-material/Edit';
-import RotateLeftIcon from '@mui/icons-material/RotateLeft';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import { Form, Formik } from "formik";
 import moment from "moment";
+import * as yup from "yup";
 import { useRouter } from "next/router";
+import { GetServerSideProps, NextPage } from "next";
+import React, { useState, useEffect, Fragment, useRef } from 'react'
+import Highlighter from "react-highlight-words";
+import ComponentsIndicatorToast from "@/components/Indicator/toast";
+import ComponentsLayoutAppUsersAdminProfile from "@/components/Layout/app/users/admin/profile";
+import ComponentsLayoutAppUsersGuestProfile from "@/components/Layout/app/users/guest/profile";
+import ComponentsLayoutAppUsersManagerProfile from "@/components/Layout/app/users/manager/profile";
+import ComponentsLayoutAppUsersOBProfile from "@/components/Layout/app/users/ob/profile";
+import ComponentsLayoutAppUsersStaffProfile from "@/components/Layout/app/users/staff/profile";
+import styles from "@/styles/ContentProfile.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import { doChangePassword, doUpdatePhotoUsers, doUpdateUsers, doUserRequest } from "@/redux/Actions/Users/reduceActions";
+import { Dialog, Transition } from "@headlessui/react"
+import { Box, FormControl, IconButton, InputAdornment, InputLabel, MenuItem, Select, Typography } from "@mui/material"
+import TextField from "@mui/material/TextField";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import SaveIcon from "@mui/icons-material/Save";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import Visibility from "@mui/icons-material/Visibility";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import CloudSyncIcon from "@mui/icons-material/CloudSync";
+import EditIcon from "@mui/icons-material/Edit";
+import RotateLeftIcon from "@mui/icons-material/RotateLeft";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { InputRef, Tabs, Tag, Button, Input, Space, Table } from "antd";
-import { SearchOutlined } from '@ant-design/icons';
-import type { ColumnsType, ColumnType } from 'antd/es/table';
-import type { FilterConfirmProps } from 'antd/es/table/interface';
-import Highlighter from 'react-highlight-words';
-import ToastIndicator from "../../../components/Indicator/ToastIndicator";
-import Head from "next/head";
-import LayoutAppUsersGuest from "@/components/Layout/app/users/guest/LayoutAppUsersGuest";
-import LayoutAppUsersManager from "@/components/Layout/app/users/manager/LayoutAppUsersManager";
-import LayoutAppUsersOB from "@/components/Layout/app/users/ob/LayoutAppUsersOB";
-import LayoutAppUsersStaff from "@/components/Layout/app/users/staff/LayoutAppUsersStaff";
-import { set } from "lodash";
-import FormItemLabel from "antd/es/form/FormItemLabel";
+import { SearchOutlined } from "@ant-design/icons";
+import type { ColumnsType, ColumnType } from "antd/es/table";
+import type { FilterConfirmProps } from "antd/es/table/interface";
 
 interface Props {
   dirs: string[];
 }
 
-const Profile: NextPage<Props> = ({ dirs }) => {
+const PagesAppUsersProfile: NextPage<Props> = ({ dirs }) => {
   const [selectPhoto, setSelectPhoto] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
@@ -72,8 +70,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     let id = 0;
     id += 1;
     if (id == 1) {
-      const timeoutId = setTimeout(() => {
-        console.info('profileBP')
+      const timeoutId = setTimeout(() => {  
         if (userMe && userMe.results) {
           setProfileBP(userMe.results);
         }
@@ -102,13 +99,13 @@ const Profile: NextPage<Props> = ({ dirs }) => {
       usproId:userId,
       usproPhoto: "Admin_" + selectedFile.name
     }
-    
     setTimeout(async () => {
       await setUploading(false);
-      await dispatch(doUpdatePhotoUsers(userId, isDataUpload));
+      const upload = await dispatch(doUpdatePhotoUsers(userId, isDataUpload));
       await dispatch(doUserRequest(userId));
+      console.info(upload);
       await localStorage.setItem('profilePhotoMe', isDataUpload.usproPhoto);
-      await ToastIndicator({ status: 'success', message: 'You have successfully profile photo updated' });
+      await ComponentsIndicatorToast({ status: 'success', message: 'You have successfully profile photo updated' });
     }, 1000);
   };
 
@@ -291,7 +288,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     setTimeout(() => {
       setIsOpenEdit(false);
       dispatch(doUserRequest(userId));
-      ToastIndicator({status: 'success', message: 'You have successfully general updated'});
+      ComponentsIndicatorToast({status: 'success', message: 'You have successfully general updated'});
       localStorage.setItem('userFullNameNew', values.userFullName);
     }, 500);
     // setSubmitting(false);
@@ -400,7 +397,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     setTimeout(() => {
       setIsOpenEditPassword(false);
       dispatch(doUserRequest(userId));
-      ToastIndicator({status: 'success', message: 'You have successfully security updated'});
+      ComponentsIndicatorToast({status: 'success', message: 'You have successfully security updated'});
     }, 500);
     setSubmitting(false);
   };
@@ -816,6 +813,7 @@ const Profile: NextPage<Props> = ({ dirs }) => {
     const roleId: any = localStorage.getItem("roleId");
     setRole(roleId);
   })
+<<<<<<< Updated upstream
 
   if (role == 4) {
     return (
@@ -3808,9 +3806,119 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                       ) : (
                         <img src={profile.uspro_photo!='null'?"/images/user.png":"/images/" + profile.uspro_photo}/>
                       )}
+=======
+  if (profile&&profileBP&&profileMemb) {
+    if (role == 4) {
+      return (
+        <>
+          <Head>
+            <title>My Profile</title>
+          </Head>
+          <ComponentsLayoutAppUsersAdminProfile>
+            <Box className="grid shadow-md rounded-xl bg-white pb-8">
+              {/* General */}
+              <Box className="m-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                <Typography className={styles.textTitleInProfile}>
+                  General
+                </Typography>
+              </Box>
+              <Box className="pl-8 pb-8 pr-8 text-left font-normal text-orange-900">
+                <Typography className={styles.textLabelInProfile}>
+                  This information will be display, so be careful what you share
+                </Typography>
+              </Box>
+              <Box className="pl-8 pb-8 pr-8 flex items-start">
+                <Box className="w-full md:w-1/4 justify-center ">
+                  <Box className="flex justify-center ">
+                    <label>
+                      <center>
+                        {/* <input
+                          type="file"
+                          hidden
+                          onChange={({ target }) => {
+                            if (target.files) {
+                              const file = target.files[0];
+                              setSelectedImage(URL.createObjectURL(file));
+                              setSelectedFile(file);
+                            }
+                          }}
+                        /> */}
+                        <Input
+                          hidden
+                          type="file"
+                          onChange={handleFileSelect}
+                        />
+                      </center>
+                      <Box className="flex justify-center h-28 w-28 cursor-pointer">
+                        {selectedImage ? (
+                          <img src={selectedImage} alt="" />
+                        ) : (
+                          <img src={profile?profile.uspro_photo=='null'?"/images/user.png":"/images/" + profile.uspro_photo:''}/>
+                        )}
+                      </Box>
+                    </label>
+                  </Box>
+                  {selectedImage&&selectPhoto ? (
+                    <Box className="flex justify-center">
+                      <button
+                        className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                        onClick={handleUpload}
+                        disabled={uploading}
+                        style={{ opacity: uploading ? ".5" : "1" }}>
+                        <p className="normal-case font-normal">{uploading ? <CloudSyncIcon /> : <CloudUploadIcon className="h-5 w-5" />}&nbsp;{"Upload"}</p>
+                      </button>
+                    </Box>
+                  ) : (
+                    <Box className="flex justify-center">
+                      <Button
+                        className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-gray-100 text-center text-gray-400 hover:bg-gray-200 hover:text-gray-600 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75"
+                        disabled={true}
+                        style={{ opacity: uploading ? ".5" : "1" }}>
+                        <p className="normal-case font-normal">{uploading ? <CloudSyncIcon /> : <CloudUploadIcon className="h-5 w-5" />}&nbsp;{"Upload"}</p>
+                        </Button>
+                    </Box>
+                  )}
+                </Box>
+                <Box className="w-full md:w-1/4 pb-9">
+                  <Box className="grid bg-white">
+                    <Box className="max-w-4xl space-y-2 mb-6">
+                      {/* Full Name */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile}>
+                          {
+                            profile.user_full_name ? profile.user_full_name
+                              : <em className="text-gray-300">{"Full Name (None)"}</em>
+                          }
+                        </span>
+                      </div>
+                      {/* Memb. Name */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile}>
+                          {
+                            profile.usme_memb_name === "SILVER" ? "Silver Member"
+                              : profile.usme_memb_name === "GOLD" ? "Gold Member"
+                                : profile.usme_memb_name === "VIP" ? "VIP Member"
+                                  : profile.usme_memb_name === "WIZARD" ? "Wizard Member"
+                                    : <em className="text-gray-300">{"Member (None)"}</em>
+                          }
+                        </span>
+                      </div>
+                      {/* Type Agency */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile}>
+                          {
+                            profile.user_type === "T" ? "Travel Agency"
+                              : profile.user_type === "C" ? "Company Agency"
+                                : profile.user_type === "I" ? "Individual Agency"
+                                  : <em className="text-gray-300">{"Agency (None)"}</em>
+                          }
+                        </span>
+                      </div>
+>>>>>>> Stashed changes
                     </Box>
                   </label>
                 </Box>
+<<<<<<< Updated upstream
                 {selectedImage&&selectPhoto ? (
                   <Box className="flex justify-center">
                     <button
@@ -3820,6 +3928,787 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                       style={{ opacity: uploading ? ".5" : "1" }}>
                       <p className="normal-case font-normal">{uploading ? <CloudSyncIcon /> : <CloudUploadIcon className="h-5 w-5" />}&nbsp;{"Upload"}</p>
                     </button>
+=======
+                <Box className="w-full md:w-1/2">
+                  <Box className="grid bg-white">
+                    <Box className="max-w-4xl space-y-2">
+                      {/* Email */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile}>
+                          {profile.user_email ? (
+                            <span>
+                              {
+                                profile ? profile.user_email
+                                  : ""
+                              } <label className="font-normal text-orange-900"><em>(default)</em></label>
+                            </span>
+                          ) : (
+                            <em className="text-gray-300">{"Email (None)"}</em>
+                          )}
+                        </span>
+                      </div>
+                      {/* Phone Number */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile}>
+                          {
+                            profile.user_phone_number ? (
+                              <span>
+                                {profile.user_phone_number} <label className="font-normal text-orange-900"><em>(active)</em></label>
+                              </span>
+                            ) : (
+                              <em className="text-gray-300">{"Phone (None)"}</em>
+                            )
+                        }
+                        </span>
+                      </div>
+                    </Box>
+                  </Box>
+                  <div className={styles.PTbuttonEditProfile}>
+                    <Box className="grid place-content-end">
+                      <button
+                        className="shadow-lg w-24 py-1 px-1  mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                        onClick={() => handleEdit()}
+                      >
+                        <p className="normal-case font-normal">{<EditIcon className="h-4 w-4 mb-1" />}&nbsp;{"Edit"}</p>
+                      </button>
+                    </Box>
+                  </div>
+                </Box>
+              </Box>
+              {/* Security */}
+              <Box className="pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                <Typography className={styles.textTitleInProfile}>
+                  Security
+                </Typography>
+              </Box>
+              <Box className="pt-8 flex">
+                <Box className="w-full md:w-1/4 pl-8">
+                  <Box className="flex items-stretch">
+                    <div className="text-left font-normal text-orange-900">
+                      <Typography className={styles.textLabelInProfile}>
+                        Change password
+                      </Typography>
+                    </div>
+                  </Box>
+                </Box>
+                <div className="grid w-full md:w-1/4">
+                  <Box className="flex items-end bg-white h-50">
+                    <Input
+                        disabled={true}
+                        className="border w-32 bg-gray-100 text-center text-gray-400 hover:bg-gray-200 hover:text-gray-600 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75"
+                        size="middle"
+                        type="text"
+                        value="**********************"
+                      />
+                  </Box>
+                </div>
+                <div className="grid w-full md:w-1/2 mr-8">
+                  <Box className="place-self-end">
+                    <button
+                      className="shadow-lg w-24 py-1 px-1 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                      onClick={() => handleEditPassword()}
+                    >
+                      <p className="normal-case font-normal">{<EditIcon className="h-4 w-4 mb-1" />}&nbsp;{"Edit"}</p>
+                    </button>
+                  </Box>
+                </div>
+              </Box>
+              {/* Points & Members */}
+              <Box className="mt-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                <Typography className={styles.textTitleInProfile}>
+                  Points & Members
+                </Typography>
+              </Box>
+              <Box className="pl-8 pt-8 pr-8">
+                <Tabs
+                  onChange={onChangeTab}
+                  type="card"
+                  tabBarGutter={8}
+                >
+                  <Tabs.TabPane
+                    tab={
+                      <div
+                        className="font-bold  items-center text-orange-900"
+                      >
+                        Bonus Points
+                      </div>
+                    }
+                    key="1"
+                  >
+                    <Table columns={columnsBonusPoints} dataSource={dataBonusPoints} />
+                  </Tabs.TabPane>
+                  <Tabs.TabPane
+                    tab={
+                      <div
+                        className="font-bold items-center text-orange-900"
+                      >
+                        Members
+                      </div>
+                    }
+                    key="2"
+                  >
+                    <Table columns={columnsMembers} dataSource={dataMembers} />
+                  </Tabs.TabPane>
+                </Tabs>
+              </Box>
+            </Box>
+            <Transition appear show={isOpenEdit} as={Fragment}>
+              <Dialog as="div" className="relative z-10" onClose={closeModalEdit}>
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0"
+                  enterTo="opacity-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <div className="fixed inset-0 bg-black bg-opacity-25" />
+                </Transition.Child>
+                <div className="fixed inset-0 overflow-y-auto">
+                  <div className="flex min-h-full items-center justify-center p-4 text-center">
+                    <Transition.Child
+                      as={Fragment}
+                      enter="ease-out duration-300"
+                      enterFrom="opacity-0 scale-95"
+                      enterTo="opacity-100 scale-100"
+                      leave="ease-in duration-200"
+                      leaveFrom="opacity-100 scale-100"
+                      leaveTo="opacity-0 scale-95"
+                    >
+                      <Dialog.Panel className="grid transform max-h-96 overflow-y-auto rounded-xl bg-white text-left  shadow-xl transition-all">
+                        <Dialog.Title
+                          as="h3"
+                          className="pl-8 pr-8 sticky top-0 flex justify-between font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-900 text-orange-100 hover:bg-orange-800 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75"
+                        >
+                          <Typography className={styles.textTitleInProfileEdit}>
+                            Edit General
+                          </Typography>
+                          <button
+                            onClick={closeModalEdit}
+                            type="button"
+                            className="rounded-md font-bold shadow-md h-fit py-1 px-1  items-end bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                            <HighlightOffIcon width={4} height={4} />
+                          </button>
+                        </Dialog.Title>
+                        <Dialog.Title
+                          as="h3"
+                          className="pl-8 mb-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                        >
+                          <Typography className={styles.textTitleInProfileEdit}>
+                            General
+                          </Typography>
+                        </Dialog.Title>
+                        <Formik
+                          onSubmit={handleFormSubmitEdit}
+                          initialValues={initialValues}
+                          validationSchema={checkoutSchema}
+                        >
+                          {({
+                            values,
+                            errors,
+                            touched,
+                            handleBlur,
+                            handleChange,
+                            handleSubmit,
+                          }) => (
+                            <Form onSubmit={handleSubmit}>
+                              {/* Edit General */}
+                              <Box 
+                                className="pl-8 pr-8 pb-8"
+                                display="grid"
+                                gap="30px"
+                                gridTemplateColumns="repeat(8, minmax(0, 1fr))"
+                              >
+                                <TextField
+                                  hidden
+                                  type='hidden'
+                                  value={values.userId = DataUserEdit.userId}
+                                />
+    
+                                {/* FullName */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type="text"
+                                  label="Full Name"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEdit('userFullName')(event); handleChange(event) }}
+                                  value={values.userFullName ? values.userFullName : values.userFullName = DataUserEdit.userFullName}
+                                  name="userFullName"
+                                  error={!!touched.userFullName && !!errors.userFullName}
+                                  helperText={getHelperText(touched.userFullName, errors.userFullName, "fullName")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* Email */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type="email"
+                                  label="Email"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEdit('userEmail')(event); handleChange(event) }}
+                                  value={values.userEmail ? values.userEmail : values.userEmail = DataUserEdit.userEmail}
+                                  name="userEmail"
+                                  error={!!touched.userEmail && !!errors.userEmail}
+                                  helperText={getHelperText(touched.userEmail, errors.userEmail, "email")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* UserType */}
+                                <FormControl color="warning" size="small" variant="standard"  sx={{ gridColumn: "span 4" }} error={!!touched.userType && !!errors.userType}>
+                                  <InputLabel id="userType" >Type</InputLabel>
+                                  <Select
+                                    placeholder="Select type ..."
+                                    fullWidth
+                                    variant="standard"
+                                    className='form-control'
+                                    name="userType"
+                                    onBlur={handleBlur}
+                                    onChange={(event) => { eventHandlerEdit('userType')(event); handleChange(event) }}
+                                    value={values.userType ? values.userType : values.userType = DataUserEdit.userType}
+                                    
+                                  >
+                                    <MenuItem value=''><em>none</em></MenuItem>
+                                    <MenuItem value='T'>Travel Agent</MenuItem>
+                                    <MenuItem value='C'>Company</MenuItem>
+                                    <MenuItem value='I'>Individual</MenuItem>
+                                  </Select>
+                                </FormControl>
+                                  {!!touched.userType && !!errors.userType && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.userType, errors.userType,"userType")}</span>}
+    
+                                {/* CompanyName */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type="text"
+                                  label="Company Name"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEdit('userCompanyName')(event); handleChange(event) }}
+                                  value={values.userCompanyName ? values.userCompanyName : values.userCompanyName = DataUserEdit.userCompanyName}
+                                  name="userCompanyName"
+                                  error={!!touched.userCompanyName && !!errors.userCompanyName}
+                                  helperText={getHelperText(touched.userCompanyName, errors.userCompanyName, "companyName")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* PhoneNumber */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type="text"
+                                  label="Phone Number"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEdit('userPhoneNumber')(event); handleChange(event) }}
+                                  value={values.userPhoneNumber ? values.userPhoneNumber : values.userPhoneNumber = DataUserEdit.userPhoneNumber}
+                                  name="userPhoneNumber"
+                                  error={!!touched.userPhoneNumber && !!errors.userPhoneNumber}
+                                  helperText={getHelperText(touched.userPhoneNumber, errors.userPhoneNumber, "phone")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* usroRole */}
+                                <FormControl size="small" color="warning" variant="standard" sx={{ gridColumn: "span 4" }} error={!!touched.usroRole && !!errors.usroRole}>
+                                  <InputLabel id="usroRole" >Role</InputLabel>
+                                  <Select
+                                    disabled={false}
+                                    fullWidth
+                                    color="warning"
+                                    variant="standard"
+                                    className="form-control"
+                                    label="Role"
+                                    onBlur={handleBlur}                             
+                                    onChange={(event) => {eventHandlerEdit('usroRole')(event); handleChange(event)}}
+                                    value={values.usroRole?values.usroRole:values.usroRole=DataUserEdit.usroRole}
+                                    name="usroRole"
+                                    error={!!touched.usroRole && !!errors.usroRole}
+                                    // helperText={getHelperText(touched.usroRole, errors.usroRole)}
+                                >
+                                    <MenuItem value=''><em>none</em></MenuItem>
+                                    <MenuItem value={1}>Guest</MenuItem>
+                                    <MenuItem value={2}>Manager</MenuItem>
+                                    <MenuItem value={3}>Office Boy</MenuItem>
+                                    <MenuItem value={4}>Admin</MenuItem>
+                                    <MenuItem value={5}>User</MenuItem>
+                                </Select>
+                                {!!touched.usroRole && !!errors.usroRole && <span className='text-red-600 text-xs pt-1'>{getHelperText(touched.usroRole, errors.usroRole, "usroRole")}</span>}
+                                </FormControl>
+                              </Box>
+                              {/* ---------------------------------------------------- */}
+                              <Dialog.Title
+                                as="h3"
+                                className="pl-8 mb-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                              >
+                                <Typography className={styles.textTitleInProfileEdit}>
+                                  Profile
+                                </Typography>
+                              </Dialog.Title>
+                              {/* Edit Profile */}
+                              <Box 
+                                className="pl-8 pr-8 pb-8"
+                                display="grid"
+                                gap="30px"
+                                gridTemplateColumns="repeat(8, minmax(0, 1fr))"
+                              >
+                              
+                                {/* usproNationalId */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type="text"
+                                  label="National ID"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEdit('usproNationalId')(event); handleChange(event) }}
+                                  value={values.usproNationalId ? values.usproNationalId : values.usproNationalId = DataUserEdit.usproNationalId}
+                                  name="usproNationalId"
+                                  error={!!touched.usproNationalId && !!errors.usproNationalId}
+                                  helperText={getHelperText(touched.usproNationalId, errors.usproNationalId, "nationalID")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* usproBirth */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type="date"
+                                  label="Birth"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEdit('usproBirth')(event); handleChange(event) }}
+                                  value={values.usproBirth ? values.usproBirth : values.usproBirth = DataUserEdit.usproBirth}
+                                  name="usproBirth"
+                                  error={!!touched.usproBirth && !!errors.usproBirth}
+                                  helperText={getHelperText(touched.usproBirth, errors.usproBirth, "usproBirth")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* usproJobTitle */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type="text"
+                                  label="Job Title"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEdit('usproJobTitle')(event); handleChange(event) }}
+                                  value={values.usproJobTitle ? values.usproJobTitle : values.usproJobTitle = DataUserEdit.usproJobTitle}
+                                  name="usproJobTitle"
+                                  error={!!touched.usproJobTitle && !!errors.usproJobTitle}
+                                  helperText={getHelperText(touched.usproJobTitle, errors.usproJobTitle, "jobTitle")}
+                                  sx={{ gridColumn: "span 8" }}
+                                />
+    
+                                {/* usproGender */}
+                                <FormControl color="warning" size="small" variant="standard" sx={{ gridColumn: "span 4" }}>
+                                  <InputLabel id="usproGender">Gender</InputLabel>
+                                  <Select
+                                    size="small"
+                                    fullWidth
+                                    variant="standard"
+                                    label="Gender"
+                                    onBlur={handleBlur}
+                                    onChange={(event) => { eventHandlerEdit('usproGender')(event); handleChange(event) }}
+                                    value={values.usproGender ? values.usproGender : values.usproGender = DataUserEdit.usproGender}
+                                    name="usproGender"
+                                    error={!!touched.usproGender && !!errors.usproGender}
+                                  >
+                                    <MenuItem value=''><em>none</em></MenuItem>
+                                    <MenuItem value='M'>Male</MenuItem>
+                                    <MenuItem value='F'>Female</MenuItem>
+                                  </Select>
+                                  {!!touched.usproGender && !!errors.usproGender && <span className='text-red-600 text-xs pt-1'>{getHelperText(touched.usproGender, errors.usproGender, "usproGender")}</span>}
+                                </FormControl>
+    
+                                {/* usproMaritalStatus */}
+                                <FormControl color="warning" size="small" variant="standard" sx={{ gridColumn: "span 4" }}>
+                                  <InputLabel id="usproMaritalStatus">Marital Status</InputLabel>
+                                  <Select
+                                    size="small"
+                                    fullWidth
+                                    variant="standard"
+                                    label="Marital Status"
+                                    onBlur={handleBlur}
+                                    onChange={(event) => { eventHandlerEdit('usproMaritalStatus')(event); handleChange(event) }}
+                                    value={values.usproMaritalStatus ? values.usproMaritalStatus : values.usproMaritalStatus = DataUserEdit.usproMaritalStatus}
+                                    name="usproMaritalStatus"
+                                    error={!!touched.usproMaritalStatus && !!errors.usproMaritalStatus}
+                                  >
+                                    <MenuItem value=''><em>none</em></MenuItem>
+                                    <MenuItem value='S'>Single</MenuItem>
+                                    <MenuItem value='M'>Married</MenuItem>
+                                  </Select>
+                                  {!!touched.usproMaritalStatus && !!errors.usproMaritalStatus && <span className='text-red-600 text-xs pt-1'>{getHelperText(touched.usproMaritalStatus, errors.usproMaritalStatus, "status")}</span>}
+                                </FormControl>
+    
+                                {/* usproAddr */}
+    
+                              </Box>
+                              <Box className="flex flex-row-reverse pb-8">
+                                <Box className='pr-8'>
+                                  <button
+                                    type="submit"
+                                    className="rounded-md font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                                    <SaveIcon width={4} height={4} />{' Save'}
+                                  </button>
+                                </Box>
+                                <Box className='pr-4'>
+                                  <button
+                                    type="reset"
+                                    className="rounded-md font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                                    <RefreshIcon width={4} height={4} />{' Cancle'}
+                                  </button>
+                                </Box>
+                              </Box>
+                            </Form>
+                          )}
+                        </Formik>
+                      </Dialog.Panel>
+                    </Transition.Child>
+                  </div>
+                </div>
+              </Dialog>
+            </Transition>
+            <Transition appear show={isOpenEditPassword} as={Fragment}>
+              <Dialog as="div" className="relative z-10" onClose={closeModalEditPassword}>
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0"
+                  enterTo="opacity-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <div className="fixed inset-0 bg-black bg-opacity-25" />
+                </Transition.Child>
+                <div className="fixed inset-0 overflow-y-auto">
+                  <div className="flex min-h-full items-center justify-center p-4 text-center">
+                    <Transition.Child
+                      as={Fragment}
+                      enter="ease-out duration-300"
+                      enterFrom="opacity-0 scale-95"
+                      enterTo="opacity-100 scale-100"
+                      leave="ease-in duration-200"
+                      leaveFrom="opacity-100 scale-100"
+                      leaveTo="opacity-0 scale-95"
+                    >
+                      <Dialog.Panel className="w-full max-w-md transform max-h-96 overflow-y-auto rounded-xl bg-white text-left align-middle shadow-xl transition-all">
+                        <Dialog.Title
+                          as="h3"
+                          className="pl-8 pr-8 sticky top-0 flex justify-between font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-900 text-orange-100 hover:bg-orange-800 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75"
+                        >
+                          <Typography className={styles.textTitleInProfileEdit}>
+                            Change Password
+                          </Typography>
+                          <button
+                            onClick={closeModalEditPassword}
+                            type="button"
+                            className="rounded-md font-bold shadow-md h-fit py-1 px-1  items-end bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                            <HighlightOffIcon width={4} height={4} />
+                          </button>
+                        </Dialog.Title>
+                        <br></br>
+                        <Formik
+                          onSubmit={handleFormSubmitEditPassword}
+                          initialValues={initialValuesPassword}
+                          validationSchema={checkoutSchemaPassword}
+                        >
+                          {({
+                            values,
+                            errors,
+                            touched,
+                            handleBlur,
+                            handleChange,
+                            handleSubmit,
+                          }) => (
+                            <Form onSubmit={handleSubmit}>
+                              <Box
+                                className="pl-8 pr-8 pb-8"
+                                display="grid"
+                                gap="30px"
+                                gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+                              >
+                                <TextField
+                                  hidden
+                                  type='hidden'
+                                  value={values.userId = DataUserEdit.userId}
+                                />
+    
+                                {/* uspaCurrentPasswordhash */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type={showCurrentPassword ? 'text' : 'password'}
+                                  InputProps={{
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        <IconButton
+                                          aria-label="toggle password visibility"
+                                          onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                                          onMouseDown={handleMouseDownCurrentPassword}
+                                        >
+                                          {showCurrentPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  label="Current Password"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEditPassword('uspaCurrentPasswordhash')(event); handleChange(event) }}
+                                  value={values.uspaCurrentPasswordhash}
+                                  name="uspaCurrentPasswordhash"
+                                  error={!!touched.uspaCurrentPasswordhash && !!errors.uspaCurrentPasswordhash}
+                                  helperText={getHelperTextPassword(touched.uspaCurrentPasswordhash, errors.uspaCurrentPasswordhash, "currentPassword")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* uspaPasswordhash */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type={showPassword ? 'text' : 'password'}
+                                  InputProps={{
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        <IconButton
+                                          aria-label="toggle password visibility"
+                                          onClick={() => setShowPassword(!showPassword)}
+                                          onMouseDown={handleMouseDownPassword}
+                                        >
+                                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  label="New Password"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEditPassword('uspaPasswordhash')(event); handleChange(event) }}
+                                  value={values.uspaPasswordhash}
+                                  name="uspaPasswordhash"
+                                  error={!!touched.uspaPasswordhash && !!errors.uspaPasswordhash}
+                                  helperText={getHelperTextPassword(touched.uspaPasswordhash, errors.uspaPasswordhash, "password")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+                                
+                                {/* confirmPassword */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type={showConfirmPassword ? 'text' : 'password'}
+                                  InputProps={{
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        <IconButton
+                                          aria-label="toggle password visibility"
+                                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                          onMouseDown={handleMouseDownConfirmPassword}
+                                        >
+                                          {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  label="Re-type Password"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEditPassword('uspaConfirmPasswordhash')(event); handleChange(event) }}
+                                  value={values.uspaConfirmPasswordhash}
+                                  name="uspaConfirmPasswordhash"
+                                  error={!!touched.uspaConfirmPasswordhash && !!errors.uspaConfirmPasswordhash}
+                                  helperText={getHelperTextPassword(touched.uspaConfirmPasswordhash, errors.uspaConfirmPasswordhash, "confirmPassword")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+                              </Box>
+    
+                              <Box className="flex flex-row-reverse pb-8">
+                                <Box className='pr-8'>
+                                  <button
+                                    type="submit"
+                                    className="rounded-md font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                                    <SaveIcon width={4} height={4} />{' Save'}
+                                  </button>
+                                </Box>
+                                <Box className='pr-4'>
+                                  <button
+                                    type="reset"
+                                    className="rounded-md font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                                    <RefreshIcon width={4} height={4} />{' Cancle'}
+                                  </button>
+                                </Box>
+                              </Box>
+                            </Form>
+                          )}
+                        </Formik>
+                      </Dialog.Panel>
+                    </Transition.Child>
+                  </div>
+                </div>
+              </Dialog>
+            </Transition>
+          </ComponentsLayoutAppUsersAdminProfile>
+        </>
+      );
+    } else if (role == 1) {
+      return (
+        <>
+          <Head>
+            <title>My Profile</title>
+          </Head>
+          <ComponentsLayoutAppUsersGuestProfile>
+            <Box className="grid shadow-md rounded-xl bg-white pb-8">
+              {/* General */}
+              <Box className="m-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                <Typography className={styles.textTitleInProfile}>
+                  General
+                </Typography>
+              </Box>
+              <Box className="pl-8 pb-8 pr-8 text-left font-normal text-orange-900">
+                <Typography className={styles.textLabelInProfile}>
+                  This information will be display, so be careful what you share
+                </Typography>
+              </Box>
+              <Box className="pl-8 pb-8 pr-8 flex items-start">
+                <Box className="w-full md:w-1/4 justify-center ">
+                  <Box className="flex justify-center ">
+                    <label>
+                      <center>
+                        {/* <input
+                          type="file"
+                          hidden
+                          onChange={({ target }) => {
+                            if (target.files) {
+                              const file = target.files[0];
+                              setSelectedImage(URL.createObjectURL(file));
+                              setSelectedFile(file);
+                            }
+                          }}
+                        /> */}
+                        <Input
+                          hidden
+                          type="file"
+                          onChange={handleFileSelect}
+                        />
+                      </center>
+                      <Box className="flex justify-center h-28 w-28 cursor-pointer">
+                        {selectedImage ? (
+                          <img src={selectedImage} alt="" />
+                        ) : (
+                          <img src={profile?profile.uspro_photo=='null'?"/images/user.png":"/images/" + profile.uspro_photo:''}/>
+                        )}
+                      </Box>
+                    </label>
+                  </Box>
+                  {selectedImage&&selectPhoto ? (
+                    <Box className="flex justify-center">
+                      <button
+                        className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                        onClick={handleUpload}
+                        disabled={uploading}
+                        style={{ opacity: uploading ? ".5" : "1" }}>
+                        <p className="normal-case font-normal">{uploading ? <CloudSyncIcon /> : <CloudUploadIcon className="h-5 w-5" />}&nbsp;{"Upload"}</p>
+                      </button>
+                    </Box>
+                  ) : (
+                    <Box className="flex justify-center">
+                      <Button
+                        className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-gray-100 text-center text-gray-400 hover:bg-gray-200 hover:text-gray-600 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75"
+                        disabled={true}
+                        style={{ opacity: uploading ? ".5" : "1" }}>
+                        <p className="normal-case font-normal">{uploading ? <CloudSyncIcon /> : <CloudUploadIcon className="h-5 w-5" />}&nbsp;{"Upload"}</p>
+                        </Button>
+                    </Box>
+                  )}
+                </Box>
+                <Box className="w-full md:w-1/4 pb-9">
+                  <Box className="grid bg-white">
+                    <Box className="max-w-4xl space-y-2 mb-6">
+                      {/* Full Name */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile}>
+                          {
+                            profile.user_full_name ? profile.user_full_name
+                              : <em className="text-gray-300">{"Full Name (None)"}</em>
+                          }
+                        </span>
+                      </div>
+                      {/* Memb. Name */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile}>
+                          {
+                            profile.usme_memb_name === "SILVER" ? "Silver Member"
+                              : profile.usme_memb_name === "GOLD" ? "Gold Member"
+                                : profile.usme_memb_name === "VIP" ? "VIP Member"
+                                  : profile.usme_memb_name === "WIZARD" ? "Wizard Member"
+                                    : <em className="text-gray-300">{"Member (None)"}</em>
+                          }
+                        </span>
+                      </div>
+                      {/* Type Agency */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile}>
+                          {
+                            profile.user_type === "T" ? "Travel Agency"
+                              : profile.user_type === "C" ? "Company Agency"
+                                : profile.user_type === "I" ? "Individual Agency"
+                                  : <em className="text-gray-300">{"Agency (None)"}</em>
+                          }
+                        </span>
+                      </div>
+                    </Box>
+                  </Box>
+                </Box>
+                <Box className="w-full md:w-1/2">
+                  <Box className="grid bg-white">
+                    <Box className="max-w-4xl space-y-2">
+                      {/* Email */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile}>
+                          {profile.user_email ? (
+                            <span>
+                              {
+                                profile ? profile.user_email
+                                  : ""
+                              } <label className="font-normal text-orange-900"><em>(default)</em></label>
+                            </span>
+                          ) : (
+                            <em className="text-gray-300">{"Email (None)"}</em>
+                          )}
+                        </span>
+                      </div>
+                      {/* Phone Number */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile}>
+                          {
+                            profile.user_phone_number ? (
+                              <span>
+                                {profile.user_phone_number} <label className="font-normal text-orange-900"><em>(active)</em></label>
+                              </span>
+                            ) : (
+                              <em className="text-gray-300">{"Phone (None)"}</em>
+                            )
+                        }
+                        </span>
+                      </div>
+                    </Box>
+>>>>>>> Stashed changes
                   </Box>
                 ) : (
                   <Box className="flex justify-center">
@@ -4491,12 +5380,2443 @@ const Profile: NextPage<Props> = ({ dirs }) => {
                     </Dialog.Panel>
                   </Transition.Child>
                 </div>
+<<<<<<< Updated upstream
               </div>
             </Dialog>
           </Transition>
         </LayoutAppUsersStaff>
       </>
     );
+=======
+              </Dialog>
+            </Transition>
+            <Transition appear show={isOpenEditPassword} as={Fragment}>
+              <Dialog as="div" className="relative z-10" onClose={closeModalEditPassword}>
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0"
+                  enterTo="opacity-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <div className="fixed inset-0 bg-black bg-opacity-25" />
+                </Transition.Child>
+                <div className="fixed inset-0 overflow-y-auto">
+                  <div className="flex min-h-full items-center justify-center p-4 text-center">
+                    <Transition.Child
+                      as={Fragment}
+                      enter="ease-out duration-300"
+                      enterFrom="opacity-0 scale-95"
+                      enterTo="opacity-100 scale-100"
+                      leave="ease-in duration-200"
+                      leaveFrom="opacity-100 scale-100"
+                      leaveTo="opacity-0 scale-95"
+                    >
+                      <Dialog.Panel className="w-full max-w-md transform max-h-96 overflow-y-auto rounded-xl bg-white text-left align-middle shadow-xl transition-all">
+                        <Dialog.Title
+                          as="h3"
+                          className="pl-8 pr-8 sticky top-0 flex justify-between font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-900 text-orange-100 hover:bg-orange-800 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75"
+                        >
+                          <Typography className={styles.textTitleInProfileEdit}>
+                            Change Password
+                          </Typography>
+                          <button
+                            onClick={closeModalEditPassword}
+                            type="button"
+                            className="rounded-md font-bold shadow-md h-fit py-1 px-1  items-end bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                            <HighlightOffIcon width={4} height={4} />
+                          </button>
+                        </Dialog.Title>
+                        <br></br>
+                        <Formik
+                          onSubmit={handleFormSubmitEditPassword}
+                          initialValues={initialValuesPassword}
+                          validationSchema={checkoutSchemaPassword}
+                        >
+                          {({
+                            values,
+                            errors,
+                            touched,
+                            handleBlur,
+                            handleChange,
+                            handleSubmit,
+                          }) => (
+                            <Form onSubmit={handleSubmit}>
+                              <Box
+                                className="pl-8 pr-8 pb-8"
+                                display="grid"
+                                gap="30px"
+                                gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+                              >
+                                <TextField
+                                  hidden
+                                  type='hidden'
+                                  value={values.userId = DataUserEdit.userId}
+                                />
+    
+                                {/* uspaCurrentPasswordhash */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type={showCurrentPassword ? 'text' : 'password'}
+                                  InputProps={{
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        <IconButton
+                                          aria-label="toggle password visibility"
+                                          onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                                          onMouseDown={handleMouseDownCurrentPassword}
+                                        >
+                                          {showCurrentPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  label="Current Password"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEditPassword('uspaCurrentPasswordhash')(event); handleChange(event) }}
+                                  value={values.uspaCurrentPasswordhash}
+                                  name="uspaCurrentPasswordhash"
+                                  error={!!touched.uspaCurrentPasswordhash && !!errors.uspaCurrentPasswordhash}
+                                  helperText={getHelperTextPassword(touched.uspaCurrentPasswordhash, errors.uspaCurrentPasswordhash, "currentPassword")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* uspaPasswordhash */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type={showPassword ? 'text' : 'password'}
+                                  InputProps={{
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        <IconButton
+                                          aria-label="toggle password visibility"
+                                          onClick={() => setShowPassword(!showPassword)}
+                                          onMouseDown={handleMouseDownPassword}
+                                        >
+                                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  label="New Password"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEditPassword('uspaPasswordhash')(event); handleChange(event) }}
+                                  value={values.uspaPasswordhash}
+                                  name="uspaPasswordhash"
+                                  error={!!touched.uspaPasswordhash && !!errors.uspaPasswordhash}
+                                  helperText={getHelperTextPassword(touched.uspaPasswordhash, errors.uspaPasswordhash, "password")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+                                
+                                {/* confirmPassword */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type={showConfirmPassword ? 'text' : 'password'}
+                                  InputProps={{
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        <IconButton
+                                          aria-label="toggle password visibility"
+                                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                          onMouseDown={handleMouseDownConfirmPassword}
+                                        >
+                                          {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  label="Re-type Password"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEditPassword('uspaConfirmPasswordhash')(event); handleChange(event) }}
+                                  value={values.uspaConfirmPasswordhash}
+                                  name="uspaConfirmPasswordhash"
+                                  error={!!touched.uspaConfirmPasswordhash && !!errors.uspaConfirmPasswordhash}
+                                  helperText={getHelperTextPassword(touched.uspaConfirmPasswordhash, errors.uspaConfirmPasswordhash, "confirmPassword")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+                              </Box>
+    
+                              <Box className="flex flex-row-reverse pb-8">
+                                <Box className='pr-8'>
+                                  <button
+                                    type="submit"
+                                    className="rounded-md font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                                    <SaveIcon width={4} height={4} />{' Save'}
+                                  </button>
+                                </Box>
+                                <Box className='pr-4'>
+                                  <button
+                                    type="reset"
+                                    className="rounded-md font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                                    <RefreshIcon width={4} height={4} />{' Cancle'}
+                                  </button>
+                                </Box>
+                              </Box>
+                            </Form>
+                          )}
+                        </Formik>
+                      </Dialog.Panel>
+                    </Transition.Child>
+                  </div>
+                </div>
+              </Dialog>
+            </Transition>
+          </ComponentsLayoutAppUsersGuestProfile>
+        </>
+      );
+    } else if (role == 2) {
+      return (
+        <>
+          <Head>
+            <title>My Profile</title>
+          </Head>
+          <ComponentsLayoutAppUsersManagerProfile>
+            <Box className="grid shadow-md rounded-xl bg-white pb-8">
+              {/* General */}
+              <Box className="m-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                <Typography className={styles.textTitleInProfile}>
+                  General
+                </Typography>
+              </Box>
+              <Box className="pl-8 pb-8 pr-8 text-left font-normal text-orange-900">
+                <Typography className={styles.textLabelInProfile}>
+                  This information will be display, so be careful what you share
+                </Typography>
+              </Box>
+              <Box className="pl-8 pb-8 pr-8 flex items-start">
+                <Box className="w-full md:w-1/4 justify-center ">
+                  <Box className="flex justify-center ">
+                    <label>
+                      <center>
+                        {/* <input
+                          type="file"
+                          hidden
+                          onChange={({ target }) => {
+                            if (target.files) {
+                              const file = target.files[0];
+                              setSelectedImage(URL.createObjectURL(file));
+                              setSelectedFile(file);
+                            }
+                          }}
+                        /> */}
+                        <Input
+                          hidden
+                          type="file"
+                          onChange={handleFileSelect}
+                        />
+                      </center>
+                      <Box className="flex justify-center h-28 w-28 cursor-pointer">
+                        {selectedImage ? (
+                          <img src={selectedImage} alt="" />
+                        ) : (
+                          <img src={profile?profile.uspro_photo=='null'?"/images/user.png":"/images/" + profile.uspro_photo:''}/>
+                        )}
+                      </Box>
+                    </label>
+                  </Box>
+                  {selectedImage&&selectPhoto ? (
+                    <Box className="flex justify-center">
+                      <button
+                        className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                        onClick={handleUpload}
+                        disabled={uploading}
+                        style={{ opacity: uploading ? ".5" : "1" }}>
+                        <p className="normal-case font-normal">{uploading ? <CloudSyncIcon /> : <CloudUploadIcon className="h-5 w-5" />}&nbsp;{"Upload"}</p>
+                      </button>
+                    </Box>
+                  ) : (
+                    <Box className="flex justify-center">
+                      <Button
+                        className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-gray-100 text-center text-gray-400 hover:bg-gray-200 hover:text-gray-600 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75"
+                        disabled={true}
+                        style={{ opacity: uploading ? ".5" : "1" }}>
+                        <p className="normal-case font-normal">{uploading ? <CloudSyncIcon /> : <CloudUploadIcon className="h-5 w-5" />}&nbsp;{"Upload"}</p>
+                        </Button>
+                    </Box>
+                  )}
+                </Box>
+                <Box className="w-full md:w-1/4 pb-9">
+                  <Box className="grid bg-white">
+                    <Box className="max-w-4xl space-y-2 mb-6">
+                      {/* Full Name */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile}>
+                          {
+                            profile.user_full_name ? profile.user_full_name
+                              : <em className="text-gray-300">{"Full Name (None)"}</em>
+                          }
+                        </span>
+                      </div>
+                      {/* Memb. Name */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile}>
+                          {
+                            profile.usme_memb_name === "SILVER" ? "Silver Member"
+                              : profile.usme_memb_name === "GOLD" ? "Gold Member"
+                                : profile.usme_memb_name === "VIP" ? "VIP Member"
+                                  : profile.usme_memb_name === "WIZARD" ? "Wizard Member"
+                                    : <em className="text-gray-300">{"Member (None)"}</em>
+                          }
+                        </span>
+                      </div>
+                      {/* Type Agency */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile}>
+                          {
+                            profile.user_type === "T" ? "Travel Agency"
+                              : profile.user_type === "C" ? "Company Agency"
+                                : profile.user_type === "I" ? "Individual Agency"
+                                  : <em className="text-gray-300">{"Agency (None)"}</em>
+                          }
+                        </span>
+                      </div>
+                    </Box>
+                  </Box>
+                </Box>
+                <Box className="w-full md:w-1/2">
+                  <Box className="grid bg-white">
+                    <Box className="max-w-4xl space-y-2">
+                      {/* Email */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile}>
+                          {profile.user_email ? (
+                            <span>
+                              {
+                                profile ? profile.user_email
+                                  : ""
+                              } <label className="font-normal text-orange-900"><em>(default)</em></label>
+                            </span>
+                          ) : (
+                            <em className="text-gray-300">{"Email (None)"}</em>
+                          )}
+                        </span>
+                      </div>
+                      {/* Phone Number */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile}>
+                          {
+                            profile.user_phone_number ? (
+                              <span>
+                                {profile.user_phone_number} <label className="font-normal text-orange-900"><em>(active)</em></label>
+                              </span>
+                            ) : (
+                              <em className="text-gray-300">{"Phone (None)"}</em>
+                            )
+                        }
+                        </span>
+                      </div>
+                    </Box>
+                  </Box>
+                  <div className={styles.PTbuttonEditProfile}>
+                    <Box className="grid place-content-end">
+                      <button
+                        className="shadow-lg w-24 py-1 px-1  mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                        onClick={() => handleEdit()}
+                      >
+                        <p className="normal-case font-normal">{<EditIcon className="h-4 w-4 mb-1" />}&nbsp;{"Edit"}</p>
+                      </button>
+                    </Box>
+                  </div>
+                </Box>
+              </Box>
+              {/* Security */}
+              <Box className="pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                <Typography className={styles.textTitleInProfile}>
+                  Security
+                </Typography>
+              </Box>
+              <Box className="pt-8 flex">
+                <Box className="w-full md:w-1/4 pl-8">
+                  <Box className="flex items-stretch">
+                    <div className="text-left font-normal text-orange-900">
+                      <Typography className={styles.textLabelInProfile}>
+                        Change password
+                      </Typography>
+                    </div>
+                  </Box>
+                </Box>
+                <div className="grid w-full md:w-1/4">
+                  <Box className="flex items-end bg-white h-50">
+                    <Input
+                        disabled={true}
+                        className="border w-32 bg-gray-100 text-center text-gray-400 hover:bg-gray-200 hover:text-gray-600 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75"
+                        size="middle"
+                        type="text"
+                        value="**********************"
+                      />
+                  </Box>
+                </div>
+                <div className="grid w-full md:w-1/2 mr-8">
+                  <Box className="place-self-end">
+                    <button
+                      className="shadow-lg w-24 py-1 px-1 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                      onClick={() => handleEditPassword()}
+                    >
+                      <p className="normal-case font-normal">{<EditIcon className="h-4 w-4 mb-1" />}&nbsp;{"Edit"}</p>
+                    </button>
+                  </Box>
+                </div>
+              </Box>
+              {/* Points & Members */}
+              <Box className="mt-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                <Typography className={styles.textTitleInProfile}>
+                  Points & Members
+                </Typography>
+              </Box>
+              <Box className="pl-8 pt-8 pr-8">
+                <Tabs
+                  onChange={onChangeTab}
+                  type="card"
+                  tabBarGutter={8}
+                >
+                  <Tabs.TabPane
+                    tab={
+                      <div
+                        className="font-bold  items-center text-orange-900"
+                      >
+                        Bonus Points
+                      </div>
+                    }
+                    key="1"
+                  >
+                    <Table columns={columnsBonusPoints} dataSource={dataBonusPoints} />
+                  </Tabs.TabPane>
+                  <Tabs.TabPane
+                    tab={
+                      <div
+                        className="font-bold items-center text-orange-900"
+                      >
+                        Members
+                      </div>
+                    }
+                    key="2"
+                  >
+                    <Table columns={columnsMembers} dataSource={dataMembers} />
+                  </Tabs.TabPane>
+                </Tabs>
+              </Box>
+            </Box>
+            <Transition appear show={isOpenEdit} as={Fragment}>
+              <Dialog as="div" className="relative z-10" onClose={closeModalEdit}>
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0"
+                  enterTo="opacity-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <div className="fixed inset-0 bg-black bg-opacity-25" />
+                </Transition.Child>
+                <div className="fixed inset-0 overflow-y-auto">
+                  <div className="flex min-h-full items-center justify-center p-4 text-center">
+                    <Transition.Child
+                      as={Fragment}
+                      enter="ease-out duration-300"
+                      enterFrom="opacity-0 scale-95"
+                      enterTo="opacity-100 scale-100"
+                      leave="ease-in duration-200"
+                      leaveFrom="opacity-100 scale-100"
+                      leaveTo="opacity-0 scale-95"
+                    >
+                      <Dialog.Panel className="grid transform max-h-96 overflow-y-auto rounded-xl bg-white text-left  shadow-xl transition-all">
+                        <Dialog.Title
+                          as="h3"
+                          className="pl-8 pr-8 sticky top-0 flex justify-between font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-900 text-orange-100 hover:bg-orange-800 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75"
+                        >
+                          <Typography className={styles.textTitleInProfileEdit}>
+                            Edit General
+                          </Typography>
+                          <button
+                            onClick={closeModalEdit}
+                            type="button"
+                            className="rounded-md font-bold shadow-md h-fit py-1 px-1  items-end bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                            <HighlightOffIcon width={4} height={4} />
+                          </button>
+                        </Dialog.Title>
+                        <Dialog.Title
+                          as="h3"
+                          className="pl-8 mb-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                        >
+                          <Typography className={styles.textTitleInProfileEdit}>
+                            General
+                          </Typography>
+                        </Dialog.Title>
+                        <Formik
+                          onSubmit={handleFormSubmitEdit}
+                          initialValues={initialValues}
+                          validationSchema={checkoutSchema}
+                        >
+                          {({
+                            values,
+                            errors,
+                            touched,
+                            handleBlur,
+                            handleChange,
+                            handleSubmit,
+                          }) => (
+                            <Form onSubmit={handleSubmit}>
+                              {/* Edit General */}
+                              <Box 
+                                className="pl-8 pr-8 pb-8"
+                                display="grid"
+                                gap="30px"
+                                gridTemplateColumns="repeat(8, minmax(0, 1fr))"
+                              >
+                                <TextField
+                                  hidden
+                                  type='hidden'
+                                  value={values.userId = DataUserEdit.userId}
+                                />
+    
+                                {/* FullName */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type="text"
+                                  label="Full Name"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEdit('userFullName')(event); handleChange(event) }}
+                                  value={values.userFullName ? values.userFullName : values.userFullName = DataUserEdit.userFullName}
+                                  name="userFullName"
+                                  error={!!touched.userFullName && !!errors.userFullName}
+                                  helperText={getHelperText(touched.userFullName, errors.userFullName, "fullName")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* Email */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type="email"
+                                  label="Email"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEdit('userEmail')(event); handleChange(event) }}
+                                  value={values.userEmail ? values.userEmail : values.userEmail = DataUserEdit.userEmail}
+                                  name="userEmail"
+                                  error={!!touched.userEmail && !!errors.userEmail}
+                                  helperText={getHelperText(touched.userEmail, errors.userEmail, "email")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* UserType */}
+                                <FormControl color="warning" size="small" variant="standard"  sx={{ gridColumn: "span 4" }} error={!!touched.userType && !!errors.userType}>
+                                  <InputLabel id="userType" >Type</InputLabel>
+                                  <Select
+                                    placeholder="Select type ..."
+                                    fullWidth
+                                    variant="standard"
+                                    className='form-control'
+                                    name="userType"
+                                    onBlur={handleBlur}
+                                    onChange={(event) => { eventHandlerEdit('userType')(event); handleChange(event) }}
+                                    value={values.userType ? values.userType : values.userType = DataUserEdit.userType}
+                                    
+                                  >
+                                    <MenuItem value=''><em>none</em></MenuItem>
+                                    <MenuItem value='T'>Travel Agent</MenuItem>
+                                    <MenuItem value='C'>Company</MenuItem>
+                                    <MenuItem value='I'>Individual</MenuItem>
+                                  </Select>
+                                </FormControl>
+                                  {!!touched.userType && !!errors.userType && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.userType, errors.userType,"userType")}</span>}
+    
+                                {/* CompanyName */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type="text"
+                                  label="Company Name"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEdit('userCompanyName')(event); handleChange(event) }}
+                                  value={values.userCompanyName ? values.userCompanyName : values.userCompanyName = DataUserEdit.userCompanyName}
+                                  name="userCompanyName"
+                                  error={!!touched.userCompanyName && !!errors.userCompanyName}
+                                  helperText={getHelperText(touched.userCompanyName, errors.userCompanyName, "companyName")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* PhoneNumber */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type="text"
+                                  label="Phone Number"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEdit('userPhoneNumber')(event); handleChange(event) }}
+                                  value={values.userPhoneNumber ? values.userPhoneNumber : values.userPhoneNumber = DataUserEdit.userPhoneNumber}
+                                  name="userPhoneNumber"
+                                  error={!!touched.userPhoneNumber && !!errors.userPhoneNumber}
+                                  helperText={getHelperText(touched.userPhoneNumber, errors.userPhoneNumber, "phone")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* usroRole */}
+                                <FormControl size="small" color="warning" variant="standard" sx={{ gridColumn: "span 4" }} error={!!touched.usroRole && !!errors.usroRole}>
+                                  <InputLabel id="usroRole" >Role</InputLabel>
+                                  <Select
+                                    disabled={true}
+                                    fullWidth
+                                    color="warning"
+                                    variant="standard"
+                                    className="form-control"
+                                    label="Role"
+                                    onBlur={handleBlur}                             
+                                    onChange={(event) => {eventHandlerEdit('usroRole')(event); handleChange(event)}}
+                                    value={values.usroRole?values.usroRole:values.usroRole=DataUserEdit.usroRole}
+                                    name="usroRole"
+                                    error={!!touched.usroRole && !!errors.usroRole}
+                                    // helperText={getHelperText(touched.usroRole, errors.usroRole)}
+                                >
+                                    <MenuItem value=''><em>none</em></MenuItem>
+                                    <MenuItem value={1}>Guest</MenuItem>
+                                    <MenuItem value={2}>Manager</MenuItem>
+                                    <MenuItem value={3}>Office Boy</MenuItem>
+                                    <MenuItem value={4}>Admin</MenuItem>
+                                    <MenuItem value={5}>User</MenuItem>
+                                </Select>
+                                {!!touched.usroRole && !!errors.usroRole && <span className='text-red-600 text-xs pt-1'>{getHelperText(touched.usroRole, errors.usroRole, "usroRole")}</span>}
+                                </FormControl>
+                              </Box>
+                              {/* ---------------------------------------------------- */}
+                              <Dialog.Title
+                                as="h3"
+                                className="pl-8 mb-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                              >
+                                <Typography className={styles.textTitleInProfileEdit}>
+                                  Profile
+                                </Typography>
+                              </Dialog.Title>
+                              {/* Edit Profile */}
+                              <Box 
+                                className="pl-8 pr-8 pb-8"
+                                display="grid"
+                                gap="30px"
+                                gridTemplateColumns="repeat(8, minmax(0, 1fr))"
+                              >
+                              
+                                {/* usproNationalId */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type="text"
+                                  label="National ID"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEdit('usproNationalId')(event); handleChange(event) }}
+                                  value={values.usproNationalId ? values.usproNationalId : values.usproNationalId = DataUserEdit.usproNationalId}
+                                  name="usproNationalId"
+                                  error={!!touched.usproNationalId && !!errors.usproNationalId}
+                                  helperText={getHelperText(touched.usproNationalId, errors.usproNationalId, "nationalID")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* usproBirth */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type="date"
+                                  label="Birth"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEdit('usproBirth')(event); handleChange(event) }}
+                                  value={values.usproBirth ? values.usproBirth : values.usproBirth = DataUserEdit.usproBirth}
+                                  name="usproBirth"
+                                  error={!!touched.usproBirth && !!errors.usproBirth}
+                                  helperText={getHelperText(touched.usproBirth, errors.usproBirth, "usproBirth")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* usproJobTitle */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type="text"
+                                  label="Job Title"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEdit('usproJobTitle')(event); handleChange(event) }}
+                                  value={values.usproJobTitle ? values.usproJobTitle : values.usproJobTitle = DataUserEdit.usproJobTitle}
+                                  name="usproJobTitle"
+                                  error={!!touched.usproJobTitle && !!errors.usproJobTitle}
+                                  helperText={getHelperText(touched.usproJobTitle, errors.usproJobTitle, "jobTitle")}
+                                  sx={{ gridColumn: "span 8" }}
+                                />
+    
+                                {/* usproGender */}
+                                <FormControl color="warning" size="small" variant="standard" sx={{ gridColumn: "span 4" }}>
+                                  <InputLabel id="usproGender">Gender</InputLabel>
+                                  <Select
+                                    size="small"
+                                    fullWidth
+                                    variant="standard"
+                                    label="Gender"
+                                    onBlur={handleBlur}
+                                    onChange={(event) => { eventHandlerEdit('usproGender')(event); handleChange(event) }}
+                                    value={values.usproGender ? values.usproGender : values.usproGender = DataUserEdit.usproGender}
+                                    name="usproGender"
+                                    error={!!touched.usproGender && !!errors.usproGender}
+                                  >
+                                    <MenuItem value=''><em>none</em></MenuItem>
+                                    <MenuItem value='M'>Male</MenuItem>
+                                    <MenuItem value='F'>Female</MenuItem>
+                                  </Select>
+                                  {!!touched.usproGender && !!errors.usproGender && <span className='text-red-600 text-xs pt-1'>{getHelperText(touched.usproGender, errors.usproGender, "usproGender")}</span>}
+                                </FormControl>
+    
+                                {/* usproMaritalStatus */}
+                                <FormControl color="warning" size="small" variant="standard" sx={{ gridColumn: "span 4" }}>
+                                  <InputLabel id="usproMaritalStatus">Marital Status</InputLabel>
+                                  <Select
+                                    size="small"
+                                    fullWidth
+                                    variant="standard"
+                                    label="Marital Status"
+                                    onBlur={handleBlur}
+                                    onChange={(event) => { eventHandlerEdit('usproMaritalStatus')(event); handleChange(event) }}
+                                    value={values.usproMaritalStatus ? values.usproMaritalStatus : values.usproMaritalStatus = DataUserEdit.usproMaritalStatus}
+                                    name="usproMaritalStatus"
+                                    error={!!touched.usproMaritalStatus && !!errors.usproMaritalStatus}
+                                  >
+                                    <MenuItem value=''><em>none</em></MenuItem>
+                                    <MenuItem value='S'>Single</MenuItem>
+                                    <MenuItem value='M'>Married</MenuItem>
+                                  </Select>
+                                  {!!touched.usproMaritalStatus && !!errors.usproMaritalStatus && <span className='text-red-600 text-xs pt-1'>{getHelperText(touched.usproMaritalStatus, errors.usproMaritalStatus, "status")}</span>}
+                                </FormControl>
+    
+                                {/* usproAddr */}
+    
+                              </Box>
+                              <Box className="flex flex-row-reverse pb-8">
+                                <Box className='pr-8'>
+                                  <button
+                                    type="submit"
+                                    className="rounded-md font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                                    <SaveIcon width={4} height={4} />{' Save'}
+                                  </button>
+                                </Box>
+                                <Box className='pr-4'>
+                                  <button
+                                    type="reset"
+                                    className="rounded-md font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                                    <RefreshIcon width={4} height={4} />{' Cancle'}
+                                  </button>
+                                </Box>
+                              </Box>
+                            </Form>
+                          )}
+                        </Formik>
+                      </Dialog.Panel>
+                    </Transition.Child>
+                  </div>
+                </div>
+              </Dialog>
+            </Transition>
+            <Transition appear show={isOpenEditPassword} as={Fragment}>
+              <Dialog as="div" className="relative z-10" onClose={closeModalEditPassword}>
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0"
+                  enterTo="opacity-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <div className="fixed inset-0 bg-black bg-opacity-25" />
+                </Transition.Child>
+                <div className="fixed inset-0 overflow-y-auto">
+                  <div className="flex min-h-full items-center justify-center p-4 text-center">
+                    <Transition.Child
+                      as={Fragment}
+                      enter="ease-out duration-300"
+                      enterFrom="opacity-0 scale-95"
+                      enterTo="opacity-100 scale-100"
+                      leave="ease-in duration-200"
+                      leaveFrom="opacity-100 scale-100"
+                      leaveTo="opacity-0 scale-95"
+                    >
+                      <Dialog.Panel className="w-full max-w-md transform max-h-96 overflow-y-auto rounded-xl bg-white text-left align-middle shadow-xl transition-all">
+                        <Dialog.Title
+                          as="h3"
+                          className="pl-8 pr-8 sticky top-0 flex justify-between font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-900 text-orange-100 hover:bg-orange-800 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75"
+                        >
+                          <Typography className={styles.textTitleInProfileEdit}>
+                            Change Password
+                          </Typography>
+                          <button
+                            onClick={closeModalEditPassword}
+                            type="button"
+                            className="rounded-md font-bold shadow-md h-fit py-1 px-1  items-end bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                            <HighlightOffIcon width={4} height={4} />
+                          </button>
+                        </Dialog.Title>
+                        <br></br>
+                        <Formik
+                          onSubmit={handleFormSubmitEditPassword}
+                          initialValues={initialValuesPassword}
+                          validationSchema={checkoutSchemaPassword}
+                        >
+                          {({
+                            values,
+                            errors,
+                            touched,
+                            handleBlur,
+                            handleChange,
+                            handleSubmit,
+                          }) => (
+                            <Form onSubmit={handleSubmit}>
+                              <Box
+                                className="pl-8 pr-8 pb-8"
+                                display="grid"
+                                gap="30px"
+                                gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+                              >
+                                <TextField
+                                  hidden
+                                  type='hidden'
+                                  value={values.userId = DataUserEdit.userId}
+                                />
+    
+                                {/* uspaCurrentPasswordhash */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type={showCurrentPassword ? 'text' : 'password'}
+                                  InputProps={{
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        <IconButton
+                                          aria-label="toggle password visibility"
+                                          onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                                          onMouseDown={handleMouseDownCurrentPassword}
+                                        >
+                                          {showCurrentPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  label="Current Password"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEditPassword('uspaCurrentPasswordhash')(event); handleChange(event) }}
+                                  value={values.uspaCurrentPasswordhash}
+                                  name="uspaCurrentPasswordhash"
+                                  error={!!touched.uspaCurrentPasswordhash && !!errors.uspaCurrentPasswordhash}
+                                  helperText={getHelperTextPassword(touched.uspaCurrentPasswordhash, errors.uspaCurrentPasswordhash, "currentPassword")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* uspaPasswordhash */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type={showPassword ? 'text' : 'password'}
+                                  InputProps={{
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        <IconButton
+                                          aria-label="toggle password visibility"
+                                          onClick={() => setShowPassword(!showPassword)}
+                                          onMouseDown={handleMouseDownPassword}
+                                        >
+                                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  label="New Password"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEditPassword('uspaPasswordhash')(event); handleChange(event) }}
+                                  value={values.uspaPasswordhash}
+                                  name="uspaPasswordhash"
+                                  error={!!touched.uspaPasswordhash && !!errors.uspaPasswordhash}
+                                  helperText={getHelperTextPassword(touched.uspaPasswordhash, errors.uspaPasswordhash, "password")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+                                
+                                {/* confirmPassword */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type={showConfirmPassword ? 'text' : 'password'}
+                                  InputProps={{
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        <IconButton
+                                          aria-label="toggle password visibility"
+                                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                          onMouseDown={handleMouseDownConfirmPassword}
+                                        >
+                                          {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  label="Re-type Password"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEditPassword('uspaConfirmPasswordhash')(event); handleChange(event) }}
+                                  value={values.uspaConfirmPasswordhash}
+                                  name="uspaConfirmPasswordhash"
+                                  error={!!touched.uspaConfirmPasswordhash && !!errors.uspaConfirmPasswordhash}
+                                  helperText={getHelperTextPassword(touched.uspaConfirmPasswordhash, errors.uspaConfirmPasswordhash, "confirmPassword")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+                              </Box>
+    
+                              <Box className="flex flex-row-reverse pb-8">
+                                <Box className='pr-8'>
+                                  <button
+                                    type="submit"
+                                    className="rounded-md font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                                    <SaveIcon width={4} height={4} />{' Save'}
+                                  </button>
+                                </Box>
+                                <Box className='pr-4'>
+                                  <button
+                                    type="reset"
+                                    className="rounded-md font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                                    <RefreshIcon width={4} height={4} />{' Cancle'}
+                                  </button>
+                                </Box>
+                              </Box>
+                            </Form>
+                          )}
+                        </Formik>
+                      </Dialog.Panel>
+                    </Transition.Child>
+                  </div>
+                </div>
+              </Dialog>
+            </Transition>
+          </ComponentsLayoutAppUsersManagerProfile>
+        </>
+      );
+    } else if (role == 3) {
+      return (
+        <>
+          <Head>
+            <title>My Profile</title>
+          </Head>
+          <ComponentsLayoutAppUsersOBProfile>
+            <Box className="grid shadow-md rounded-xl bg-white pb-8">
+              {/* General */}
+              <Box className="m-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                <Typography className={styles.textTitleInProfile}>
+                  General
+                </Typography>
+              </Box>
+              <Box className="pl-8 pb-8 pr-8 text-left font-normal text-orange-900">
+                <Typography className={styles.textLabelInProfile}>
+                  This information will be display, so be careful what you share
+                </Typography>
+              </Box>
+              <Box className="pl-8 pb-8 pr-8 flex items-start">
+                <Box className="w-full md:w-1/4 justify-center ">
+                  <Box className="flex justify-center ">
+                    <label>
+                      <center>
+                        {/* <input
+                          type="file"
+                          hidden
+                          onChange={({ target }) => {
+                            if (target.files) {
+                              const file = target.files[0];
+                              setSelectedImage(URL.createObjectURL(file));
+                              setSelectedFile(file);
+                            }
+                          }}
+                        /> */}
+                        <Input
+                          hidden
+                          type="file"
+                          onChange={handleFileSelect}
+                        />
+                      </center>
+                      <Box className="flex justify-center h-28 w-28 cursor-pointer">
+                        {selectedImage ? (
+                          <img src={selectedImage} alt="" />
+                        ) : (
+                          <img src={profile?profile.uspro_photo=='null'?"/images/user.png":"/images/" + profile.uspro_photo:''}/>
+                        )}
+                      </Box>
+                    </label>
+                  </Box>
+                  {selectedImage&&selectPhoto ? (
+                    <Box className="flex justify-center">
+                      <button
+                        className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                        onClick={handleUpload}
+                        disabled={uploading}
+                        style={{ opacity: uploading ? ".5" : "1" }}>
+                        <p className="normal-case font-normal">{uploading ? <CloudSyncIcon /> : <CloudUploadIcon className="h-5 w-5" />}&nbsp;{"Upload"}</p>
+                      </button>
+                    </Box>
+                  ) : (
+                    <Box className="flex justify-center">
+                      <Button
+                        className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-gray-100 text-center text-gray-400 hover:bg-gray-200 hover:text-gray-600 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75"
+                        disabled={true}
+                        style={{ opacity: uploading ? ".5" : "1" }}>
+                        <p className="normal-case font-normal">{uploading ? <CloudSyncIcon /> : <CloudUploadIcon className="h-5 w-5" />}&nbsp;{"Upload"}</p>
+                        </Button>
+                    </Box>
+                  )}
+                </Box>
+                <Box className="w-full md:w-1/4 pb-9">
+                  <Box className="grid bg-white">
+                    <Box className="max-w-4xl space-y-2 mb-6">
+                      {/* Full Name */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile}>
+                          {
+                            profile.user_full_name ? profile.user_full_name
+                              : <em className="text-gray-300">{"Full Name (None)"}</em>
+                          }
+                        </span>
+                      </div>
+                      {/* Memb. Name */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile}>
+                          {
+                            profile.usme_memb_name === "SILVER" ? "Silver Member"
+                              : profile.usme_memb_name === "GOLD" ? "Gold Member"
+                                : profile.usme_memb_name === "VIP" ? "VIP Member"
+                                  : profile.usme_memb_name === "WIZARD" ? "Wizard Member"
+                                    : <em className="text-gray-300">{"Member (None)"}</em>
+                          }
+                        </span>
+                      </div>
+                      {/* Type Agency */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile}>
+                          {
+                            profile.user_type === "T" ? "Travel Agency"
+                              : profile.user_type === "C" ? "Company Agency"
+                                : profile.user_type === "I" ? "Individual Agency"
+                                  : <em className="text-gray-300">{"Agency (None)"}</em>
+                          }
+                        </span>
+                      </div>
+                    </Box>
+                  </Box>
+                </Box>
+                <Box className="w-full md:w-1/2">
+                  <Box className="grid bg-white">
+                    <Box className="max-w-4xl space-y-2">
+                      {/* Email */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile}>
+                          {profile.user_email ? (
+                            <span>
+                              {
+                                profile ? profile.user_email
+                                  : ""
+                              } <label className="font-normal text-orange-900"><em>(default)</em></label>
+                            </span>
+                          ) : (
+                            <em className="text-gray-300">{"Email (None)"}</em>
+                          )}
+                        </span>
+                      </div>
+                      {/* Phone Number */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile}>
+                          {
+                            profile.user_phone_number ? (
+                              <span>
+                                {profile.user_phone_number} <label className="font-normal text-orange-900"><em>(active)</em></label>
+                              </span>
+                            ) : (
+                              <em className="text-gray-300">{"Phone (None)"}</em>
+                            )
+                        }
+                        </span>
+                      </div>
+                    </Box>
+                  </Box>
+                  <div className={styles.PTbuttonEditProfile}>
+                    <Box className="grid place-content-end">
+                      <button
+                        className="shadow-lg w-24 py-1 px-1  mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                        onClick={() => handleEdit()}
+                      >
+                        <p className="normal-case font-normal">{<EditIcon className="h-4 w-4 mb-1" />}&nbsp;{"Edit"}</p>
+                      </button>
+                    </Box>
+                  </div>
+                </Box>
+              </Box>
+              {/* Security */}
+              <Box className="pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                <Typography className={styles.textTitleInProfile}>
+                  Security
+                </Typography>
+              </Box>
+              <Box className="pt-8 flex">
+                <Box className="w-full md:w-1/4 pl-8">
+                  <Box className="flex items-stretch">
+                    <div className="text-left font-normal text-orange-900">
+                      <Typography className={styles.textLabelInProfile}>
+                        Change password
+                      </Typography>
+                    </div>
+                  </Box>
+                </Box>
+                <div className="grid w-full md:w-1/4">
+                  <Box className="flex items-end bg-white h-50">
+                    <Input
+                        disabled={true}
+                        className="border w-32 bg-gray-100 text-center text-gray-400 hover:bg-gray-200 hover:text-gray-600 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75"
+                        size="middle"
+                        type="text"
+                        value="**********************"
+                      />
+                  </Box>
+                </div>
+                <div className="grid w-full md:w-1/2 mr-8">
+                  <Box className="place-self-end">
+                    <button
+                      className="shadow-lg w-24 py-1 px-1 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                      onClick={() => handleEditPassword()}
+                    >
+                      <p className="normal-case font-normal">{<EditIcon className="h-4 w-4 mb-1" />}&nbsp;{"Edit"}</p>
+                    </button>
+                  </Box>
+                </div>
+              </Box>
+              {/* Points & Members */}
+              <Box className="mt-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                <Typography className={styles.textTitleInProfile}>
+                  Points & Members
+                </Typography>
+              </Box>
+              <Box className="pl-8 pt-8 pr-8">
+                <Tabs
+                  onChange={onChangeTab}
+                  type="card"
+                  tabBarGutter={8}
+                >
+                  <Tabs.TabPane
+                    tab={
+                      <div
+                        className="font-bold  items-center text-orange-900"
+                      >
+                        Bonus Points
+                      </div>
+                    }
+                    key="1"
+                  >
+                    <Table columns={columnsBonusPoints} dataSource={dataBonusPoints} />
+                  </Tabs.TabPane>
+                  <Tabs.TabPane
+                    tab={
+                      <div
+                        className="font-bold items-center text-orange-900"
+                      >
+                        Members
+                      </div>
+                    }
+                    key="2"
+                  >
+                    <Table columns={columnsMembers} dataSource={dataMembers} />
+                  </Tabs.TabPane>
+                </Tabs>
+              </Box>
+            </Box>
+            <Transition appear show={isOpenEdit} as={Fragment}>
+              <Dialog as="div" className="relative z-10" onClose={closeModalEdit}>
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0"
+                  enterTo="opacity-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <div className="fixed inset-0 bg-black bg-opacity-25" />
+                </Transition.Child>
+                <div className="fixed inset-0 overflow-y-auto">
+                  <div className="flex min-h-full items-center justify-center p-4 text-center">
+                    <Transition.Child
+                      as={Fragment}
+                      enter="ease-out duration-300"
+                      enterFrom="opacity-0 scale-95"
+                      enterTo="opacity-100 scale-100"
+                      leave="ease-in duration-200"
+                      leaveFrom="opacity-100 scale-100"
+                      leaveTo="opacity-0 scale-95"
+                    >
+                      <Dialog.Panel className="grid transform max-h-96 overflow-y-auto rounded-xl bg-white text-left  shadow-xl transition-all">
+                        <Dialog.Title
+                          as="h3"
+                          className="pl-8 pr-8 sticky top-0 flex justify-between font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-900 text-orange-100 hover:bg-orange-800 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75"
+                        >
+                          <Typography className={styles.textTitleInProfileEdit}>
+                            Edit General
+                          </Typography>
+                          <button
+                            onClick={closeModalEdit}
+                            type="button"
+                            className="rounded-md font-bold shadow-md h-fit py-1 px-1  items-end bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                            <HighlightOffIcon width={4} height={4} />
+                          </button>
+                        </Dialog.Title>
+                        <Dialog.Title
+                          as="h3"
+                          className="pl-8 mb-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                        >
+                          <Typography className={styles.textTitleInProfileEdit}>
+                            General
+                          </Typography>
+                        </Dialog.Title>
+                        <Formik
+                          onSubmit={handleFormSubmitEdit}
+                          initialValues={initialValues}
+                          validationSchema={checkoutSchema}
+                        >
+                          {({
+                            values,
+                            errors,
+                            touched,
+                            handleBlur,
+                            handleChange,
+                            handleSubmit,
+                          }) => (
+                            <Form onSubmit={handleSubmit}>
+                              {/* Edit General */}
+                              <Box 
+                                className="pl-8 pr-8 pb-8"
+                                display="grid"
+                                gap="30px"
+                                gridTemplateColumns="repeat(8, minmax(0, 1fr))"
+                              >
+                                <TextField
+                                  hidden
+                                  type='hidden'
+                                  value={values.userId = DataUserEdit.userId}
+                                />
+    
+                                {/* FullName */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type="text"
+                                  label="Full Name"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEdit('userFullName')(event); handleChange(event) }}
+                                  value={values.userFullName ? values.userFullName : values.userFullName = DataUserEdit.userFullName}
+                                  name="userFullName"
+                                  error={!!touched.userFullName && !!errors.userFullName}
+                                  helperText={getHelperText(touched.userFullName, errors.userFullName, "fullName")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* Email */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type="email"
+                                  label="Email"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEdit('userEmail')(event); handleChange(event) }}
+                                  value={values.userEmail ? values.userEmail : values.userEmail = DataUserEdit.userEmail}
+                                  name="userEmail"
+                                  error={!!touched.userEmail && !!errors.userEmail}
+                                  helperText={getHelperText(touched.userEmail, errors.userEmail, "email")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* UserType */}
+                                <FormControl color="warning" size="small" variant="standard"  sx={{ gridColumn: "span 4" }} error={!!touched.userType && !!errors.userType}>
+                                  <InputLabel id="userType" >Type</InputLabel>
+                                  <Select
+                                    placeholder="Select type ..."
+                                    fullWidth
+                                    variant="standard"
+                                    className='form-control'
+                                    name="userType"
+                                    onBlur={handleBlur}
+                                    onChange={(event) => { eventHandlerEdit('userType')(event); handleChange(event) }}
+                                    value={values.userType ? values.userType : values.userType = DataUserEdit.userType}
+                                    
+                                  >
+                                    <MenuItem value=''><em>none</em></MenuItem>
+                                    <MenuItem value='T'>Travel Agent</MenuItem>
+                                    <MenuItem value='C'>Company</MenuItem>
+                                    <MenuItem value='I'>Individual</MenuItem>
+                                  </Select>
+                                </FormControl>
+                                  {!!touched.userType && !!errors.userType && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.userType, errors.userType,"userType")}</span>}
+    
+                                {/* CompanyName */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type="text"
+                                  label="Company Name"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEdit('userCompanyName')(event); handleChange(event) }}
+                                  value={values.userCompanyName ? values.userCompanyName : values.userCompanyName = DataUserEdit.userCompanyName}
+                                  name="userCompanyName"
+                                  error={!!touched.userCompanyName && !!errors.userCompanyName}
+                                  helperText={getHelperText(touched.userCompanyName, errors.userCompanyName, "companyName")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* PhoneNumber */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type="text"
+                                  label="Phone Number"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEdit('userPhoneNumber')(event); handleChange(event) }}
+                                  value={values.userPhoneNumber ? values.userPhoneNumber : values.userPhoneNumber = DataUserEdit.userPhoneNumber}
+                                  name="userPhoneNumber"
+                                  error={!!touched.userPhoneNumber && !!errors.userPhoneNumber}
+                                  helperText={getHelperText(touched.userPhoneNumber, errors.userPhoneNumber, "phone")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* usroRole */}
+                                <FormControl size="small" color="warning" variant="standard" sx={{ gridColumn: "span 4" }} error={!!touched.usroRole && !!errors.usroRole}>
+                                  <InputLabel id="usroRole" >Role</InputLabel>
+                                  <Select
+                                    disabled={true}
+                                    fullWidth
+                                    color="warning"
+                                    variant="standard"
+                                    className="form-control"
+                                    label="Role"
+                                    onBlur={handleBlur}                             
+                                    onChange={(event) => {eventHandlerEdit('usroRole')(event); handleChange(event)}}
+                                    value={values.usroRole?values.usroRole:values.usroRole=DataUserEdit.usroRole}
+                                    name="usroRole"
+                                    error={!!touched.usroRole && !!errors.usroRole}
+                                    // helperText={getHelperText(touched.usroRole, errors.usroRole)}
+                                >
+                                    <MenuItem value=''><em>none</em></MenuItem>
+                                    <MenuItem value={1}>Guest</MenuItem>
+                                    <MenuItem value={2}>Manager</MenuItem>
+                                    <MenuItem value={3}>Office Boy</MenuItem>
+                                    <MenuItem value={4}>Admin</MenuItem>
+                                    <MenuItem value={5}>User</MenuItem>
+                                </Select>
+                                {!!touched.usroRole && !!errors.usroRole && <span className='text-red-600 text-xs pt-1'>{getHelperText(touched.usroRole, errors.usroRole, "usroRole")}</span>}
+                                </FormControl>
+                              </Box>
+                              {/* ---------------------------------------------------- */}
+                              <Dialog.Title
+                                as="h3"
+                                className="pl-8 mb-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                              >
+                                <Typography className={styles.textTitleInProfileEdit}>
+                                  Profile
+                                </Typography>
+                              </Dialog.Title>
+                              {/* Edit Profile */}
+                              <Box 
+                                className="pl-8 pr-8 pb-8"
+                                display="grid"
+                                gap="30px"
+                                gridTemplateColumns="repeat(8, minmax(0, 1fr))"
+                              >
+                              
+                                {/* usproNationalId */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type="text"
+                                  label="National ID"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEdit('usproNationalId')(event); handleChange(event) }}
+                                  value={values.usproNationalId ? values.usproNationalId : values.usproNationalId = DataUserEdit.usproNationalId}
+                                  name="usproNationalId"
+                                  error={!!touched.usproNationalId && !!errors.usproNationalId}
+                                  helperText={getHelperText(touched.usproNationalId, errors.usproNationalId, "nationalID")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* usproBirth */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type="date"
+                                  label="Birth"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEdit('usproBirth')(event); handleChange(event) }}
+                                  value={values.usproBirth ? values.usproBirth : values.usproBirth = DataUserEdit.usproBirth}
+                                  name="usproBirth"
+                                  error={!!touched.usproBirth && !!errors.usproBirth}
+                                  helperText={getHelperText(touched.usproBirth, errors.usproBirth, "usproBirth")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* usproJobTitle */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type="text"
+                                  label="Job Title"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEdit('usproJobTitle')(event); handleChange(event) }}
+                                  value={values.usproJobTitle ? values.usproJobTitle : values.usproJobTitle = DataUserEdit.usproJobTitle}
+                                  name="usproJobTitle"
+                                  error={!!touched.usproJobTitle && !!errors.usproJobTitle}
+                                  helperText={getHelperText(touched.usproJobTitle, errors.usproJobTitle, "jobTitle")}
+                                  sx={{ gridColumn: "span 8" }}
+                                />
+    
+                                {/* usproGender */}
+                                <FormControl color="warning" size="small" variant="standard" sx={{ gridColumn: "span 4" }}>
+                                  <InputLabel id="usproGender">Gender</InputLabel>
+                                  <Select
+                                    size="small"
+                                    fullWidth
+                                    variant="standard"
+                                    label="Gender"
+                                    onBlur={handleBlur}
+                                    onChange={(event) => { eventHandlerEdit('usproGender')(event); handleChange(event) }}
+                                    value={values.usproGender ? values.usproGender : values.usproGender = DataUserEdit.usproGender}
+                                    name="usproGender"
+                                    error={!!touched.usproGender && !!errors.usproGender}
+                                  >
+                                    <MenuItem value=''><em>none</em></MenuItem>
+                                    <MenuItem value='M'>Male</MenuItem>
+                                    <MenuItem value='F'>Female</MenuItem>
+                                  </Select>
+                                  {!!touched.usproGender && !!errors.usproGender && <span className='text-red-600 text-xs pt-1'>{getHelperText(touched.usproGender, errors.usproGender, "usproGender")}</span>}
+                                </FormControl>
+    
+                                {/* usproMaritalStatus */}
+                                <FormControl color="warning" size="small" variant="standard" sx={{ gridColumn: "span 4" }}>
+                                  <InputLabel id="usproMaritalStatus">Marital Status</InputLabel>
+                                  <Select
+                                    size="small"
+                                    fullWidth
+                                    variant="standard"
+                                    label="Marital Status"
+                                    onBlur={handleBlur}
+                                    onChange={(event) => { eventHandlerEdit('usproMaritalStatus')(event); handleChange(event) }}
+                                    value={values.usproMaritalStatus ? values.usproMaritalStatus : values.usproMaritalStatus = DataUserEdit.usproMaritalStatus}
+                                    name="usproMaritalStatus"
+                                    error={!!touched.usproMaritalStatus && !!errors.usproMaritalStatus}
+                                  >
+                                    <MenuItem value=''><em>none</em></MenuItem>
+                                    <MenuItem value='S'>Single</MenuItem>
+                                    <MenuItem value='M'>Married</MenuItem>
+                                  </Select>
+                                  {!!touched.usproMaritalStatus && !!errors.usproMaritalStatus && <span className='text-red-600 text-xs pt-1'>{getHelperText(touched.usproMaritalStatus, errors.usproMaritalStatus, "status")}</span>}
+                                </FormControl>
+    
+                                {/* usproAddr */}
+    
+                              </Box>
+                              <Box className="flex flex-row-reverse pb-8">
+                                <Box className='pr-8'>
+                                  <button
+                                    type="submit"
+                                    className="rounded-md font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                                    <SaveIcon width={4} height={4} />{' Save'}
+                                  </button>
+                                </Box>
+                                <Box className='pr-4'>
+                                  <button
+                                    type="reset"
+                                    className="rounded-md font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                                    <RefreshIcon width={4} height={4} />{' Cancle'}
+                                  </button>
+                                </Box>
+                              </Box>
+                            </Form>
+                          )}
+                        </Formik>
+                      </Dialog.Panel>
+                    </Transition.Child>
+                  </div>
+                </div>
+              </Dialog>
+            </Transition>
+            <Transition appear show={isOpenEditPassword} as={Fragment}>
+              <Dialog as="div" className="relative z-10" onClose={closeModalEditPassword}>
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0"
+                  enterTo="opacity-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <div className="fixed inset-0 bg-black bg-opacity-25" />
+                </Transition.Child>
+                <div className="fixed inset-0 overflow-y-auto">
+                  <div className="flex min-h-full items-center justify-center p-4 text-center">
+                    <Transition.Child
+                      as={Fragment}
+                      enter="ease-out duration-300"
+                      enterFrom="opacity-0 scale-95"
+                      enterTo="opacity-100 scale-100"
+                      leave="ease-in duration-200"
+                      leaveFrom="opacity-100 scale-100"
+                      leaveTo="opacity-0 scale-95"
+                    >
+                      <Dialog.Panel className="w-full max-w-md transform max-h-96 overflow-y-auto rounded-xl bg-white text-left align-middle shadow-xl transition-all">
+                        <Dialog.Title
+                          as="h3"
+                          className="pl-8 pr-8 sticky top-0 flex justify-between font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-900 text-orange-100 hover:bg-orange-800 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75"
+                        >
+                          <Typography className={styles.textTitleInProfileEdit}>
+                            Change Password
+                          </Typography>
+                          <button
+                            onClick={closeModalEditPassword}
+                            type="button"
+                            className="rounded-md font-bold shadow-md h-fit py-1 px-1  items-end bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                            <HighlightOffIcon width={4} height={4} />
+                          </button>
+                        </Dialog.Title>
+                        <br></br>
+                        <Formik
+                          onSubmit={handleFormSubmitEditPassword}
+                          initialValues={initialValuesPassword}
+                          validationSchema={checkoutSchemaPassword}
+                        >
+                          {({
+                            values,
+                            errors,
+                            touched,
+                            handleBlur,
+                            handleChange,
+                            handleSubmit,
+                          }) => (
+                            <Form onSubmit={handleSubmit}>
+                              <Box
+                                className="pl-8 pr-8 pb-8"
+                                display="grid"
+                                gap="30px"
+                                gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+                              >
+                                <TextField
+                                  hidden
+                                  type='hidden'
+                                  value={values.userId = DataUserEdit.userId}
+                                />
+    
+                                {/* uspaCurrentPasswordhash */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type={showCurrentPassword ? 'text' : 'password'}
+                                  InputProps={{
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        <IconButton
+                                          aria-label="toggle password visibility"
+                                          onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                                          onMouseDown={handleMouseDownCurrentPassword}
+                                        >
+                                          {showCurrentPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  label="Current Password"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEditPassword('uspaCurrentPasswordhash')(event); handleChange(event) }}
+                                  value={values.uspaCurrentPasswordhash}
+                                  name="uspaCurrentPasswordhash"
+                                  error={!!touched.uspaCurrentPasswordhash && !!errors.uspaCurrentPasswordhash}
+                                  helperText={getHelperTextPassword(touched.uspaCurrentPasswordhash, errors.uspaCurrentPasswordhash, "currentPassword")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* uspaPasswordhash */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type={showPassword ? 'text' : 'password'}
+                                  InputProps={{
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        <IconButton
+                                          aria-label="toggle password visibility"
+                                          onClick={() => setShowPassword(!showPassword)}
+                                          onMouseDown={handleMouseDownPassword}
+                                        >
+                                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  label="New Password"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEditPassword('uspaPasswordhash')(event); handleChange(event) }}
+                                  value={values.uspaPasswordhash}
+                                  name="uspaPasswordhash"
+                                  error={!!touched.uspaPasswordhash && !!errors.uspaPasswordhash}
+                                  helperText={getHelperTextPassword(touched.uspaPasswordhash, errors.uspaPasswordhash, "password")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+                                
+                                {/* confirmPassword */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type={showConfirmPassword ? 'text' : 'password'}
+                                  InputProps={{
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        <IconButton
+                                          aria-label="toggle password visibility"
+                                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                          onMouseDown={handleMouseDownConfirmPassword}
+                                        >
+                                          {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  label="Re-type Password"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEditPassword('uspaConfirmPasswordhash')(event); handleChange(event) }}
+                                  value={values.uspaConfirmPasswordhash}
+                                  name="uspaConfirmPasswordhash"
+                                  error={!!touched.uspaConfirmPasswordhash && !!errors.uspaConfirmPasswordhash}
+                                  helperText={getHelperTextPassword(touched.uspaConfirmPasswordhash, errors.uspaConfirmPasswordhash, "confirmPassword")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+                              </Box>
+    
+                              <Box className="flex flex-row-reverse pb-8">
+                                <Box className='pr-8'>
+                                  <button
+                                    type="submit"
+                                    className="rounded-md font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                                    <SaveIcon width={4} height={4} />{' Save'}
+                                  </button>
+                                </Box>
+                                <Box className='pr-4'>
+                                  <button
+                                    type="reset"
+                                    className="rounded-md font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                                    <RefreshIcon width={4} height={4} />{' Cancle'}
+                                  </button>
+                                </Box>
+                              </Box>
+                            </Form>
+                          )}
+                        </Formik>
+                      </Dialog.Panel>
+                    </Transition.Child>
+                  </div>
+                </div>
+              </Dialog>
+            </Transition>
+          </ComponentsLayoutAppUsersOBProfile>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <Head>
+            <title>My Profile</title>
+          </Head>
+          <ComponentsLayoutAppUsersStaffProfile>
+            <Box className="grid shadow-md rounded-xl bg-white pb-8">
+              {/* General */}
+              <Box className="m-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                <Typography className={styles.textTitleInProfile}>
+                  General
+                </Typography>
+              </Box>
+              <Box className="pl-8 pb-8 pr-8 text-left font-normal text-orange-900">
+                <Typography className={styles.textLabelInProfile}>
+                  This information will be display, so be careful what you share
+                </Typography>
+              </Box>
+              <Box className="pl-8 pb-8 pr-8 flex items-start">
+                <Box className="w-full md:w-1/4 justify-center ">
+                  <Box className="flex justify-center ">
+                    <label>
+                      <center>
+                        {/* <input
+                          type="file"
+                          hidden
+                          onChange={({ target }) => {
+                            if (target.files) {
+                              const file = target.files[0];
+                              setSelectedImage(URL.createObjectURL(file));
+                              setSelectedFile(file);
+                            }
+                          }}
+                        /> */}
+                        <Input
+                          hidden
+                          type="file"
+                          onChange={handleFileSelect}
+                        />
+                      </center>
+                      <Box className="flex justify-center h-28 w-28 cursor-pointer">
+                        {selectedImage ? (
+                          <img src={selectedImage} alt="" />
+                        ) : (
+                          <img src={profile?profile.uspro_photo=='null'?"/images/user.png":"/images/" + profile.uspro_photo:''}/>
+                        )}
+                      </Box>
+                    </label>
+                  </Box>
+                  {selectedImage&&selectPhoto ? (
+                    <Box className="flex justify-center">
+                      <button
+                        className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                        onClick={handleUpload}
+                        disabled={uploading}
+                        style={{ opacity: uploading ? ".5" : "1" }}>
+                        <p className="normal-case font-normal">{uploading ? <CloudSyncIcon /> : <CloudUploadIcon className="h-5 w-5" />}&nbsp;{"Upload"}</p>
+                      </button>
+                    </Box>
+                  ) : (
+                    <Box className="flex justify-center">
+                      <Button
+                        className="shadow-lg w-28 py-1 px-1 mx-auto rounded-md  bg-gray-100 text-center text-gray-400 hover:bg-gray-200 hover:text-gray-600 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75"
+                        disabled={true}
+                        style={{ opacity: uploading ? ".5" : "1" }}>
+                        <p className="normal-case font-normal">{uploading ? <CloudSyncIcon /> : <CloudUploadIcon className="h-5 w-5" />}&nbsp;{"Upload"}</p>
+                      </Button>
+                    </Box>
+                  )}
+                </Box>
+                <Box className="w-full md:w-1/4 pb-9">
+                  <Box className="grid bg-white">
+                    <Box className="max-w-4xl space-y-2 mb-6">
+                      {/* Full Name */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile}>
+                          {
+                            profile.user_full_name ? profile.user_full_name
+                              : <em className="text-gray-300">{"Full Name (None)"}</em>
+                          }
+                        </span>
+                      </div>
+                      {/* Memb. Name */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile}>
+                          {
+                            profile.usme_memb_name === "SILVER" ? "Silver Member"
+                              : profile.usme_memb_name === "GOLD" ? "Gold Member"
+                                : profile.usme_memb_name === "VIP" ? "VIP Member"
+                                  : profile.usme_memb_name === "WIZARD" ? "Wizard Member"
+                                    : <em className="text-gray-300">{"Member (None)"}</em>
+                          }
+                        </span>
+                      </div>
+                      {/* Type Agency */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile}>
+                          {
+                            profile.user_type === "T" ? "Travel Agency"
+                              : profile.user_type === "C" ? "Company Agency"
+                                : profile.user_type === "I" ? "Individual Agency"
+                                  : <em className="text-gray-300">{"Agency (None)"}</em>
+                          }
+                        </span>
+                      </div>
+                    </Box>
+                  </Box>
+                </Box>
+                <Box className="w-full md:w-1/2">
+                  <Box className="grid bg-white">
+                    <Box className="max-w-4xl space-y-2">
+                      {/* Email */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile}>
+                          {profile.user_email ? (
+                            <span>
+                              {
+                                profile ? profile.user_email
+                                  : ""
+                              } <label className="font-normal text-orange-900"><em>(default)</em></label>
+                            </span>
+                          ) : (
+                            <em className="text-gray-300">{"Email (None)"}</em>
+                          )}
+                        </span>
+                      </div>
+                      {/* Phone Number */}
+                      <div className="flex flex-wrap">
+                        <span className={styles.formProfile}>
+                          {
+                            profile.user_phone_number ? (
+                              <span>
+                                {profile.user_phone_number} <label className="font-normal text-orange-900"><em>(active)</em></label>
+                              </span>
+                            ) : (
+                              <em className="text-gray-300">{"Phone (None)"}</em>
+                            )
+                        }
+                        </span>
+                      </div>
+                    </Box>
+                  </Box>
+                  <div className={styles.PTbuttonEditProfile}>
+                    <Box className="grid place-content-end">
+                      <button
+                        className="shadow-lg w-24 py-1 px-1  mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                        onClick={() => handleEdit()}
+                      >
+                        <p className="normal-case font-normal">{<EditIcon className="h-4 w-4 mb-1" />}&nbsp;{"Edit"}</p>
+                      </button>
+                    </Box>
+                  </div>
+                </Box>
+              </Box>
+              {/* Security */}
+              <Box className="pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                <Typography className={styles.textTitleInProfile}>
+                  Security
+                </Typography>
+              </Box>
+              <Box className="pt-8 flex">
+                <Box className="w-full md:w-1/4 pl-8">
+                  <Box className="flex items-stretch">
+                    <div className="text-left font-normal text-orange-900">
+                      <Typography className={styles.textLabelInProfile}>
+                        Change password
+                      </Typography>
+                    </div>
+                  </Box>
+                </Box>
+                <div className="grid w-full md:w-1/4">
+                  <Box className="flex items-end bg-white h-50">
+                    <Input
+                        disabled={true}
+                        className="border w-32 bg-gray-100 text-center text-gray-400 hover:bg-gray-200 hover:text-gray-600 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75"
+                        size="middle"
+                        type="text"
+                        value="**********************"
+                      />
+                  </Box>
+                </div>
+                <div className="grid w-full md:w-1/2 mr-8">
+                  <Box className="place-self-end">
+                    <button
+                      className="shadow-lg w-24 py-1 px-1 mx-auto rounded-md  bg-orange-100 text-center text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                      onClick={() => handleEditPassword()}
+                    >
+                      <p className="normal-case font-normal">{<EditIcon className="h-4 w-4 mb-1" />}&nbsp;{"Edit"}</p>
+                    </button>
+                  </Box>
+                </div>
+              </Box>
+              {/* Points & Members */}
+              <Box className="mt-8 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                <Typography className={styles.textTitleInProfile}>
+                  Points & Members
+                </Typography>
+              </Box>
+              <Box className="pl-8 pt-8 pr-8">
+                <Tabs
+                  onChange={onChangeTab}
+                  type="card"
+                  tabBarGutter={8}
+                >
+                  <Tabs.TabPane
+                    tab={
+                      <div
+                        className="font-bold  items-center text-orange-900"
+                      >
+                        Bonus Points
+                      </div>
+                    }
+                    key="1"
+                  >
+                    <Table columns={columnsBonusPoints} dataSource={dataBonusPoints} />
+                  </Tabs.TabPane>
+                  <Tabs.TabPane
+                    tab={
+                      <div
+                        className="font-bold items-center text-orange-900"
+                      >
+                        Members
+                      </div>
+                    }
+                    key="2"
+                  >
+                    <Table columns={columnsMembers} dataSource={dataMembers} />
+                  </Tabs.TabPane>
+                </Tabs>
+              </Box>
+            </Box>
+            <Transition appear show={isOpenEdit} as={Fragment}>
+              <Dialog as="div" className="relative z-10" onClose={closeModalEdit}>
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0"
+                  enterTo="opacity-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <div className="fixed inset-0 bg-black bg-opacity-25" />
+                </Transition.Child>
+                <div className="fixed inset-0 overflow-y-auto">
+                  <div className="flex min-h-full items-center justify-center p-4 text-center">
+                    <Transition.Child
+                      as={Fragment}
+                      enter="ease-out duration-300"
+                      enterFrom="opacity-0 scale-95"
+                      enterTo="opacity-100 scale-100"
+                      leave="ease-in duration-200"
+                      leaveFrom="opacity-100 scale-100"
+                      leaveTo="opacity-0 scale-95"
+                    >
+                      <Dialog.Panel className="grid transform max-h-96 overflow-y-auto rounded-xl bg-white text-left  shadow-xl transition-all">
+                        <Dialog.Title
+                          as="h3"
+                          className="pl-8 pr-8 sticky top-0 flex justify-between font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-900 text-orange-100 hover:bg-orange-800 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75"
+                        >
+                          <Typography className={styles.textTitleInProfileEdit}>
+                            Edit General
+                          </Typography>
+                          <button
+                            onClick={closeModalEdit}
+                            type="button"
+                            className="rounded-md font-bold shadow-md h-fit py-1 px-1  items-end bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                            <HighlightOffIcon width={4} height={4} />
+                          </button>
+                        </Dialog.Title>
+                        <Dialog.Title
+                          as="h3"
+                          className="pl-8 mb-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                        >
+                          <Typography className={styles.textTitleInProfileEdit}>
+                            General
+                          </Typography>
+                        </Dialog.Title>
+                        <Formik
+                          onSubmit={handleFormSubmitEdit}
+                          initialValues={initialValues}
+                          validationSchema={checkoutSchema}
+                        >
+                          {({
+                            values,
+                            errors,
+                            touched,
+                            handleBlur,
+                            handleChange,
+                            handleSubmit,
+                          }) => (
+                            <Form onSubmit={handleSubmit}>
+                              {/* Edit General */}
+                              <Box 
+                                className="pl-8 pr-8 pb-8"
+                                display="grid"
+                                gap="30px"
+                                gridTemplateColumns="repeat(8, minmax(0, 1fr))"
+                              >
+                                <TextField
+                                  hidden
+                                  type='hidden'
+                                  value={values.userId = DataUserEdit.userId}
+                                />
+    
+                                {/* FullName */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type="text"
+                                  label="Full Name"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEdit('userFullName')(event); handleChange(event) }}
+                                  value={values.userFullName ? values.userFullName : values.userFullName = DataUserEdit.userFullName}
+                                  name="userFullName"
+                                  error={!!touched.userFullName && !!errors.userFullName}
+                                  helperText={getHelperText(touched.userFullName, errors.userFullName, "fullName")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* Email */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type="email"
+                                  label="Email"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEdit('userEmail')(event); handleChange(event) }}
+                                  value={values.userEmail ? values.userEmail : values.userEmail = DataUserEdit.userEmail}
+                                  name="userEmail"
+                                  error={!!touched.userEmail && !!errors.userEmail}
+                                  helperText={getHelperText(touched.userEmail, errors.userEmail, "email")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* UserType */}
+                                <FormControl color="warning" size="small" variant="standard"  sx={{ gridColumn: "span 4" }} error={!!touched.userType && !!errors.userType}>
+                                  <InputLabel id="userType" >Type</InputLabel>
+                                  <Select
+                                    placeholder="Select type ..."
+                                    fullWidth
+                                    variant="standard"
+                                    className='form-control'
+                                    name="userType"
+                                    onBlur={handleBlur}
+                                    onChange={(event) => { eventHandlerEdit('userType')(event); handleChange(event) }}
+                                    value={values.userType ? values.userType : values.userType = DataUserEdit.userType}
+                                    
+                                  >
+                                    <MenuItem value=''><em>none</em></MenuItem>
+                                    <MenuItem value='T'>Travel Agent</MenuItem>
+                                    <MenuItem value='C'>Company</MenuItem>
+                                    <MenuItem value='I'>Individual</MenuItem>
+                                  </Select>
+                                </FormControl>
+                                  {!!touched.userType && !!errors.userType && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.userType, errors.userType,"userType")}</span>}
+    
+                                {/* CompanyName */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type="text"
+                                  label="Company Name"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEdit('userCompanyName')(event); handleChange(event) }}
+                                  value={values.userCompanyName ? values.userCompanyName : values.userCompanyName = DataUserEdit.userCompanyName}
+                                  name="userCompanyName"
+                                  error={!!touched.userCompanyName && !!errors.userCompanyName}
+                                  helperText={getHelperText(touched.userCompanyName, errors.userCompanyName, "companyName")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* PhoneNumber */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type="text"
+                                  label="Phone Number"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEdit('userPhoneNumber')(event); handleChange(event) }}
+                                  value={values.userPhoneNumber ? values.userPhoneNumber : values.userPhoneNumber = DataUserEdit.userPhoneNumber}
+                                  name="userPhoneNumber"
+                                  error={!!touched.userPhoneNumber && !!errors.userPhoneNumber}
+                                  helperText={getHelperText(touched.userPhoneNumber, errors.userPhoneNumber, "phone")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* usroRole */}
+                                <FormControl size="small" color="warning" variant="standard" sx={{ gridColumn: "span 4" }} error={!!touched.usroRole && !!errors.usroRole}>
+                                  <InputLabel id="usroRole" >Role</InputLabel>
+                                  <Select
+                                    disabled={true}
+                                    fullWidth
+                                    color="warning"
+                                    variant="standard"
+                                    className="form-control"
+                                    label="Role"
+                                    onBlur={handleBlur}                             
+                                    onChange={(event) => {eventHandlerEdit('usroRole')(event); handleChange(event)}}
+                                    value={values.usroRole?values.usroRole:values.usroRole=DataUserEdit.usroRole}
+                                    name="usroRole"
+                                    error={!!touched.usroRole && !!errors.usroRole}
+                                    // helperText={getHelperText(touched.usroRole, errors.usroRole)}
+                                >
+                                    <MenuItem value=''><em>none</em></MenuItem>
+                                    <MenuItem value={1}>Guest</MenuItem>
+                                    <MenuItem value={2}>Manager</MenuItem>
+                                    <MenuItem value={3}>Office Boy</MenuItem>
+                                    <MenuItem value={4}>Admin</MenuItem>
+                                    <MenuItem value={5}>User</MenuItem>
+                                </Select>
+                                {!!touched.usroRole && !!errors.usroRole && <span className='text-red-600 text-xs pt-1'>{getHelperText(touched.usroRole, errors.usroRole, "usroRole")}</span>}
+                                </FormControl>
+                              </Box>
+                              {/* ---------------------------------------------------- */}
+                              <Dialog.Title
+                                as="h3"
+                                className="pl-8 mb-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75"
+                              >
+                                <Typography className={styles.textTitleInProfileEdit}>
+                                  Profile
+                                </Typography>
+                              </Dialog.Title>
+                              {/* Edit Profile */}
+                              <Box 
+                                className="pl-8 pr-8 pb-8"
+                                display="grid"
+                                gap="30px"
+                                gridTemplateColumns="repeat(8, minmax(0, 1fr))"
+                              >
+                              
+                                {/* usproNationalId */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type="text"
+                                  label="National ID"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEdit('usproNationalId')(event); handleChange(event) }}
+                                  value={values.usproNationalId ? values.usproNationalId : values.usproNationalId = DataUserEdit.usproNationalId}
+                                  name="usproNationalId"
+                                  error={!!touched.usproNationalId && !!errors.usproNationalId}
+                                  helperText={getHelperText(touched.usproNationalId, errors.usproNationalId, "nationalID")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* usproBirth */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type="date"
+                                  label="Birth"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEdit('usproBirth')(event); handleChange(event) }}
+                                  value={values.usproBirth ? values.usproBirth : values.usproBirth = DataUserEdit.usproBirth}
+                                  name="usproBirth"
+                                  error={!!touched.usproBirth && !!errors.usproBirth}
+                                  helperText={getHelperText(touched.usproBirth, errors.usproBirth, "usproBirth")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* usproJobTitle */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type="text"
+                                  label="Job Title"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEdit('usproJobTitle')(event); handleChange(event) }}
+                                  value={values.usproJobTitle ? values.usproJobTitle : values.usproJobTitle = DataUserEdit.usproJobTitle}
+                                  name="usproJobTitle"
+                                  error={!!touched.usproJobTitle && !!errors.usproJobTitle}
+                                  helperText={getHelperText(touched.usproJobTitle, errors.usproJobTitle, "jobTitle")}
+                                  sx={{ gridColumn: "span 8" }}
+                                />
+    
+                                {/* usproGender */}
+                                <FormControl color="warning" size="small" variant="standard" sx={{ gridColumn: "span 4" }}>
+                                  <InputLabel id="usproGender">Gender</InputLabel>
+                                  <Select
+                                    size="small"
+                                    fullWidth
+                                    variant="standard"
+                                    label="Gender"
+                                    onBlur={handleBlur}
+                                    onChange={(event) => { eventHandlerEdit('usproGender')(event); handleChange(event) }}
+                                    value={values.usproGender ? values.usproGender : values.usproGender = DataUserEdit.usproGender}
+                                    name="usproGender"
+                                    error={!!touched.usproGender && !!errors.usproGender}
+                                  >
+                                    <MenuItem value=''><em>none</em></MenuItem>
+                                    <MenuItem value='M'>Male</MenuItem>
+                                    <MenuItem value='F'>Female</MenuItem>
+                                  </Select>
+                                  {!!touched.usproGender && !!errors.usproGender && <span className='text-red-600 text-xs pt-1'>{getHelperText(touched.usproGender, errors.usproGender, "usproGender")}</span>}
+                                </FormControl>
+    
+                                {/* usproMaritalStatus */}
+                                <FormControl color="warning" size="small" variant="standard" sx={{ gridColumn: "span 4" }}>
+                                  <InputLabel id="usproMaritalStatus">Marital Status</InputLabel>
+                                  <Select
+                                    size="small"
+                                    fullWidth
+                                    variant="standard"
+                                    label="Marital Status"
+                                    onBlur={handleBlur}
+                                    onChange={(event) => { eventHandlerEdit('usproMaritalStatus')(event); handleChange(event) }}
+                                    value={values.usproMaritalStatus ? values.usproMaritalStatus : values.usproMaritalStatus = DataUserEdit.usproMaritalStatus}
+                                    name="usproMaritalStatus"
+                                    error={!!touched.usproMaritalStatus && !!errors.usproMaritalStatus}
+                                  >
+                                    <MenuItem value=''><em>none</em></MenuItem>
+                                    <MenuItem value='S'>Single</MenuItem>
+                                    <MenuItem value='M'>Married</MenuItem>
+                                  </Select>
+                                  {!!touched.usproMaritalStatus && !!errors.usproMaritalStatus && <span className='text-red-600 text-xs pt-1'>{getHelperText(touched.usproMaritalStatus, errors.usproMaritalStatus, "status")}</span>}
+                                </FormControl>
+    
+                                {/* usproAddr */}
+    
+                              </Box>
+                              <Box className="flex flex-row-reverse pb-8">
+                                <Box className='pr-8'>
+                                  <button
+                                    type="submit"
+                                    className="rounded-md font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                                    <SaveIcon width={4} height={4} />{' Save'}
+                                  </button>
+                                </Box>
+                                <Box className='pr-4'>
+                                  <button
+                                    type="reset"
+                                    className="rounded-md font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                                    <RefreshIcon width={4} height={4} />{' Cancle'}
+                                  </button>
+                                </Box>
+                              </Box>
+                            </Form>
+                          )}
+                        </Formik>
+                      </Dialog.Panel>
+                    </Transition.Child>
+                  </div>
+                </div>
+              </Dialog>
+            </Transition>
+            <Transition appear show={isOpenEditPassword} as={Fragment}>
+              <Dialog as="div" className="relative z-10" onClose={closeModalEditPassword}>
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0"
+                  enterTo="opacity-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <div className="fixed inset-0 bg-black bg-opacity-25" />
+                </Transition.Child>
+                <div className="fixed inset-0 overflow-y-auto">
+                  <div className="flex min-h-full items-center justify-center p-4 text-center">
+                    <Transition.Child
+                      as={Fragment}
+                      enter="ease-out duration-300"
+                      enterFrom="opacity-0 scale-95"
+                      enterTo="opacity-100 scale-100"
+                      leave="ease-in duration-200"
+                      leaveFrom="opacity-100 scale-100"
+                      leaveTo="opacity-0 scale-95"
+                    >
+                      <Dialog.Panel className="w-full max-w-md transform max-h-96 overflow-y-auto rounded-xl bg-white text-left align-middle shadow-xl transition-all">
+                        <Dialog.Title
+                          as="h3"
+                          className="pl-8 pr-8 sticky top-0 flex justify-between font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-900 text-orange-100 hover:bg-orange-800 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75"
+                        >
+                          <Typography className={styles.textTitleInProfileEdit}>
+                            Change Password
+                          </Typography>
+                          <button
+                            onClick={closeModalEditPassword}
+                            type="button"
+                            className="rounded-md font-bold shadow-md h-fit py-1 px-1  items-end bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                            <HighlightOffIcon width={4} height={4} />
+                          </button>
+                        </Dialog.Title>
+                        <br></br>
+                        <Formik
+                          onSubmit={handleFormSubmitEditPassword}
+                          initialValues={initialValuesPassword}
+                          validationSchema={checkoutSchemaPassword}
+                        >
+                          {({
+                            values,
+                            errors,
+                            touched,
+                            handleBlur,
+                            handleChange,
+                            handleSubmit,
+                          }) => (
+                            <Form onSubmit={handleSubmit}>
+                              <Box
+                                className="pl-8 pr-8 pb-8"
+                                display="grid"
+                                gap="30px"
+                                gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+                              >
+                                <TextField
+                                  hidden
+                                  type='hidden'
+                                  value={values.userId = DataUserEdit.userId}
+                                />
+    
+                                {/* uspaCurrentPasswordhash */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type={showCurrentPassword ? 'text' : 'password'}
+                                  InputProps={{
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        <IconButton
+                                          aria-label="toggle password visibility"
+                                          onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                                          onMouseDown={handleMouseDownCurrentPassword}
+                                        >
+                                          {showCurrentPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  label="Current Password"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEditPassword('uspaCurrentPasswordhash')(event); handleChange(event) }}
+                                  value={values.uspaCurrentPasswordhash}
+                                  name="uspaCurrentPasswordhash"
+                                  error={!!touched.uspaCurrentPasswordhash && !!errors.uspaCurrentPasswordhash}
+                                  helperText={getHelperTextPassword(touched.uspaCurrentPasswordhash, errors.uspaCurrentPasswordhash, "currentPassword")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+    
+                                {/* uspaPasswordhash */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type={showPassword ? 'text' : 'password'}
+                                  InputProps={{
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        <IconButton
+                                          aria-label="toggle password visibility"
+                                          onClick={() => setShowPassword(!showPassword)}
+                                          onMouseDown={handleMouseDownPassword}
+                                        >
+                                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  label="New Password"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEditPassword('uspaPasswordhash')(event); handleChange(event) }}
+                                  value={values.uspaPasswordhash}
+                                  name="uspaPasswordhash"
+                                  error={!!touched.uspaPasswordhash && !!errors.uspaPasswordhash}
+                                  helperText={getHelperTextPassword(touched.uspaPasswordhash, errors.uspaPasswordhash, "password")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+                                
+                                {/* confirmPassword */}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  color="warning"
+                                  variant="standard"
+                                  type={showConfirmPassword ? 'text' : 'password'}
+                                  InputProps={{
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        <IconButton
+                                          aria-label="toggle password visibility"
+                                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                          onMouseDown={handleMouseDownConfirmPassword}
+                                        >
+                                          {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  label="Re-type Password"
+                                  onBlur={handleBlur}
+                                  onChange={(event) => { eventHandlerEditPassword('uspaConfirmPasswordhash')(event); handleChange(event) }}
+                                  value={values.uspaConfirmPasswordhash}
+                                  name="uspaConfirmPasswordhash"
+                                  error={!!touched.uspaConfirmPasswordhash && !!errors.uspaConfirmPasswordhash}
+                                  helperText={getHelperTextPassword(touched.uspaConfirmPasswordhash, errors.uspaConfirmPasswordhash, "confirmPassword")}
+                                  sx={{ gridColumn: "span 4" }}
+                                />
+                              </Box>
+    
+                              <Box className="flex flex-row-reverse pb-8">
+                                <Box className='pr-8'>
+                                  <button
+                                    type="submit"
+                                    className="rounded-md font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                                    <SaveIcon width={4} height={4} />{' Save'}
+                                  </button>
+                                </Box>
+                                <Box className='pr-4'>
+                                  <button
+                                    type="reset"
+                                    className="rounded-md font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
+                                    <RefreshIcon width={4} height={4} />{' Cancle'}
+                                  </button>
+                                </Box>
+                              </Box>
+                            </Form>
+                          )}
+                        </Formik>
+                      </Dialog.Panel>
+                    </Transition.Child>
+                  </div>
+                </div>
+              </Dialog>
+            </Transition>
+          </ComponentsLayoutAppUsersStaffProfile>
+        </>
+      );
+    }
+  } else {
+    return (<></>);
+>>>>>>> Stashed changes
   }
 }
 
@@ -4513,4 +7833,4 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
 };
 
-export default Profile;
+export default PagesAppUsersProfile;

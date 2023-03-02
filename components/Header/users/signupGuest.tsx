@@ -9,13 +9,13 @@ import {
 import { HomeIcon  } from "@heroicons/react/24/solid";
 import { Menu, Transition } from "@headlessui/react";
 import { useRouter } from "next/router";
-import LoginIcon from "@mui/icons-material/Login";
+import LoginIcon from '@mui/icons-material/Login';
 import { Button, Typography } from "@mui/material";
-import "react-toastify/dist/ReactToastify.css";
+import 'react-toastify/dist/ReactToastify.css';
 import Link from "next/link";
-import styles from "@/styles/TopBarProfile.module.css";
+import styles from '@/styles/TopBarProfile.module.css';
 
-export default function ComponentsHeader({ showNav, setShowNav }: any) {
+export default function ComponentsHeaderUsersSignUpGuest({ showNav, setShowNav }: any) {
   const router = useRouter();
   
   const handleLogin = () => {
@@ -98,15 +98,32 @@ export default function ComponentsHeader({ showNav, setShowNav }: any) {
             <HomeIcon className="h-5 w-5 " />
           </div>
           <div className="w-auto">
-            <Link href="#">
+            <Link href="../.">
               <div
-                className={`text-lef text-sm font-medium cursor-pointer flex items-left transition-colors ${router.pathname == "/app"
+                className={`text-lef text-sm font-medium cursor-pointer flex items-left transition-colors ${router.pathname == "./"
                   ? " text-orange-500"
                   : "text-orange-900 hover:text-orange-500"
                   }`}
               >
                 <div>
                   <p>Home</p>
+                </div>
+                <ChevronRightIcon
+                  className={`h-5 w-5 text-orange-500`}
+                />
+              </div>
+            </Link>
+          </div>
+          <div className=" w-auto">
+            <Link href="./signupGuest">
+              <div
+                className={`text-left text-sm font-medium cursor-pointer flex items-left transition-colors ${router.pathname == "/users/signupGuest"
+                  ? " text-orange-500"
+                  : "text-orange-900 hover:text-orange-500"
+                  }`}
+              >
+                <div>
+                  <p>Sign Up</p>
                 </div>
               </div>
             </Link>
@@ -122,7 +139,7 @@ export default function ComponentsHeader({ showNav, setShowNav }: any) {
               `}>
                 <div>
                   <Typography className={styles.textTitleInProfile}>
-                    Home
+                    Sign Up
                   </Typography>
                 </div>
               </div>

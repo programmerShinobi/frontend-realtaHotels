@@ -15,12 +15,9 @@ import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 import LayoutSignUpGuest from '@/components/Layout/users/LayoutSignUpGuest';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import ToastIndicator from '@/components/Indicator/ToastIndicator'; 
-import stylesAuth from '../../styles/ContentAuth.module.css'
-import LayoutRegister from '@/components/Layout/users/LayoutRegister';
+import ToastIndicator from '@/components/Indicator/toast';
 
-
-export default function registerGuest() {
+export default function UsersRegisterGuest() {
   // use Router
   const router = useRouter();
   
@@ -71,7 +68,7 @@ export default function registerGuest() {
     // Memeriksa apakah user sudah login
     if (await isRegister.message == 'Register Successfully' && !isRegister.savedUser.message) {
       ToastIndicator({status: 'success', message: 'You have successfully registered'});  
-      router.push('/users/login');
+      router.push('/users/signin');
     } else if (isRegister.savedUser.message == 'duplicate key value violates unique constraint \"u_user_phone_number\"') {;
       ToastIndicator({status: 'warning', message: 'Your phone number has been registered'});
     } else {
@@ -245,132 +242,126 @@ export default function registerGuest() {
   };
 
   const handletoLogin = () => {
-    router.push('/users/login');
+    router.push('/users/signin');
   };
-
+  
   return (
-    <>
+    <Box>
       <Head>
-        <title>Register</title>
+        <title>Guest SignUp</title>
       </Head>
-      <LayoutRegister>
-        <Box className="grid shadow-lg shadow-orange-100 rounded-xl bg-white pb-8">
-          {/* Home */}
-          <Box className="mt-8 mb-4 pl-8 font-bold shadow-md w-full h-fit py-2 px-2 mx-auto items-center bg-orange-100 text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-75">
-            <Typography className={stylesAuth.textTitleInAuth}>
-              Create to your account
+      <LayoutSignUpGuest>
+        <section className='w-3/4 mx-auto my-auto flex flex-col gap-2' >
+          <center>
+          <Typography className={styles.textTitleInFormLogin}>
+              Guest Sign Up
             </Typography>
-          </Box>
-          <Box className="pl-8 pr-8 font-normal text-orange-900 text-justify">
-            <Box pt={2}>
-              <Formik
-                onSubmit={handleFormSubmit}
-                initialValues={initialValues}
-                validationSchema={checkoutSchema}
-              >
-                {({
-                  values,
-                  errors,
-                  touched,
-                  handleBlur,
-                  handleChange,
-                  handleSubmit,
-                }) => (
-                  <Form onSubmit={handleSubmit}>
-                    <Box
-                      // alignItems="center"
-                      justifyContent="center"
-                      display="grid"
-                      gap="2px"
-                      gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+          </center>  
+          <Formik
+            onSubmit={handleFormSubmit}
+            initialValues={initialValues}
+            validationSchema={checkoutSchema}
+          >
+            {({
+              values,
+              errors,
+              touched,
+              handleBlur,
+              handleChange,
+              handleSubmit,
+            }) => (
+              <Form onSubmit={handleSubmit}>
+                <Box
+                  // alignItems="center"
+                  justifyContent="center"
+                  display="grid"
+                  gap="2px"
+                  gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+                >
+                  <InputLabel
+                    margin='dense'
+                    className={styles.textLabelInFormLogin}
+                    sx={{ gridColumn: "span 1" }}
+                  >Phone Number
+                  </InputLabel>
+                  <FormControl margin='dense' size="small" variant="outlined" sx={{ gridColumn: "span 1" }}>
+                    <Select
+                      name="countryCode"
+                      value={values.countryCode}
+                      onChange={(event) => {eventHandlerAdd('countryCode')(event);handleChange(event)}}
+                      onBlur={handleBlur}
+                      error={touched.countryCode && Boolean(errors.countryCode)}
+                      placeholder="Select country code..."
                     >
-                      <InputLabel
-                        margin='dense'
-                        className={styles.textLabelInFormLogin}
-                        sx={{ gridColumn: "span 1" }}
-                      >Phone Number
-                      </InputLabel>
-                      <FormControl margin='dense' size="small" variant="outlined" sx={{ gridColumn: "span 1" }}>
-                        <Select
-                          name="countryCode"
-                          value={values.countryCode}
-                          onChange={(event) => {eventHandlerAdd('countryCode')(event);handleChange(event)}}
-                          onBlur={handleBlur}
-                          error={touched.countryCode && Boolean(errors.countryCode)}
-                          placeholder="Select country code..."
-                        >
-                          <MenuItem value="" disabled>
-                            Select extension...
+                      <MenuItem value="" disabled>
+                        Select extension...
+                      </MenuItem>
+                      {/* {phoneExtension.map((code) => (
+                        <MenuItem key={code.value} value={code.value}>
+                          {code.label}
+                        </MenuItem>
+                      ))} */}
+                      {phoneExtension.sort((a:any, b:any) => b.value - a.value)
+                        .map((code) => (
+                          <MenuItem key={code.value} value={code.value}>
+                            {code.label}
                           </MenuItem>
-                          {/* {phoneExtension.map((code) => (
-                            <MenuItem key={code.value} value={code.value}>
-                              {code.label}
-                            </MenuItem>
-                          ))} */}
-                          {phoneExtension.sort((a:any, b:any) => b.value - a.value)
-                            .map((code) => (
-                              <MenuItem key={code.value} value={code.value}>
-                                {code.label}
-                              </MenuItem>
-                            ))}
-                        </Select>
-                        {!!touched.countryCode && !!errors.countryCode && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.countryCode, errors.countryCode, "countryCode")}</span>}
-                      </FormControl>
+                        ))}
+                    </Select>
+                    {!!touched.countryCode && !!errors.countryCode && <span className='text-red-600 text-xs pt-1 pl-4'>{getHelperText(touched.countryCode, errors.countryCode, "countryCode")}</span>}
+                  </FormControl>
 
-                      <TextField
-                        margin='dense'
-                        size="small"
-                        fullWidth
-                        className="border border-orange-700"
-                        variant="outlined"
-                        type="number"
-                        placeholder="Phone Number"
-                        onBlur={handleBlur}
-                        onChange={(event) => {eventHandlerAdd('userPhoneNumber')(event); handleChange(event);}}
-                        value={values.userPhoneNumber}
-                        name="userPhoneNumber"
-                        error={!!touched.userPhoneNumber && !!errors.userPhoneNumber}
-                        helperText={getHelperText(touched.userPhoneNumber, errors.userPhoneNumber, "phone")}
-                        sx={{ gridColumn: "span 2" }}
-                      />
-                      <FormControl margin='dense' sx={{ gridColumn: "span 2" }}>
-                        <Button
-                            type="reset"
-                            color="warning"
-                            className="rounded-md bg-orange-300 text-white hover:bg-orange-400 hover:text-orange-700 border-warning-500 first-line:bg-opacity-20 px-4 py-1 text-sm normal-case font-normal  hover:bg-opacity-30 focus:outline-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-                            
-                          >
-                            <RotateLeftIcon width={15} height={15} /><span className='text-transparent'>-</span>{"Cancle"}
-                        </Button>
-                      </FormControl>
-                      <FormControl margin='dense' sx={{ gridColumn: "span 2" }}>
-                        <Button
-                            type="submit"
-                            color="warning"
-                            className="rounded-md bg-orange-900 text-white hover:bg-orange-700 hover:text-orange-700 border-warning-500 first-line:bg-opacity-20 px-4 text-sm normal-case font-normal  hover:bg-opacity-30 focus:outline-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-                          >
-                            <KeyIcon width={15} height={15} /><span className='text-transparent'>-</span>{"Sign Up"}
-                        </Button>
-                      </FormControl>
-                      <InputLabel
-                        className={'text-center text-orange-700 normal-case font-normal mt-2'}
-                        sx={{ gridColumn: "span 4" }}
+                  <TextField
+                    margin='dense'
+                    size="small"
+                    fullWidth
+                    className="border border-gray-700"
+                    variant="outlined"
+                    type="number"
+                    placeholder="Phone Number"
+                    onBlur={handleBlur}
+                    onChange={(event) => {eventHandlerAdd('userPhoneNumber')(event); handleChange(event);}}
+                    value={values.userPhoneNumber}
+                    name="userPhoneNumber"
+                    error={!!touched.userPhoneNumber && !!errors.userPhoneNumber}
+                    helperText={getHelperText(touched.userPhoneNumber, errors.userPhoneNumber, "phone")}
+                    sx={{ gridColumn: "span 2" }}
+                  />
+                  <FormControl margin='dense' sx={{ gridColumn: "span 2" }}>
+                    <Button
+                        type="reset"
+                        color="warning"
+                        className="rounded-md bg-gray-500 text-white hover:bg-gray-400 hover:text-gray-700 border-warning-500 first-line:bg-opacity-20 px-4 py-1 text-sm normal-case font-normal  hover:bg-opacity-30 focus:outline-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+                        
                       >
-                        do have an account yet?<Button
-                          className="bg-transparent text-orange-400 hover:text-orange-500 normal-case font-normal hover:bg-transparent"
-                          onClick={handletoLogin}>
-                          <b>Sign In</b>
-                        </Button>
-                      </InputLabel>
-                    </Box>
-                  </Form>
-                )}
-              </Formik>
-            </Box>
-          </Box>
-        </Box>
-
-      </LayoutRegister>
-    </>
+                        <RotateLeftIcon width={15} height={15} /><span className='text-transparent'>-</span>{"Cancle"}
+                    </Button>
+                  </FormControl>
+                  <FormControl margin='dense' sx={{ gridColumn: "span 2" }}>
+                    <Button
+                        type="submit"
+                        color="warning"
+                        className="rounded-md bg-gray-700 text-white hover:bg-gray-400 hover:text-gray-700 border-warning-500 first-line:bg-opacity-20 px-4 text-sm normal-case font-normal  hover:bg-opacity-30 focus:outline-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+                      >
+                        <KeyIcon width={15} height={15} /><span className='text-transparent'>-</span>{"Sign Up"}
+                    </Button>
+                  </FormControl>
+                  <InputLabel
+                    className='text-center text-gray-700 normal-case font-normal'
+                    sx={{ gridColumn: "span 4" }}
+                  >
+                    do have an account yet?<Button
+                      className="bg-transparent text-blue-400 hover:text-blue-500 normal-case font-normal hover:bg-transparent justify-center"
+                      onClick={handletoLogin}>
+                      <b>Sign In</b>
+                    </Button>
+                  </InputLabel>
+                </Box>
+              </Form>
+            )}
+          </Formik>
+        </section>
+      </LayoutSignUpGuest>
+    </Box>
   );
 }

@@ -1,13 +1,13 @@
 import { useState, useEffect, Fragment } from "react";
-import HeaderAppUsers from '../../../../Header/app/users/HeaderAppUsers';
-import SidebarAppUsers from "../../../../Sidebar/app/users/SidebarAppUsers";
 import { Transition } from "@headlessui/react";
 import { useRouter } from "next/router";
 import Custom401 from "@/pages/401";
-import WithAuth from "../../../../Private/withAuth";
-import LoadingIndicator from "../../../../Indicator/LoadingIndicator";
+import LoadingIndicator from "@/components/Indicator/loading";
+import ComponentsPrivateWithAuth from "@/components/Private/withAuth";
+import ComponentsHeaderAppUsersProfile from "@/components/Header/app/users/profile";
+import ComponentsSidebarAppUsersProfile from "@/components/Sidebar/app/users/profile";
 
-const LayoutAppUsersAdmin = ({ children }:any) => {
+const ComponentsLayoutAppUsersOBProfile = ({ children }:any) => {
   const [showNav, setShowNav] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -34,7 +34,7 @@ const LayoutAppUsersAdmin = ({ children }:any) => {
   const router = useRouter();
 
   const roleId: any = localStorage.getItem("roleId");
-  if (roleId && roleId != 4) {
+  if (roleId && roleId != 3) {
     router.back();
     return Custom401();
   } else if (!roleId) {
@@ -43,7 +43,7 @@ const LayoutAppUsersAdmin = ({ children }:any) => {
 
   return (
     <>
-      <HeaderAppUsers showNav={showNav} setShowNav={setShowNav} />
+      <ComponentsHeaderAppUsersProfile showNav={showNav} setShowNav={setShowNav} />
       <Transition
         as={Fragment}
         show={showNav}
@@ -54,7 +54,7 @@ const LayoutAppUsersAdmin = ({ children }:any) => {
         leaveFrom="translate-x-0"
         leaveTo="-translate-x-full"
       >
-        <SidebarAppUsers showNav={showNav}/>
+        <ComponentsSidebarAppUsersProfile showNav={showNav}/>
       </Transition>
       <main
         className={`pt-16 transition-all duration-[400ms] ${showNav && !isMobile ? "pl-56" : ""
@@ -66,4 +66,4 @@ const LayoutAppUsersAdmin = ({ children }:any) => {
   );
 }
 
-export default WithAuth(LayoutAppUsersAdmin);
+export default ComponentsPrivateWithAuth(ComponentsLayoutAppUsersOBProfile);

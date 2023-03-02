@@ -1,9 +1,9 @@
-import Header from "../Header";
+import ComponentsHeader from "../Header";
 
-const Layout = ({ children }:any) => {
+const ComponentsLayout = ({ children }:any) => {
   return (
     <>
-      <Header/>
+      <ComponentsHeader/>
       <main
         className={`transition-all duration-[400ms]`}
       >
@@ -13,4 +13,4 @@ const Layout = ({ children }:any) => {
   );
 }
 
-export default Layout;
+export default ComponentsLayout;

@@ -1,25 +1,25 @@
-import Head from 'next/head';
-import * as React from 'react';
-import { useEffect, useState } from 'react';
+import Head from "next/head";
+import { useRouter } from "next/router";
+import * as React from "react";
 import * as yup from "yup";
+import { Form, Formik, validateYupSchema } from "formik";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { doRegister } from "@/redux/Actions/Users/reduceActions";
+import usersReducers from "@/redux/Reducers/Users/usersReducer";
+import ComponentsIndicatorToast from "@/components/Indicator/toast";
+import ComponentsLayoutUsersSignUpEmployee from "@/components/Layout/users/signupEmployee";
+import { KeyIcon } from "@heroicons/react/24/solid";
 import { Box, Button, InputLabel, InputAdornment, IconButton, Typography, FormControl, Select, MenuItem  } from "@mui/material";
-import TextField from '@mui/material/TextField';
-import { Form, Formik, validateYupSchema } from 'formik';
-import { useDispatch, useSelector } from 'react-redux';
-import { doRegister } from '@/redux/Actions/Users/reduceActions';
-import { useRouter } from 'next/router';
-import usersReducers from '@/redux/Reducers/Users/usersReducer';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import styles from '../../styles/FormSignUpEmployee.module.css'
-import { KeyIcon } from '@heroicons/react/24/solid';
-import RotateLeftIcon from '@mui/icons-material/RotateLeft';
-import LayoutSignUpEmployee from '@/components/Layout/users/LayoutSignUpEmployee';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import ToastIndicator from '@/components/Indicator/ToastIndicator';
+import TextField from "@mui/material/TextField";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import styles from "@/styles/FormSignUpEmployee.module.css"
+import RotateLeftIcon from "@mui/icons-material/RotateLeft";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-export default function SignUpEmployee() {
+export default function PagesUsersSignUpEmployee() {
   // use Router
   const router = useRouter();
   
@@ -67,18 +67,18 @@ export default function SignUpEmployee() {
     console.info(isRegister);
     // Memeriksa apakah user sudah login
     if (isRegister.message == 'Register Successfully' && !isRegister.savedUser.message && !isRegister.savedUserRoles.message && !isRegister.savedUserPassword.message ) {
-      ToastIndicator({status: 'success', message: 'You have successfully registered'});
+      ComponentsIndicatorToast({status: 'success', message: 'You have successfully registered'});
       router.push('/users/signin');
     } else if (isRegister.savedUser.message == 'userEmail must be an email') {
-      ToastIndicator({status: 'warning', message: 'Your email is invalid'});
+      ComponentsIndicatorToast({status: 'warning', message: 'Your email is invalid'});
     } else if (isRegister.message == 'uspaPasswordhash is not strong enough') {
-      ToastIndicator({status: 'warning', message: 'Your password is not strong enough'});
+      ComponentsIndicatorToast({status: 'warning', message: 'Your password is not strong enough'});
     } else if (isRegister.savedUser.message == 'duplicate key value violates unique constraint \"u_user_phone_number\"') {;
-      ToastIndicator({status: 'warning', message: 'Your phone number has been registered'});
+      ComponentsIndicatorToast({status: 'warning', message: 'Your phone number has been registered'});
     } else if (isRegister.savedUser.message == 'duplicate key value violates unique constraint \"u_user_email\"') {
-      ToastIndicator({status: 'warning', message: 'Your email has been registered'});
+      ComponentsIndicatorToast({status: 'warning', message: 'Your email has been registered'});
     } else {
-      ToastIndicator({status: 'warning', message: 'Your password is not strong enough'});
+      ComponentsIndicatorToast({status: 'warning', message: 'Your password is not strong enough'});
     }
   };
 
@@ -310,7 +310,7 @@ export default function SignUpEmployee() {
       <Head>
         <title>Employee SignUp</title>
       </Head>
-      <LayoutSignUpEmployee>
+      <ComponentsLayoutUsersSignUpEmployee>
         <section className='w-3/4 mx-auto my-auto flex flex-col gap-2' >
           <center>
           <Typography className={styles.textTitleInFormLogin}>
@@ -531,7 +531,7 @@ export default function SignUpEmployee() {
             )}
           </Formik>
         </section>
-      </LayoutSignUpEmployee>
+      </ComponentsLayoutUsersSignUpEmployee>
     </Box>
   );
 }

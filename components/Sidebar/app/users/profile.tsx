@@ -6,7 +6,7 @@ import { Disclosure } from '@headlessui/react';
 import { ChevronUpIcon } from '@heroicons/react/20/solid';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 
-const SidebarAppUsers = forwardRef(({ showNav }:any, ref:any) => {
+const ComponentsSidebarAppUsersProfile = forwardRef(({ showNav }:any, ref:any) => {
   const router = useRouter();
   return (
     <div ref={ref} className="fixed w-56 mt-4 bg-white shadow-lg h-full overflow-y-auto rounded-tr-md">
@@ -93,7 +93,7 @@ const SidebarAppUsers = forwardRef(({ showNav }:any, ref:any) => {
   );
 });
 
-SidebarAppUsers.displayName = "SidebarAppUsers";
-export default SidebarAppUsers;
+ComponentsSidebarAppUsersProfile.displayName = "ComponentsSidebarAppUsersProfile";
+export default ComponentsSidebarAppUsersProfile;
 
 
