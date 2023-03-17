@@ -185,7 +185,7 @@ const Stocks = () => {
         <Form onFinish={onFinish}>
           <Row gutter={[32, 32]}>
             <Col>
-              <Form.Item label="Stock" name="stockName">
+              <Form.Item label="Stock Name" name="stockName" rules={[{required:true}]}>
                 <Input />
               </Form.Item>
             </Col>
@@ -197,17 +197,17 @@ const Stocks = () => {
           </Row>
           <Row gutter={[32, 32]}>
             <Col>
-              <Form.Item label="Quantity" name="stockQuantity">
+              <Form.Item label="Quantity" name="stockQuantity" rules={[{required:true}]}>
                 <Input style={{ width: 100 }} placeholder="0" type="number" />
               </Form.Item>
             </Col>
             <Col>
-              <Form.Item label="Used" name="stockUsed">
+              <Form.Item label="Used" name="stockUsed" rules={[{required:true}]}>
                 <Input style={{ width: 100 }} placeholder="0" type="number" />
               </Form.Item>
             </Col>
             <Col>
-              <Form.Item label="Scrap" name="stockScrap">
+              <Form.Item label="Scrap" name="stockScrap" rules={[{required:true}]}>
                 <Input style={{ width: 100 }} placeholder="0" type="number" />
               </Form.Item>
             </Col>
@@ -228,12 +228,12 @@ const Stocks = () => {
             <Input />
           </Form.Item>
           <Form.Item>
-            <Button
+            <button
               htmlType="submit"
               className="bg-[#F33C5D] text-white hover:text-white-600 px-5 py-2.5 rounded hover:bg-[#c7354f]"
             >
               Save
-            </Button>
+            </button>
           </Form.Item>
         </Form>
       </Modal>

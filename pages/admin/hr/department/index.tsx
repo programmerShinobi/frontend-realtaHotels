@@ -38,9 +38,7 @@ export default function HRDepartment() {
 
   const countedData = department.count;
 
-  console.log("data department ", dataDepartment)
-  console.log("department.data", department.data)
-  console.log("tableData", tableData)
+  
   /* counting data and assign to table */
 
 

@@ -124,7 +124,7 @@ export default function udatehotel() {
                 showSearch
                 style={{ width: 200 }}
                 optionFilterProp="children"
-                filterOption={(input, option) =>
+                filterOption={(input: any, option: any) =>
                   (option?.label ?? "")
                     .toLowerCase()
                     .includes(input.toLowerCase())

@@ -74,6 +74,7 @@ export default function FintechTable({ data }: {
 
 	return (
 		<Container>
+			<Spacer/>
 			<Row justify="space-between">
 				<Input
 					bordered

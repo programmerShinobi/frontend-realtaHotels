@@ -37,7 +37,6 @@ export default function ModalComponent(props: any){
   /* end mapping data shift */
 
 
-  console.log("formValues", formValues)
 
   /* handlee modal Edit Data */
   const handleInputChange = (input: any) => (e: any) => {
@@ -68,8 +67,6 @@ export default function ModalComponent(props: any){
 
   /* handle form */
   const onFinish = (values: any) => {
-    console.log(values)
-
     values = {
       ...values,
       page: page, 

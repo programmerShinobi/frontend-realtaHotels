@@ -34,6 +34,13 @@ export const doAddStockPhotoSucceed = (payload: any) => {
   };
 };
 
+export const doAddStockPhotoFailed = (payload:any) =>{
+  return{
+    type: purchasingTypes.ADD_STOCK_PHOTO_FAILED,
+    payload
+  }
+}
+
 export const doGetPhotoDashboard = () => {
   return {
     type: purchasingTypes.GET_STOCK_PHOTO_DASHBOARD,

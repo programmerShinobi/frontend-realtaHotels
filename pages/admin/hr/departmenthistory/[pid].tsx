@@ -53,10 +53,7 @@ export default function HRDepartmentHistory() {
 
   const countedData = employeeDepartmentHistory.count;
 
-  console.log("data employeeDepartmentHistory ", dataEmployeeDepartmentHistory)
 
-  // console.log("employeeDepartmentHistory", employeeDepartmentHistory.data[0].ephiModifiedDate)
-  // console.log("tableData", tableData)
   /* counting data and assign to table */
 
 

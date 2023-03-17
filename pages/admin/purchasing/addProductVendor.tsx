@@ -1,6 +1,6 @@
 import { doAddVendpro, doGetVendrpo } from "@/redux/Actions/Purchasing/vendproActions";
 import { ColumnsType } from "antd/es/table";
-import { Button, Col, Form, Input, Modal, Row, Table } from "antd";
+import { Button, Col, Form, Input, Modal, Row, Table, message } from "antd";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,7 +21,6 @@ const addProductVendor = () => {
   const { vendpro } = useSelector((state: any) => state.vendproReducers);
   const { vendors } = useSelector((state: any) => state.vendorReducers);
   const router = useRouter();
-  console.log(router.query)
   const id = router.query.id;
   const dispatch = useDispatch();
 
@@ -34,6 +33,7 @@ const addProductVendor = () => {
         stockprice : 0
     }
   )
+  const [messageApi,contextHolder] = message.useMessage()
 
   const eventHandler = (input:any) => (event:any) =>{
     setProduct({...product, [input]:event.target.value})
@@ -51,15 +51,18 @@ const addProductVendor = () => {
     router.push("/admin/purchasing/vendor");
   };
   const vendorProduct = vendpro?.filter((obj: any) => obj.vendid == id);
-  console.log(vendorProduct, "ven", id);
-
   
   const vendorName = vendors?.filter((obj: any) => obj.vendorEntityId == id);
 
   const onFinish = () => {
-    console.log(product)
     dispatch(doAddVendpro(product))
-    setModalProduct(false);
+    messageApi.open({
+      type:'loading',
+      content:'Action in Progress...',
+      duration: 2.5
+    }).then(()=>message.success('Product Added', 2))
+    setTimeout(() => {setModalProduct(false)}, 2100)
+    
   };
   //   console.log(id);
   // console.log(vendorName, 'test')
@@ -102,6 +105,7 @@ const addProductVendor = () => {
   const data = vendorProduct?.length > 0 ? vendorProduct : [];
   return (
     <LayoutAdmin>
+      {contextHolder}
       <h4 className="font-bold m-4 text-center">{vendorName[0]?.vendorName}</h4>
       <div className="flex hover:text-blue-500 cursor-pointer">
         <BackwardOutlined
@@ -120,6 +124,7 @@ const addProductVendor = () => {
         title="New Vendor Product"
         open={modalProduct}
         onCancel={closeModalProduct}
+        footer={null}
       >
         <Form layout="vertical" onFinish={onFinish}>
           <Form.Item label="Stock Name" name="stockname">

@@ -1,11 +1,14 @@
 import React from "react";
 import styles from "@/styles/ContentHome.module.css"
+import { Layout } from "antd";
 
 export default function Footer() {
+  const { Footer } = Layout;
   return (
-    <footer aria-label="Site Footer" className="bg-[#131828] dark:bg-gray-900">
-      <div className="max-w-screen-xl px-4 py-10 mx-auto space-y-8 sm:px-6 lg:space-y-16 lg:px-8">
-        <div className="grid grid-cols-2 gap-8 lg:grid-cols-3 ml-5 mt-2">
+    <>
+    <Footer className="bg-[#131828] dark:bg-gray-900">
+      <div className="max-w-screen-xl px-4 py-10 mx-auto space-y-8 sm:px-0 lg:space-y-16 lg:px-0">
+        <div className="grid grid-cols-2 gap-8 lg:grid-cols-3 mt-2">
           <div>
             <div className="text-teal-600 dark:text-teal-300 ">
               <div className="h-11">
@@ -91,8 +94,8 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div className="grid pl-120 ml-4 mt-3 grid-cols-3 gap-8 sm:grid-cols-2 lg:col-span-2 lg:grid-cols-4">
-            <div className="underline-offset-8   font-medium text-white">
+          <div className="grid pl-120 mr-0 mt-3 grid-cols-3 gap-8 sm:grid-cols-2 lg:col-span-2 lg:grid-cols-4">
+            <div className="underline-offset-8 ml-0   font-medium text-white">
               <p className={styles.textLabelTitleInHomeFooter}>
                 Services
               </p>
@@ -128,7 +131,7 @@ export default function Footer() {
               </nav>
             </div>
 
-            <div className="underline-offset-8 ml-4 font-medium text-white dark:text-white">
+            <div className="underline-offset-8 ml-0 font-medium text-white dark:text-white">
               <p className={styles.textLabelTitleInHomeFooter}>
                 Company
               </p>
@@ -165,7 +168,7 @@ export default function Footer() {
               </nav>
             </div>
 
-            <div className="underline-offset-8  ml-4 font-medium text-white dark:text-white">
+            <div className="underline-offset-8 ml-0 font-medium text-white dark:text-white">
               <p className={styles.textLabelTitleInHomeFooter}>
                 Helpful Links
               </p>
@@ -202,7 +205,7 @@ export default function Footer() {
               </nav>
             </div>
 
-            <div className="underline-offset-8 ml-4 font-medium text-white dark:text-white">
+            <div className="underline-offset-8 ml-0 font-medium text-white dark:text-white">
               <p className={styles.textLabelTitleInHomeFooter}>
                 Legal
               </p>
@@ -250,12 +253,13 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="underline-offset-4 text-xs ml-5 text-gray-500 dark:text-gray-400">
+        <div className="underline-offset-4 text-xs text-gray-500 dark:text-gray-400">
           <p className={styles.textLabelInHomeFooter}>
             &copy; 2023. Realta Hotels. All rights reserved.
           </p>
         </div>
       </div>
-    </footer>
+    </Footer>
+    </>
   );
 }

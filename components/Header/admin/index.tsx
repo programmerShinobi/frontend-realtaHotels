@@ -1,7 +1,7 @@
 import { useState, useEffect, Fragment } from "react";
 import { useRouter } from "next/router";
-import { doLogin } from "@/redux/Actions/Users/reduceActions";
-import { useDispatch } from "react-redux";
+import { doLogin, doUserRequest } from "@/redux/Actions/Users/reduceActions";
+import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import * as React from 'react';
 import { ToastContainer, toast } from 'react-toastify';
@@ -13,11 +13,51 @@ import { DownOutlined, UserOutlined, LogoutOutlined} from '@ant-design/icons';
 
 export default function HeaderAdmin() {
   const router = useRouter();
-  const userFullName: any = localStorage.getItem('userFullName');
-  const roleId: any = localStorage.getItem('roleId');
-  const userPhoto: any = localStorage.getItem('userPhoto');
-  const profilePhotoMe: any = localStorage.getItem('profilePhotoMe');
-  const profileNameMe: any = localStorage.getItem('userFullNameNew');
+  const [login, setLogin]: any = useState(false);
+  const [userFullName, setFullName]: any = useState(null);
+  const [userPhoto, setUserPhoto]: any = useState(null);
+  const [roleId, setRoleId]: any = useState(null);
+  const [profilePhotoMe, setProfilePhotoMe]: any = useState(null);
+  const [profileNameMe, setProfileNameMe]: any = useState(null);
+
+  useEffect(() => {
+    const token: any = localStorage.getItem('token');
+    setFullName(localStorage.getItem('userFullName'));
+    setUserPhoto(localStorage.getItem('userPhoto'));
+    setRoleId(localStorage.getItem('roleId'));
+    if (token) {
+      setLogin(true);
+    } else {
+      setLogin(false);
+    }
+  });
+
+  const [profile, setProfile]: any = useState([]);
+  const userMe = useSelector((state: any) => state.usersReducers.user);
+  useEffect(() => {
+    const userId = localStorage.getItem('userId');
+    dispatch(doUserRequest(userId));
+  },[]);
+
+  // Profile General
+  useEffect(() => {
+    if (userMe?.results) {
+      setProfile(userMe.results[0]);
+    }
+    
+    if (localStorage.getItem('profilePhotoMe') != profile?.uspro_photo) {
+      setProfilePhotoMe(profile?.uspro_photo);
+    } else {
+      setProfilePhotoMe(localStorage.getItem('profilePhotoMe'));
+    }
+
+    if (localStorage.getItem('userFullNameNew') != profile?.user_full_name) {
+      setProfileNameMe(profile?.user_full_name);
+    } else {
+      setProfileNameMe(localStorage.getItem('userFullNameNew'));
+    }
+    
+  });
 
   let myPhoto: any; 
   if (profilePhotoMe) {
@@ -97,24 +137,28 @@ export default function HeaderAdmin() {
       icon: (<LogoutOutlined />),
     },
   ];
-  
-  return (
-    <div style={{backgroundColor: '#F5F5F5'}}>
-      <div className="pr-4 md:pr-4 text-blue-500 hover:text-blue-500 flex justify-end justify-items-center text-center">
-          <Dropdown menu={{ items }}>
-            <a onClick={(e) => e.preventDefault()} className="w-fit">
-              <Space>
-                <picture>
-                <Avatar src={<img src={"/images/" + myPhoto} alt="avatar" />} size="large" />
-              </picture>
-              <span className="hidden md:block font-medium text-blue-500 hover:text-blue-500">
-                {myName+" | "+myRole}
-              </span>
-                <DownOutlined height={2} width={2}/>
-              </Space>
-            </a>
-          </Dropdown>
+
+  if (login) {
+    return (
+      <div style={{backgroundColor: '#F5F5F5'}}>
+        <div className="pr-4 md:pr-4 text-blue-500 hover:text-blue-500 flex justify-end justify-items-center text-center">
+            <Dropdown menu={{ items }}>
+              <a onClick={(e) => e.preventDefault()} className="w-fit">
+                <Space>
+                  <picture>
+                  <Avatar src={<img src={"/images/" + myPhoto} alt="avatar" />} size="large" />
+                </picture>
+                <span className="hidden md:block font-medium text-blue-500 hover:text-blue-500">
+                  {myName+" | "+myRole}
+                </span>
+                  <DownOutlined height={2} width={2}/>
+                </Space>
+              </a>
+            </Dropdown>
+        </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (<></>);
+  }
 }

@@ -1,10 +1,25 @@
 import { money } from "@/lib/helper";
-import { Transaction } from "@/lib/interfaces";
-import { Button, Card, Col, Container, Dropdown, Row, Spacer, StyledContainer, Table, Text } from "@nextui-org/react";
-import { useState } from "react";
+import { PaginationOptions, Transaction } from "@/lib/interfaces";
+import { Card, Col, Dropdown, Row, Spacer, Text } from "@nextui-org/react";
+import { useEffect, useState } from "react";
 import TransactionDetailModal from "./modals/TransactionDetailModal";
+import { ServiceType } from "@/lib/payment/enum";
 
-export default function TransactionHistory({ data, total }: { data: Transaction[], total: number }) {
+export default function TransactionHistory({
+    userId,
+    data,
+    total,
+    paginationOptions,
+    setPaginationOptions
+}: {
+    userId: number,
+    data: Transaction[],
+    total: number,
+    paginationOptions: any,
+    setPaginationOptions: (options: PaginationOptions) => void
+}) {
+    const [selectedDateRange, setSelectedDateRange] = useState("date")
+    const [selectedService, setSelectedService] = useState("service")
     const [showTrxDetail, setShowTrxDetail] = useState(false)
     const [trxDetailData, setTrxDetailData] = useState<Transaction>({
         transactionId: 0,
@@ -26,44 +41,79 @@ export default function TransactionHistory({ data, total }: { data: Transaction[
         userFullName: "",
     })
 
+    useEffect(() => {
+        selectedDateRange !== "date" ?
+            setPaginationOptions({
+                ...paginationOptions,
+                keyword: {
+                    userId: userId,
+                    timestamp: selectedDateRange
+                }
+            }) : 
+            setPaginationOptions({
+                ...paginationOptions,
+                keyword: {
+                    userId: userId,
+                }
+            })
+        
+        selectedService !== "service" ?
+            setPaginationOptions({
+                ...paginationOptions,
+                keyword: {
+                    userId: userId,
+                    transactionType: selectedService,
+                }
+            }) : 
+            setPaginationOptions({
+                ...paginationOptions,
+                keyword: {
+                    userId: userId,
+                }
+            })
+        
+    }, [selectedDateRange, selectedService])
+    console.log(paginationOptions)
     return (
         <div className="text-center">
             <Text b size={"$3xl"}> Transaction History </Text>
             <Spacer />
             <div className="flex justify-center h-max">
-                <div className="p-3 w-[50%] rounded-3xl border-2 border-[#E31260] h-max">
+                <div className="p-3 w-[30%] rounded-3xl border-2 border-[#E31260] h-max">
                     <Row justify="space-evenly">
-                        <Dropdown>
-                            <Dropdown.Button rounded color="error">
-                                <Text color="white"> Date </Text>
+                        <Dropdown disableAnimation>
+                            <Dropdown.Button rounded color="error" className="capitalize">
+                                {selectedDateRange !== "date" ? `Last ${selectedDateRange}` : "date"}
                             </Dropdown.Button>
-                            <Dropdown.Menu color="default">
-                                <Dropdown.Item> Last 30 days </Dropdown.Item>
-                                <Dropdown.Item> Last 60 days </Dropdown.Item>
-                                <Dropdown.Item> Last 90 days </Dropdown.Item>
-                                <Dropdown.Item color="error" withDivider> Reset filter </Dropdown.Item>
+                            <Dropdown.Menu
+                                color="default"
+                                aria-label="Single selection actions"
+                                disallowEmptySelection
+                                selectionMode="single"
+                                selectedKeys={selectedDateRange}
+                                onSelectionChange={(value: any) => setSelectedDateRange(value.currentKey)}>
+                                <Dropdown.Item key="30 days"> Last 30 days </Dropdown.Item>
+                                <Dropdown.Item key="60 days"> Last 60 days </Dropdown.Item>
+                                <Dropdown.Item key="90 days"> Last 90 days </Dropdown.Item>
+                                <Dropdown.Item key="date" color="error" withDivider> Reset selection </Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
 
-                        <Dropdown>
-                            <Dropdown.Button rounded color="error">
-                                <Text color="white"> Service </Text>
+                        <Dropdown disableAnimation>
+                            <Dropdown.Button rounded color="error" className="capitalize">
+                                {selectedService !== "service" ? ServiceType[selectedService as keyof typeof ServiceType] : "service"}
                             </Dropdown.Button>
-                            <Dropdown.Menu color="default">
-                                <Dropdown.Item> Hotel </Dropdown.Item>
-                                <Dropdown.Item> Restaurant </Dropdown.Item>
-                                <Dropdown.Item color="error" withDivider> Reset filter </Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-
-                        <Dropdown>
-                            <Dropdown.Button rounded color="error">
-                                <Text color="white"> Method </Text>
-                            </Dropdown.Button>
-                            <Dropdown.Menu color="default">
-                                <Dropdown.Item> Bank </Dropdown.Item>
-                                <Dropdown.Item> Fintech </Dropdown.Item>
-                                <Dropdown.Item color="error" withDivider> Reset filter </Dropdown.Item>
+                            <Dropdown.Menu
+                                color="default"
+                                aria-label="Single selection actions"
+                                disallowEmptySelection
+                                selectionMode="single"
+                                selectedKeys={selectedService}
+                                onSelectionChange={(value: any) => setSelectedService(value.currentKey)}>
+                                <Dropdown.Item key="TP "> Top Up </Dropdown.Item>
+                                <Dropdown.Item key="TRB"> Hotel </Dropdown.Item>
+                                <Dropdown.Item key="ORM"> Restaurant </Dropdown.Item>
+                                <Dropdown.Item key="service" color="error" withDivider> Reset filter </Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                     </Row>
@@ -88,7 +138,7 @@ export default function TransactionHistory({ data, total }: { data: Transaction[
                             key={transaction.transactionNumber}
                             className="h-[50%] my-2">
                             <Card.Header className="pb-0">
-                                <Text size={14}> {transaction.trxDate} </Text>
+                                <Text size={14}> {transaction?.trxDate} </Text>
                             </Card.Header>
                             <Card.Body className="pt-0 pb-4">
                                 <Row justify="space-between">

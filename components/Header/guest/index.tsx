@@ -3,11 +3,11 @@ import { useRouter } from "next/router";
 
 import Cookies from "js-cookie";
 import ToastIndicator from "@/components/Indicator/toast";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { Dropdown, MenuProps, Space, Typography } from "antd";
 import { BookOutlined, DownOutlined, IdcardOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
-import { doLogin } from '@/redux/Actions/Users/reduceActions';
+import { doLogin, doUserRequest } from '@/redux/Actions/Users/reduceActions';
 import Link from 'next/link';
 import LoginIcon from "@mui/icons-material/Login";
 import KeyIcon from '@mui/icons-material/Key';
@@ -21,18 +21,43 @@ export default function HeaderGuest() {
   const [userPhoto, setUserPhoto]: any = useState(null);
   const [profilePhotoMe, setProfilePhotoMe]: any = useState(null);
   const [profileNameMe, setProfileNameMe]: any = useState(null);
-
+  
   useEffect(() => {
     const token: any = localStorage.getItem('token');
     setFullName(localStorage.getItem('userFullName'));
     setUserPhoto(localStorage.getItem('userPhoto'));
-    setProfilePhotoMe(localStorage.getItem('profilePhotoMe'));
-    setProfileNameMe(localStorage.getItem('userFullNameNew'));
     if (token) {
       setLogin(true);
     } else {
       setLogin(false);
     }
+  });
+
+  const [profile, setProfile]: any = useState([]);
+  const userMe = useSelector((state: any) => state.usersReducers.user);
+  useEffect(() => {
+    const userId = localStorage.getItem('userId');
+    dispatch(doUserRequest(userId));
+  },[]);
+
+  // Profile General
+  useEffect(() => {
+    if (userMe?.results) {
+      setProfile(userMe.results[0]);
+    }
+    
+    if (localStorage.getItem('profilePhotoMe') != profile?.uspro_photo) {
+      setProfilePhotoMe(profile?.uspro_photo);
+    } else {
+      setProfilePhotoMe(localStorage.getItem('profilePhotoMe'));
+    }
+
+    if (localStorage.getItem('userFullNameNew') != profile?.user_full_name) {
+      setProfileNameMe(profile?.user_full_name);
+    } else {
+      setProfileNameMe(localStorage.getItem('userFullNameNew'));
+    }
+    
   });
 
   let myPhoto: any;
@@ -147,7 +172,7 @@ export default function HeaderGuest() {
 
   return (
     <>
-      <header className="w-full sticky mb-1 shadow">
+      <header className="w-full  mb-1  shadow">
         <div className="relative bg-white">
           <div className="relative pl-6">
             <nav className="flex items-center justify-between h-16 lg:h-20">
@@ -175,11 +200,12 @@ export default function HeaderGuest() {
                   />
                 </svg>
               </button>
-              <div className="hidden lg:flex lg:justify-center lg:items-center lg:space-x-12">
+              <div className="flex justify-center items-center space-x-12">
                 <Link href={'/'}>
                   <h1 className="text-rose-500 font-bold">Home</h1>
                 </Link>
                 <Link className='hover:text-current' href="/.#hotels">Hotels</Link>
+                <Link className='hover:text-current' href="/Resto/menus">Restaurant</Link>
                 <Link className='hover:text-current' href="/.#facility">Facility</Link>
                 <Link className='hover:text-current' href="/.#about">About</Link>
               </div>

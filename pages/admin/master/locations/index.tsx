@@ -77,9 +77,8 @@ export default function MasterLocations() {
   console.log("DataBenua", mBenua)
 
   const mNegara = useSelector((state: any) => state.ContryReducer.mCountry);
-  console.log("datanegara",mNegara)
+  console.log("datanegara", mNegara)
 
-  const countryR = mNegara
 
   const mProv = useSelector((state: any) => state.ProvincesReducer.mProvinces);
 
@@ -88,9 +87,10 @@ export default function MasterLocations() {
   // define data filter
 
   const [dataCountry, setDataCountry] = useState(mNegara)
-  const [dataCountries, setDataCountries] = useState(mNegara)
   const [dataProvCity, setDataProvCity] = useState(mProv)
   const [dataRegion, setDataRegion] = useState(mBenua)
+  const [dataProvCountry, setDataProvCountry] = useState(mNegara)
+
 
   // tampung data region untuk value country region berdasarkan regionName
   const [selectedRegion, setSelectedRegion] = useState<any>(''); // State untuk menyimpan data dari filterRegion
@@ -152,10 +152,10 @@ export default function MasterLocations() {
 
 
     if (countryFind) {
-      setDataCountries(countryFind);
+      setDataProvCountry(countryFind);
       setSelectedCountry(countryFind)
     } else {
-      setDataCountries(mNegara)
+      setDataProvCountry(mNegara)
       setSelectedCountry('')
     }
     console.log('ShowCountry:', countryFind?.country_name)
@@ -183,20 +183,33 @@ export default function MasterLocations() {
       setDataProvCity(ProvCityFind);
       setSelectedProvCity(ProvCityFind)
     } else {
-      setDataCountries(mProv)
+      setDataProvCity(mProv)
       setSelectedProvCity('')
     }
     console.log('ShowProv:', ProvCityFind?.prov_name)
   }
 
   // const dispatch = useDispatch();
+  // useEffect(() => {
+  //   dispatch(doRegionsRequest());
+  //   dispatch(doCountryRequest());
+  //   dispatch(doProvRequest());
+  //   dispatch(doAddrRequest());
+  // }, []);
+
+  // trigger useefect 
+  // const [loadCountry, setLoadCountry] = useState(false)
+  // const [loadProv, setLoadProv] = useState(false)
+  // const [loadAddr, setLoadAddr] = useState(false)
+
+  // useefect stop loading
   useEffect(() => {
     dispatch(doRegionsRequest());
     dispatch(doCountryRequest());
     dispatch(doProvRequest());
     dispatch(doAddrRequest());
+  }, [])
 
-  }, []);
 
 
   // Method dispacth for add,update,delete data 
@@ -238,33 +251,53 @@ export default function MasterLocations() {
   const handleOpenEditModalRegion = () => setOpenEditModalRegion(true);
   const handleCloseEditModalRegion = () => setOpenEditModalRegion(false);
   const [editFormRegion] = Form.useForm();
-  // country
-//   const [idCountry, setIdCountry] = useState(0)
-//   const details= countryR.find((item:any)=>item.country_id==idCountry );
-// console.log('countryR :',countryR);
 
-//   console.log('detailsCon',details);
-//   console.log('idCountry',idCountry);
-  
-
-  // const [prevData, setPrevData]= useState(details);
-
-  // console.log("prevdatanegara",prevData)
   const [openEditModalCountry, setOpenEditModalCountry] = useState(false);
-  const handleOpenEditModalCountry = () => setOpenEditModalCountry(true);
-  const handleCloseEditModalCountry = () => setOpenEditModalCountry(false);
+  const handleOpenEditModalCountry = (data: any) => {
+    setOpenEditModalCountry(true);
+    setEditDataCountries(data);
+  };
+  const handleCloseEditModalCountry = () => {
+    setEditDataCountries({
+      country_id: 0,
+      countryRegion: 0,
+      countryName: '',
+    })
+    setOpenEditModalCountry(false);
+
+  }
   const [editFormCountry] = Form.useForm();
   // prov
   const [openEditModalProvinces, setOpenEditModalProvinces] = useState(false);
-  const handleOpenEditModalProvinces = () => setOpenEditModalProvinces(true);
-  const handleCloseEditModalProvinces = () => setOpenEditModalProvinces(false);
+  const handleOpenEditModalProvinces = (data: any) => {
+    setEditDataProv(data);
+    setOpenEditModalProvinces(true);
+  }
+  const handleCloseEditModalProvinces = () => {
+    setEditDataProv({
+      prov_id: 0,
+      provCountry: 0,
+      provName: ''
+    })
+    setOpenEditModalProvinces(false)
+  };
   const [editFormProvinces] = Form.useForm();
   // city
   const [openEditModalCity, setOpenEditModalCity] = useState(false);
-  const handleOpenEditModalCity = () => setOpenEditModalCity(true);
-  const handleCloseEditModalCity = () => setOpenEditModalCity(false);
+  const handleOpenEditModalCity = (data: any) => {
+    setEditDataCity(data)
+    setOpenEditModalCity(true);
+  }
+  const handleCloseEditModalCity = () => {
+    setEditDataCity({
+      addr_id: 0,
+      addrProv: 0,
+      addrLine2: '',
+    })
+    setOpenEditModalCity(false);
+  }
   const [editFormCity] = Form.useForm();
-  
+
   //state untuk menyimpan nilai input pada form edit data policy
   const [editDataRegion, setEditDataRegion] = useState({
     regionCode: '',
@@ -272,23 +305,23 @@ export default function MasterLocations() {
   });
   console.log("dataValueEditRegion:", editDataRegion)
   const [editDataCountries, setEditDataCountries] = useState({
-    country_region_id: '',
-    country_name: '',
-    country_id: ''
+    country_id: 0,
+    countryRegion: 0,
+    countryName: '',
   });
   console.log("dataValueEditCountry:", editDataCountries)
 
   const [editDataProv, setEditDataProv] = useState({
+    prov_id: 0,
     provCountry: 0,
     provName: '',
-    provId: 0
   });
   console.log("dataValueEditProvy:", editDataProv)
 
   const [editDataCity, setEditDataCity] = useState({
-    addr_prov_id: '',
-    addr_line2: '',
-    addr_id: ''
+    addr_id: 0,
+    addrProv: 0,
+    addrLine2: '',
   });
   console.log("dataValueEditCity:", editDataCity)
 
@@ -300,14 +333,14 @@ export default function MasterLocations() {
       [name]: value,
     }));
   };
-  const handleEditInputChangeCountries  = (event: { target: { name: any; value: any; }; }) => {
+  const handleEditInputChangeCountries = (event: { target: { name: any; value: any; }; }) => {
     const { name, value } = event.target;
     setEditDataCountries((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
-  const handleEditInputChangeProv  = (event: { target: { name: any; value: any; }; }) => {
+  const handleEditInputChangeProv = (event: { target: { name: any; value: any; }; }) => {
     const { name, value } = event.target;
     setEditDataProv((prevData) => ({
       ...prevData,
@@ -339,7 +372,7 @@ export default function MasterLocations() {
 
   const handleEditDataCountries = (country_id: any) => {
     console.log(country_id)
-    setIdCountry(country_id)
+    // setDataCountry(country_id)
 
     const FindNegara = mNegara?.find(
       (temp: any) => temp.country_id === country_id
@@ -349,7 +382,7 @@ export default function MasterLocations() {
     handleOpenEditModalCountry(FindNegara);
     console.log("editDataCountry:", editDataCountries)
   };
- 
+
   const handleEditDataProv = (prov_id: any) => {
     console.log(prov_id)
 
@@ -361,7 +394,7 @@ export default function MasterLocations() {
     handleOpenEditModalProvinces(FindProv);
     console.log("editDataProv:", editDataProv)
   };
- 
+
   const handleEditDataCity = (addr_id: any) => {
     console.log(addr_id)
 
@@ -382,7 +415,7 @@ export default function MasterLocations() {
   //   handleCloseEditModalRegion();
   //   window.location.reload();
   // };
-  const handleEditRegion = async ():any => {
+  const handleEditRegion = async (): any => {
     console.log(editDataRegion)
     try {
       await editFormRegion.validateFields();
@@ -402,57 +435,114 @@ export default function MasterLocations() {
       }
     }
   };
-  const handleEditCountries =  () => {
-    console.log(editDataCountries)
-    try {
-      dispatch(doUpdateCountry(editDataCountries));
-      handleCloseEditModalCountry();
-      // editFormCountry.resetFields();
-      setTimeout(() => {
-        window.location.reload();
-      }, 150);
-      message.success('Data berhasil di edit');
-    } catch (error) {
-      if (error instanceof Error) {
-        message.error('Gagal mengupdate data: ' + error.message);
-      } else {
-        // setAddFormError(error);
-      }
-    }
-  };
-  const handleEditProv =  () => {
-    console.log("judulan",editDataProv)
-    try {
-       editFormProvinces.validateFields();
-      dispatchUpdate(doUpdateProv(editDataProv));
-      handleCloseEditModalProvinces();
-      // editFormCountry.resetFields();
 
-      message.success('Data berhasil di edit');
-    } catch (error) {
-      if (error instanceof Error) {
-        message.error('Gagal mengupdate data: ' + error.message);
-      } else {
-        // setAddFormError(error);
-      }
+  // edit data country
+  const handleEditCountries = (e: any) => {
+    e.preventDefault();
+
+    if (!editDataCountries) {
+      console.log("editDataCountries is undefined");
+      return;
     }
+
+    // Convert editDataCountries to JSON
+    const body = JSON.stringify(editDataCountries);
+
+    // You can use any AJAX library you like
+    fetch(`http://localhost:3005/countries/edit/${editDataCountries.country_id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: body,
+    })
+      .then((res) => {
+        console.log(res);
+        if (res.status === 200) {
+          message.success("Data berhasil diubah.");
+          // Optionally, reload the page or navigate to a different URL
+          window.location.reload();
+        } else {
+          message.error("Data gagal diubah.");
+        }
+      })
+      .catch((e: any) => {
+        message.error("Data gagal diubah.");
+        console.log("Data gagal diubah", e);
+      });
+
+    console.log("Data yang diubah:", editDataCountries);
   };
-  const handleEditCity =  () => {
+
+
+  // edit data prov
+  const handleEditProv = (e: any) => {
+    console.log("judulan", editDataProv)
+    e.preventDefault();
+
+    if (!editDataProv) {
+      console.log("editDataProv is undefined");
+      return;
+    }
+
+    // Convert editDataProv to JSON
+    const body = JSON.stringify(editDataProv);
+
+    // You can use any AJAX library you like
+    fetch(`http://localhost:3005/provinces/edit/${editDataProv.prov_id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: body,
+    })
+      .then((res) => {
+        console.log(res);
+        if (res.status === 200) {
+          message.success("Data berhasil diubah.");
+          // Optionally, reload the page or navigate to a different URL
+          window.location.reload();
+        } else {
+          message.error("Data gagal diubah.");
+        }
+      })
+      .catch((e: any) => {
+        message.error("Data gagal diubah.");
+        console.log("Data gagal diubah", e);
+      });
+
+    console.log("Data yang diubah:", editDataProv);
+  };
+
+  // edit data city
+  const handleEditCity = (e: any) => {
     console.log(editDataCity)
-    try {
-       editFormCity.validateFields();
-       dispatch(doUpdateProv(editDataCity));
-      handleCloseEditModalCity();
-      // editFormCountry.resetFields();
+    e.preventDefault();
 
-      message.success('Data berhasil di edit');
-    } catch (error) {
-      if (error instanceof Error) {
-        message.error('Gagal mengupdate data: ' + error.message);
-      } else {
-        // setAddFormError(error);
-      }
-    }
+    const body = JSON.stringify(editDataCity);
+    // You can use any AJAX library you like
+    fetch(`http://localhost:3005/address/edit/${editDataCity.addr_id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: body,
+    })
+      .then((res) => {
+        console.log(res);
+        if (res.status === 200) {
+          message.success("Data berhasil diubah.");
+          // Optionally, reload the page or navigate to a different URL
+          window.location.reload();
+        } else {
+          message.error("Data gagal diubah.");
+        }
+      })
+      .catch((e: any) => {
+        message.error("Data gagal diubah.");
+        console.log("Data gagal diubah", e);
+      });
+    console.log("Data yang diubah:", editDataCountries);
   };
 
   // delete data 
@@ -462,7 +552,7 @@ export default function MasterLocations() {
       dispatch(doDeleteRegions(regionCode));
       await dispatch(doRegionsRequest(regionCode));
       console.log('idDeleteRegion:', regionCode);
-      // window.location
+      window.location.reload();
       message.success('Data berhasil dihapus');
     } catch (error) {
       message.error('Data gagal di hapus');
@@ -473,9 +563,10 @@ export default function MasterLocations() {
   //Country
   const handleDeleteCountry = async (country_id: any) => {
     try {
-       dispatchDelete(doDeleteCountry(country_id));
+      dispatchDelete(doDeleteCountry(country_id));
       console.log('idDelete:', country_id);
       message.success('Data berhasil dihapus');
+      window.location.reload();
     } catch (error) {
       message.error('Data gagal di hapus');
       console.log("delete id : ", country_id);
@@ -487,6 +578,7 @@ export default function MasterLocations() {
       await dispatch(doDeleteProv(prov_id));
       console.log('idDelete:', prov_id);
       message.success('Data berhasil dihapus');
+      window.location.reload();
     } catch (error) {
       message.error('Data gagal di hapus');
       console.log("delete id : ", prov_id);
@@ -530,8 +622,8 @@ export default function MasterLocations() {
   //   country
   const [addDataCountry, setAddDataCountry] = useState({
     // countryId: 0,
-    country_name: '',
-    country_region_id: '',
+    countryName: '',
+    countryRegion: '',
   });
   console.log('AddDataCountry:', addDataCountry)
   //   Provinces
@@ -581,7 +673,7 @@ export default function MasterLocations() {
   };
 
   // menambahkan data region
-  const handleAddRegion = async ():any => {
+  const handleAddRegion = async (): any => {
     try {
       await addFormRegion.validateFields();
       await dispatch(doRegionsCreate(addDataRegion));
@@ -603,20 +695,22 @@ export default function MasterLocations() {
     }
   };
   //   country add data
-  const handleAddCountry = async ():any => {
+  const handleAddCountry = async () => {
     try {
       await addFormCountry.validateFields();
-      await dispatch(doCountryCreate(addDataCountry));
+      dispatch(doCountryCreate(addDataCountry))
       await dispatch(doCountryRequest(addDataCountry));
       handleCloseAddModalCountry();
       addFormCountry.resetFields();
       setAddDataCountry({
         // countryId: 0,
-        country_name: '',
-        country_region_id:'',
+        countryName: '',
+        countryRegion: dataRegion?.regionCode,
       });
       //   loadData()
+      window.location.reload()
       console.log('dataCOuntryAdd:', addDataCountry)
+      // setLoadCountry(false)
       message.success('Data berhasil ditambahkan');
     } catch (error) {
       if (error instanceof Error) {
@@ -641,6 +735,8 @@ export default function MasterLocations() {
         provCountry: '',
       });
       message.success('Data berhasil ditambahkan');
+      // setLoadProv(false)
+      window.location.reload()
     } catch (error) {
       if (error instanceof Error) {
         message.error('Data gagal ditambahkan ' + error.message);
@@ -650,7 +746,7 @@ export default function MasterLocations() {
     }
   };
   //   City add data
-  const handleAddCity = async ():any => {
+  const handleAddCity = async (): any => {
     try {
       await addFormCity.validateFields();
       await dispatch(doAddrCreate(addDataCity));
@@ -663,6 +759,8 @@ export default function MasterLocations() {
         addrProv: '',
       });
       message.success('Data berhasil ditambahkan');
+      // setLoadAddr(false)
+      window.location.reload()
     } catch (error) {
       if (error instanceof Error) {
         message.error('Data gagal ditambahkan ' + error.message);
@@ -873,9 +971,9 @@ export default function MasterLocations() {
       key: 'actions',
       render: (_: any, record: { addr_id: any }) => (
         <span className="flex">
-          <Button type="button" onClick={() => 
+          <Button type="button" onClick={() =>
             handleEditDataCity(record.addr_id)}
-            >Edit</Button>
+          >Edit</Button>
           <Popconfirm
             title="Are you sure to delete this City?"
             onConfirm={() => handleDeleteCity(record.addr_id)}
@@ -998,9 +1096,9 @@ export default function MasterLocations() {
                 style={{ textAlign: 'center' }}
               >
                 <Input
-                value={addDataCountry.country_region_id} 
-                name="country_region_id" 
-                onChange={handleAddInputChangeCountry} 
+                  value={addDataCountry?.countryRegion}
+                  name="countryRegion"
+                  onChange={handleAddInputChangeCountry}
                 />
               </Form.Item>
               <Form.Item
@@ -1013,7 +1111,7 @@ export default function MasterLocations() {
                   },
                 ]}
               >
-                <Input name="countryName" value={addDataCountry.country_name} onChange={handleAddInputChangeCountry} />
+                <Input name="countryName" value={addDataCountry?.countryName} onChange={handleAddInputChangeCountry} />
               </Form.Item>
             </Form>
           </Modal>
@@ -1029,11 +1127,12 @@ export default function MasterLocations() {
                 // name="countryRegion"
                 style={{ textAlign: 'center' }}
               >
-                <Input name='country_region_id' value={editDataCountries?.country_region_id} onChange={handleEditInputChangeCountries}/>
+                <Input value={editDataCountries?.country_id} onChange={handleEditInputChangeCountries} hidden />
+                <Input value={editDataCountries?.countryRegion} name='countryRegion' onChange={handleEditInputChangeCountries} />
               </Form.Item>
               <Form.Item
                 label="Country Name"
-                name='country_name'
+                // name='countryName'
                 rules={[
                   {
                     required: true,
@@ -1041,11 +1140,11 @@ export default function MasterLocations() {
                   },
                 ]}
               >
-                <Input 
-                placeholder="input country"
-                onChange={handleEditInputChangeCountries}
-                // value={prevData?.country_name}
-                // name="country_name"
+                <Input
+                  placeholder="input country"
+                  onChange={handleEditInputChangeCountries}
+                  value={editDataCountries?.countryName}
+                  name="countryName"
                 />
               </Form.Item>
             </Form>
@@ -1066,7 +1165,7 @@ export default function MasterLocations() {
               //     ...rowSelection,
               // }}
               columns={columnsCountry}
-              dataSource={countryR} />
+              dataSource={dataCountry} />
           </Radio.Group>
         </div>
         <div>
@@ -1078,8 +1177,8 @@ export default function MasterLocations() {
           >
             <Form form={addFormProvinces} layout="vertical" onFinish={handleAddProvinces}>
               <Form.Item
-                label={`Country Name: ${dataCountries?.country_name}`}
-                name="provCountry"
+                label={`Country Name: ${dataProvCountry?.country_name}`}
+              // name="provCountry"
               >
                 {/* <Input name="countryId" value={addDataCountry.countryId} onChange={handleAddInputChangeCountry} hidden/> */}
                 <Input name="provCountry" value={addDataProvinces.provCountry} onChange={handleAddInputChangeProv} />
@@ -1105,13 +1204,14 @@ export default function MasterLocations() {
             onCancel={handleCloseEditModalProvinces}
           >
             <Form form={editFormCountry} layout="vertical" onFinish={handleEditProv}>
-             
+
               <Form.Item
-                label={`Country Name:    ${dataCountries?.country_name}`}
+                label={`Country Name:    ${dataProvCountry?.country_name}`}
                 // name="countryRegion"
                 style={{ textAlign: 'center' }}
               >
-                <Input name='provCountry' value={editDataProv.provCountry} onChange={handleEditInputChangeProv}/>
+                <Input name='prov_id' value={editDataProv.prov_id} onChange={handleEditInputChangeProv} hidden />
+                <Input name='provCountry' value={editDataProv.provCountry} onChange={handleEditInputChangeProv} />
               </Form.Item>
               <Form.Item
                 label="Provinces Name"
@@ -1123,7 +1223,7 @@ export default function MasterLocations() {
                   },
                 ]}
               >
-                <Input name='provName' value={editDataProv.provName} onChange={handleEditInputChangeProv}/>
+                <Input name='provName' value={editDataProv.provName} onChange={handleEditInputChangeProv} />
               </Form.Item>
             </Form>
           </Modal>
@@ -1154,7 +1254,7 @@ export default function MasterLocations() {
           >
             <Form form={addFormCity} layout="vertical" onFinish={handleAddCity}>
               <Form.Item
-                label={`City Provinces : ${dataProvCity?.prov_name}`}
+                label={`Provinces : ${dataProvCity?.prov_name}`}
                 name="addrProv"
               >
                 {/* <Input name="countryId" value={addDataCountry.countryId} onChange={handleAddInputChangeCountry} hidden/> */}
@@ -1171,6 +1271,31 @@ export default function MasterLocations() {
                 ]}
               >
                 <Input name="addrLine2" value={addDataCity.addrLine2} onChange={handleAddInputChangeCity} />
+              </Form.Item>
+            </Form>
+          </Modal>
+
+          {/* edit data city */}
+          <Modal
+            title="Edit City"
+            open={openEditModalCity}
+            onOk={handleEditCity}
+            onCancel={handleCloseEditModalCity}
+          >
+            <Form form={editFormCountry} layout="vertical" onFinish={handleEditCity}>
+
+              <Form.Item
+                label={`Provinces:   ${dataProvCity?.prov_name}`}
+                // name="countryRegion"
+                style={{ textAlign: 'center' }}
+              >
+                <Input name='addrId' value={editDataCity?.addrId} onChange={handleEditInputChangeCity} hidden />
+                <Input name='addrProv' value={editDataCity?.addrProv} onChange={handleEditInputChangeCity} />
+              </Form.Item>
+              <Form.Item
+                label="City Name"
+              >
+                <Input name='addrLine2' value={editDataCity?.addrLine2} onChange={handleEditInputChangeCity} />
               </Form.Item>
             </Form>
           </Modal>

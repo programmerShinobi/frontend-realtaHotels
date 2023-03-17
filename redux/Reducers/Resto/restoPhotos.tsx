@@ -27,7 +27,7 @@ function restoPhotosReducers(state = initialState, action: any) {
       return { ...state, restoPhotos: state.restoPhotos.filter((restoPhotos: any) => restoPhotos.id !== action.payload.id) };
 
     default:
-      return { ...state, restoPhotos: action.payload };
+      return state;
   }
 }
 

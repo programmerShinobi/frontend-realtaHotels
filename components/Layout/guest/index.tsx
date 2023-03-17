@@ -3,10 +3,10 @@ import { Layout, theme } from 'antd';
 import PrivateWithAuth from "@/components/Private/withAuth";
 import { useRouter } from 'next/router';
 import HeaderGuest from '@/components/Header/guest';
-import Footer from '@/components/Footer/guest/footer';
+import FooterGuest from '@/components/Footer/guest/footer';
 
 const LayoutGuest = ({ children }: any) => {
-  const { Header, Content } = Layout;
+  const { Header, Content, Footer } = Layout;
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -36,8 +36,10 @@ const LayoutGuest = ({ children }: any) => {
 
           </Content>
 
-          {/* Footer */}
-          <Footer />
+          <Footer className="bg-[#131828] dark:bg-gray-900">
+              {/* Footer */}
+              <FooterGuest /> 
+          </Footer>
 
       </Layout>
     </>

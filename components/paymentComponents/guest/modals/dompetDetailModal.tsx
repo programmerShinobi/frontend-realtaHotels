@@ -21,7 +21,7 @@ export default function DompetDetailModal(props: {
     const showCardDetail = () => {
         return (
             <Col className="flex flex-col items-center">
-                <Container className="bg-blue-300 rounded-xl h-48 py-10">
+                <Container className="bg-gradient-to-br from-blue-200 to-blue-900 rounded-xl h-48 py-10">
                     <Text b size={18}> Dompet Realta </Text>
                     <Text size={28}> {money(dompetdata?.balance)} </Text>
                     <Text i> {dompetdata?.fullName} </Text>

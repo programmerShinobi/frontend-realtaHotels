@@ -13,21 +13,23 @@ const Slideshow = () => {
   ];
 
   return (
-    <div className="static">
-      <Carousel autoplay autoplaySpeed={5000} dots={true} arrows={true} >
-        <div className=''>
-            <img src="./img/Frame 15.png" alt="frame-1" />
-        </div>
-        <div className=''>
-            <img src="./img/Frame 16.png" alt="frame-2" />
-        </div>
-        <div className=''>
-            <img src="./img/Frame 17.png" alt="frame-3" />
-        </div>
-        <div className=''>
-            <img src="./img/Frame 18.png" alt="frame-4" />
-        </div>
-      </Carousel>
+    <div className="relative w-full flex justify-center">
+      <div className="w-5/6 max-w-screen">
+        <Carousel autoplay autoplaySpeed={5000} dots={true} arrows={true} >
+          <div className=''>
+              <img src="./img/Frame 15.png" alt="frame-1" />
+          </div>
+          <div className=''>
+              <img src="./img/Frame 16.png" alt="frame-2" />
+          </div>
+          <div className=''>
+              <img src="./img/Frame 17.png" alt="frame-3" />
+          </div>
+          <div className=''>
+              <img src="./img/Frame 18.png" alt="frame-4" />
+          </div>
+        </Carousel>
+      </div>
     </div>
   );
 };

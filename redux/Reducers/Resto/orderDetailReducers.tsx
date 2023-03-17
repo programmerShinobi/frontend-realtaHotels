@@ -20,7 +20,7 @@ function orderDetailReducers(state = initialState, action: any) {
       return { ...state, orderDetails: action.payload };
 
     default:
-      return { ...state, orderDetails: action.payload };
+      return state;
   }
 }
 

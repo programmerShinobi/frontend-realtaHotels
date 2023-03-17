@@ -44,7 +44,7 @@ const GuestAccount = () => {
     useEffect(() => {
         dispatch(fetchUserAccountBy({ userId: userId }))
         dispatch(fetchBanks(paginationOptions))
-    }, [dispatch])
+    }, [account])
 
     const fintech = account?.filter((item: UserAccount) => item.paymentType == "Fintech")
     const card = account?.filter((item: UserAccount) => item.paymentType !== "Fintech")
@@ -64,7 +64,7 @@ const GuestAccount = () => {
                 <title>My Account</title>
             </Head>
             <LayoutGuest>
-                <div className="mx-64">
+                <div className="mx-52">
                     <Col>
                         <Card variant="bordered" className="my-5">
                             <Card.Header className="pb-0">

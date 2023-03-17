@@ -72,6 +72,7 @@ export default function BankTable({ data, totalPage, paginationOptions, setPagin
 
     return (
         <div className="w-[100%]">
+            <Spacer/>
             <Row justify="space-between">
                 <Input
                     className="h-10"

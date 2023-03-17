@@ -110,10 +110,6 @@ export default function ModalComponent(props: any){
   /* handle form */
   const onFinish = (values: any) => {
 
-    console.log(values)
-    console.log(fileList)
-
-
     if (props.typeModal == "Add") {
       // console.log("Success Add:", values);
 
@@ -138,7 +134,6 @@ export default function ModalComponent(props: any){
       .then(() => {
         setFileList([]);
         message.success('upload successfully.');
-        console.log('upload successfully')
       })
       .catch((e: any) => {
         message.error('upload failed.');

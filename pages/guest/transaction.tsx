@@ -2,7 +2,6 @@ import Head from "next/head";
 import LayoutGuest from "@/components/Layout/guest";
 import TransactionHistory from "@/components/paymentComponents/guest/TransactionHistory";
 import { useDispatch, useSelector } from "react-redux";
-import { Transaction, UserAccount } from "@/lib/interfaces";
 import { useEffect, useMemo, useState } from "react";
 import { fetchUserAccountBy } from "@/redux/Actions/payment/userAccount";
 import { fetchTransactions } from "@/redux/Actions/payment/transaction";
@@ -16,7 +15,6 @@ export default function GuestTransaction() {
     
     const { transactions, page, totalTrx, total, lastPage, message, status } = useSelector((state: any) => state.transactionReducer)
     
-    const [selectedTransactionType, setSelectedTransactionType] = useState("")
     const [paginationOptions, setPaginationOptions] = useState({
         page: page,
         limit: 50,
@@ -27,7 +25,11 @@ export default function GuestTransaction() {
 
     useEffect(() => {
         dispatch(fetchTransactions(paginationOptions))
-    }, [dispatch])
+    }, [paginationOptions])
+
+    const handlePaginationOptions = (options: any) => {
+        setPaginationOptions(options)
+    }
     
     return (
         <>
@@ -35,7 +37,12 @@ export default function GuestTransaction() {
                 <title> My Transactions </title>
             </Head>
             <LayoutGuest>
-                <TransactionHistory data={transactions} total={total} />
+                <TransactionHistory
+                    userId={userId}
+                    data={transactions}
+                    paginationOptions={paginationOptions}
+                    setPaginationOptions={handlePaginationOptions}
+                    total={total} />
             </LayoutGuest>
         </>
     )

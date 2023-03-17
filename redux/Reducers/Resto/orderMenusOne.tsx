@@ -14,7 +14,7 @@ function orderMenusAkhirReducers(state = initialState, action: any): any {
     case ActionTypeResto.GET_AKHIR_ORDER_MENUS_FAILED:
       return { ...state, orderMenusAkhir: action.payload };
     default:
-      return { ...state, orderMenusAkhir: action.payload };
+      return state;
   }
 }
 

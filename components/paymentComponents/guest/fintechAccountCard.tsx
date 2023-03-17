@@ -32,8 +32,8 @@ const FintechAccountCard = (props: {
 
     const activateButton = (type: string) => {
         return type == 'dompet' ?
-            (<Button className="text-white bg-[#F33C5D]" onPress={() => setActivateDompetVisible(true)}> Activate </Button>) :
-            (<Button className="text-[#F33C5D]" onPress={() => setActivateGotoVisible(true)}> Link account </Button>)
+            (<Button color={"error"} onPress={() => setActivateDompetVisible(true)}> Activate </Button>) :
+            (<Button color={"error"} onPress={() => setActivateGotoVisible(true)}> Link account </Button>)
     }
 
     const showBalance = (data: any) => {

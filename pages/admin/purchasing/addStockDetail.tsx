@@ -33,7 +33,6 @@ const addStockDetail = () => {
         dispatch(doGetStocks())
         dispatch(doGetFaciNameAndId())
     },[])
-    console.log(faciName)
     
     useEffect(()=>{
         dispatch(doGetStockDetail())
@@ -69,16 +68,13 @@ const addStockDetail = () => {
     ]
 
     const EditButton = (value:any) =>{
-        // console.log(value)
         const stockDetailId = stockDetail.find((item:any)=> item.detailid == value)
-        // console.log(stockDetailId)
         setModalEditDetail(true)
         setEditDetail({
             stodId : value,
             stodStatus : stockDetailId.stodstatus,
             stodFaciId : stockDetailId.faciid
         })
-        console.log(editDetail)
     }
     // const eventHandlerForDetail = (input:any) =>(event:any) =>{
     //     setEditDetail({...editDetail, [input]:event.target.value})
@@ -137,7 +133,7 @@ const addStockDetail = () => {
   return (
     <LayoutAdmin>
         <div>
-            <h1 className='font-bold text-center'>{stockName[0]?.stockName ? stockName[0]?.stockName : []}</h1>
+            <h1 className='font-bold text-center'>{stockName[0]?.stockName ? stockName[0].stockName : []}</h1>
         </div>
         <div>
             <button className="bg-[#3C6FF3] w-40 px-2 py-1 rounded text-white hover:bg-[#274799] m-8"><Link href='/admin/purchasing/stocks'>Back To Stocks</Link></button>

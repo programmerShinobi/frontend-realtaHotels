@@ -5,8 +5,8 @@ import { Col, DatePicker, Dropdown, Input, Row, Space, MenuProps } from "antd";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { doLogin } from "@/redux/Actions/Users/reduceActions";
-import { useDispatch } from "react-redux";
+import { doLogin, doUserRequest } from "@/redux/Actions/Users/reduceActions";
+import { useDispatch, useSelector } from "react-redux";
 import { BookOutlined, DownOutlined, IdcardOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import LoginIcon from "@mui/icons-material/Login";
 import KeyIcon from '@mui/icons-material/Key';
@@ -124,13 +124,38 @@ const NavBar: React.FC = () => {
     const token: any = localStorage.getItem('token');
     setFullName(localStorage.getItem('userFullName'));
     setUserPhoto(localStorage.getItem('userPhoto'));
-    setProfilePhotoMe(localStorage.getItem('profilePhotoMe'));
-    setProfileNameMe(localStorage.getItem('userFullNameNew'));
     if (token) {
       setLogin(true);
     } else {
       setLogin(false);
     }
+  });
+
+  const [profile, setProfile]: any = useState([]);
+  const userMe = useSelector((state: any) => state.usersReducers.user);
+  useEffect(() => {
+    const userId = localStorage.getItem('userId');
+    dispatch(doUserRequest(userId));
+  },[]);
+
+  // Profile General
+  useEffect(() => {
+    if (userMe?.results) {
+      setProfile(userMe.results[0]);
+    }
+    
+    if (localStorage.getItem('profilePhotoMe') != profile?.uspro_photo) {
+      setProfilePhotoMe(profile?.uspro_photo);
+    } else {
+      setProfilePhotoMe(localStorage.getItem('profilePhotoMe'));
+    }
+
+    if (localStorage.getItem('userFullNameNew') != profile?.user_full_name) {
+      setProfileNameMe(profile?.user_full_name);
+    } else {
+      setProfileNameMe(localStorage.getItem('userFullNameNew'));
+    }
+    
   });
 
   let myPhoto: any;
@@ -229,7 +254,7 @@ const NavBar: React.FC = () => {
 
   return (
     <>
-            <header className="w-full sticky mb-1 shadow">
+            <header className="w-full mb-1 shadow">
         <div className="relative bg-white">
           <div className="relative pl-6">
             <nav className="flex items-center justify-between h-16 lg:h-20">
@@ -263,7 +288,7 @@ const NavBar: React.FC = () => {
                       {/* Provices */}
                       <Col span={5} className="flex items-center">
                         <Input
-                          placeholder="City"
+                          placeholder="City/Provinces"
                           type="text"
                           name="Provices"
                           value={search.Provices}

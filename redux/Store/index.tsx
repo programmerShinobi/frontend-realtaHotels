@@ -45,6 +45,14 @@ import PritReducer from "redux/Reducers/Masters/PritReducer";
 import cagroReducer from "redux/Reducers/Masters/CagroReducer";
 import serviceTaskReducer from "redux/Reducers/Masters/serviceTaskReducer";
 import bookingHistoryReducer from "../Reducers/Booking/bookingHistory";
+import orderMenusIdAkhirReducers from "../Reducers/Resto/orderMenusIdAkhir";
+import orderDetailReducers from "../Reducers/Resto/orderDetailReducers";
+import orderMenusAkhirReducers from "../Reducers/Resto/orderMenusOne";
+import orderMenusReducers from "../Reducers/Resto/orderMenusReducers";
+import restoCardClientReducers from "../Reducers/Resto/restoCardClientReducer";
+import restoMenusPhotosUrlReducers from "../Reducers/Resto/restoMenuPhotosUrlReducers";
+import restoMenusReducers from "../Reducers/Resto/restoMenusReducer";
+import restoPhotosReducers from "../Reducers/Resto/restoPhotos";
 
 const saga = createSagaMiddleware();
 const reducer = combineReducers({
@@ -71,7 +79,6 @@ const reducer = combineReducers({
   employeePayHistoryReducer,
   employeeDepartmentHistoryReducer,
 
-
   //Hotels
   HotelAdminReducer,
   FaciAdminReducer,
@@ -91,7 +98,16 @@ const reducer = combineReducers({
   GetInvoiceReducer,
   boexReducer,
   bookingHistoryReducer,
+
   //Resto
+  orderDetailReducers,
+  orderMenusIdAkhirReducers,
+  orderMenusAkhirReducers,
+  orderMenusReducers,
+  restoCardClientReducers,
+  restoMenusPhotosUrlReducers,
+  restoMenusReducers,
+  restoPhotosReducers,
 
   //Payment
   transactionReducer,
@@ -107,6 +123,7 @@ const reducer = combineReducers({
   sphoReducers: sphoReducers,
   stodReducers: stodReducers,
 });
+
 const store = configureStore({
   reducer,
   middleware: (getDefaultMiddleware) =>

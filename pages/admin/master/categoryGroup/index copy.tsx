@@ -68,11 +68,9 @@ export default function MasterCategoryGroup() {
   const handleDelete = async (cagroId: number) => {
     try {
       await dispatchDelete(doDeleteCagro(cagroId));
-      console.log('idDelete:', cagroId);
       message.success('Data berhasil dihapus');
     } catch (error) {
       message.error('Data gagal di hapus');
-      console.log("delete id : ", cagroId);
     }
   };
   
@@ -154,7 +152,6 @@ export default function MasterCategoryGroup() {
       handleCloseAddModal();
       addForm.resetFields();
       
-      console.log('DataCagro:', newData)
       message.success('Data berhasil ditambahkan');
     } catch (error) {
       if (error instanceof Error) {
@@ -174,7 +171,6 @@ export default function MasterCategoryGroup() {
       cagroIconUrl: ''
     }
   );
-  console.log("dataValueEdit:", editData)
   
   
   // modal edit data cagro
@@ -206,17 +202,13 @@ export default function MasterCategoryGroup() {
   // mengambil data policy yang akan diedit dan mengisi nilai pada form edit data policy
   
   const handleEditData = (cagroId: any) => {
-    console.log("id", cagroId)
   
     const filterCagro = mCate?.find(
       (temp: any) => temp.cagroId === cagroId
     )
-    console.log('FindDataCagro:', filterCagro)
     handleOpenEditModal(filterCagro);
     setEditData(filterCagro)
   }
-  
-  console.log("editData:", editData)
   
   // edit data cagro
   const [editForm] = Form.useForm();
@@ -226,7 +218,6 @@ export default function MasterCategoryGroup() {
   
   // menyimpan perubahan data cagro
   const handleEdit = async (cagroId: any) => {
-    console.log(editData)
     try {
       await editForm.validateFields();
       await dispatchUpdateCagro(doUpdateCagro(editData));
@@ -277,7 +268,6 @@ export default function MasterCategoryGroup() {
   
   const handleClick = (cagroId: any) => {
     setOpen(true);
-    console.log("hadir", cagroId)
   
   };
   // Table antd columns cagro

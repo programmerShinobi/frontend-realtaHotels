@@ -2,7 +2,6 @@ import { Col, DatePicker, Input, Row } from "antd";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import dayjs from 'dayjs';
-import styles from "@/styles/ContentHome.module.css";
 
 export default function SearchHotel() {
   const root = useRouter()
@@ -16,7 +15,6 @@ export default function SearchHotel() {
     checkout:''
   })
   
-  console.log('out',search.checkout);
   const [cek,setCek]=useState('')
   
   const handleSearch = (event:any) => {
@@ -47,9 +45,10 @@ export default function SearchHotel() {
   };
 
   useEffect(()=>{
-    if (dayjs(search.checkin).isAfter(search.checkout, 'day')){
+    if (dayjs(search.checkin).isAfter(search.checkout, 'day')||dayjs(search.checkin).isSame(search.checkout, 'day') ){
       SetSearch({...search, checkout:dayjs(search.checkin).add(1, 'day').format('YYYY-MM-DD')})
     }
+    
   },[search.checkin])
 
   const Search = () => {
@@ -61,8 +60,6 @@ export default function SearchHotel() {
       setCek('Check-In Belum Di Input')
     }else if (search.checkout == ''){
       setCek('Check-Out Belum Di Input')
-    }else if (search.checkin == search.checkout){
-      setCek('Check-In Check-Out Tidak Boleh Sama')
     }else{
       if(search.Provices == ''){
         root.push({pathname: `/booking/`,search: `?guest=${search.guest}&Kids=${search.Kids}&Sroom=${search.Sroom}&checkIn=${search.checkin}&checkOut=${search.checkout}`})
@@ -72,9 +69,15 @@ export default function SearchHotel() {
     }
   }
 
+  useEffect(()=>{
+    if (search.Sroom !== 0 || search.guest !== 0 || search.checkout !== '' || search.Provices !== ''){
+      setCek('')
+    }
+  },[search.Sroom,search.checkin,search.checkout,search.guest])
+
   return (
     <>
-      <div className={styles.searchCardHome}>  
+      <div className='flex justify-center absolute w-full bottom-8'>  
         <Row gutter={6} className="bg-white w-4/6 rounded-2xl shadow-2xl justify-between" >
             <Col span={24} className="flex justify-center mt-4 pb-4">
               <Col span={7}>
@@ -83,6 +86,7 @@ export default function SearchHotel() {
                 </label>
                 <Input
                   className="rounded-lg"
+                  placeholder="City/Provinces"
                   type="text"
                   name="Provices"
                   value={search.Provices}
@@ -158,7 +162,7 @@ export default function SearchHotel() {
                 />
               </Col>
               <Col span={8} className="justify-center text-center">
-                <h2 className="absolute text-rose-500">{cek}</h2>
+                <h2 className="absolute text-rose-500 text-[13px]">{cek}</h2>
                 <button
                     type="button"
                     className="mt-7 rounded-lg bg-[#F33C5D] inline-block py-2 w-full text-white font-medium text-xs leading-tight uppercase shadow-md hover:bg-rose-600 hover:shadow-lg focus:bg-rose-800 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-rose-800 active:shadow-lg transition duration-150 ease-in-out "

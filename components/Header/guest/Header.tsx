@@ -42,7 +42,7 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <header className="w-full sticky mb-1 shadow">
+      <header className="w-full mb-1 shadow">
         <div className="sticky bg-white">
           <div className="relative px-4 mx-auto sm:px-6 lg:px-8">
             <nav className="flex items-center justify-between h-16 lg:h-20">

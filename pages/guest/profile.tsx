@@ -624,11 +624,11 @@ const GuestProfile: NextPage<Props> = ({ dirs }) => {
         <>
           {type.map((isType) => {
             if (isType) {
-              let color = isType.length < 5 ? 'geekpink' : 'green';
+              let color = isType.length < 5 ? 'geekblue' : 'green';
               if (isType === 'P') {
                 color = 'pink';
               } else if (isType === 'R') {
-                color = 'geekpink'
+                color = 'geekblue'
               }
               return (
                 <Tag color={color} key={isType}>
@@ -750,7 +750,7 @@ const GuestProfile: NextPage<Props> = ({ dirs }) => {
         <>
           {type.map((isType) => {
             if (isType) {
-              let color = isType.length < 5 ? 'geekpink' : 'green';
+              let color = isType.length < 5 ? 'geekblue' : 'green';
               if (isType === 'WIZARD') {
                 color = 'green';
               } else if (isType === 'VIP') {
@@ -789,7 +789,7 @@ const GuestProfile: NextPage<Props> = ({ dirs }) => {
         <>
           {status.map((isStatus) => {
             if (isStatus) {
-              let color = isStatus.length > 5 ? 'geekpink' : 'green';
+              let color = isStatus.length > 5 ? 'geekblue' : 'green';
               if (isStatus === 'expired') {
                 color = 'volcano';
               }
@@ -818,190 +818,225 @@ const GuestProfile: NextPage<Props> = ({ dirs }) => {
             <title>My Profile</title>
           </Head>
           <LayoutGuestProfile>
-            <Box className={styles.cardInBackground }>
-              <Box className="w-full" pt={6} pb={5}  >
-                <Box p={4} className="w-full border rounded-lg bg-white pb-6">
-                  <Box className="flex justify-between">
-                    <Box className="w-3/5">
-                      <Box className="mb-4 font-bold w-full h-fit mx-auto items-center text-pink-900 focus:outline-none focus-visible:ring focus-visible:ring-pink-500 focus-visible:ring-opacity-75">
-                        <div className={styles.textTitleInProfile}>
-                        General
-                        </div>
-                      </Box>
-                      <hr className="h-1 bg-[#FFACBB]"/>
-                      <Box className="pt-4  text-left font-normal text-pink-900">
-                        <div className={styles.textLabelInProfile}>
-                          This information will be displayed, so be careful what you share
-                        </div>
-                      </Box>
-                      <Box className=" flex justify-between">
-                        <Box className="w-1/4">
-                          <Box className="flex justify-center ">
-                            <label>
-                              <center>
-                                <Input
-                                  hidden
-                                  type="file"
-                                  onChange={handleFileSelect}
-                                />
-                              </center>
-                              <Box className="flex justify-center h-32 w-32 cursor-pointer">
-                                {selectedImage ? (
-                                  <img src={selectedImage} alt="" />
-                                ) : (
-                                  <img src={profile?profile.uspro_photo=='null'?"/images/user.png":"/images/" + profile.uspro_photo:''}/>
-                                )}
-                              </Box>
-                            </label>
-                          </Box>
-                          {selectedImage&&selectPhoto ? (
-                            <Box className="flex justify-center">
-                              <button
-                                className="shadow-lg w-32 py-1 px-1 mx-auto rounded-md  bg-pink-100 text-center text-pink-900 hover:bg-pink-200 focus:outline-none focus-visible:ring focus-visible:ring-pink-500 focus-visible:ring-opacity-75"
-                                onClick={handleUpload}
-                                disabled={uploading}
-                                style={{ opacity: uploading ? ".5" : "1" }}>
-                                <p className="normal-case font-normal">{uploading ? <CloudSyncIcon /> : <CloudUploadIcon className="h-5 w-5" />}&nbsp;{"Upload"}</p>
-                              </button>
+            <Box className="w-full" pt={6} pb={5} pr={15} pl={15} >
+              <Box p={4} className="w-full border rounded-lg bg-white pb-6">
+                <Box className="flex justify-between">
+                  <Box className="w-3/5">
+                    <Box className="mb-4 font-bold w-full h-fit mx-auto items-center text-pink-900 focus:outline-none focus-visible:ring focus-visible:ring-pink-500 focus-visible:ring-opacity-75">
+                      <div className={styles.textTitleInProfile}>
+                      General
+                      </div>
+                    </Box>
+                    <hr className="h-1 bg-[#FFACBB]"/>
+                    <Box className="pt-4  text-left font-normal text-pink-900">
+                      <div className={styles.textLabelInProfile}>
+                        This information will be displayed, so be careful what you share
+                      </div>
+                    </Box>
+                    <Box className=" flex justify-between">
+                      <Box className="w-1/4">
+                        <Box className="flex justify-center ">
+                          <label>
+                            <center>
+                              <Input
+                                hidden
+                                type="file"
+                                onChange={handleFileSelect}
+                              />
+                            </center>
+                            <Box className="flex justify-center h-32 w-32 cursor-pointer">
+                              {selectedImage ? (
+                                <img src={selectedImage} alt="" />
+                              ) : (
+                                <img src={profile?profile.uspro_photo=='null'?"/images/user.png":"/images/" + profile.uspro_photo:''}/>
+                              )}
                             </Box>
-                          ) : (
-                            <Box className="flex justify-center">
-                              <Button
-                                className="shadow-lg w-32 py-1 px-1 mx-auto rounded-md  bg-gray-100 text-center text-gray-400 hover:bg-gray-200 hover:text-gray-600 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75"
-                                disabled={true}
-                                style={{ opacity: uploading ? ".5" : "1" }}>
-                                <p className="normal-case font-normal">{uploading ? <CloudSyncIcon /> : <CloudUploadIcon className="h-5 w-5" />}&nbsp;{"Upload"}</p>
-                                </Button>
-                            </Box>
-                          )}
+                          </label>
                         </Box>
-                        <Box className="w-2/3">
-                          <Box className="grid">
-                            <Box className="max-w-4xl space-y-3">
-                              {/* Full Name */}
-                              <div className="flex flex-wrap">
-                                <span className={styles.formProfile}>
-                                  {
-                                    profile.user_full_name ? profile.user_full_name
-                                      : <em className="text-gray-300">{"Full Name (None)"}</em>
-                                  }
-                                </span>
-                              </div>
-                              {/* Memb. Name */}
-                              {/* <div className="flex flex-wrap">
-                                <span className={styles.formProfile}>
-                                  {
-                                    profile.usme_memb_name === "SILVER" ? "Silver Member"
-                                      : profile.usme_memb_name === "GOLD" ? "Gold Member"
-                                        : profile.usme_memb_name === "VIP" ? "VIP Member"
-                                          : profile.usme_memb_name === "WIZARD" ? "Wizard Member"
-                                            : <em className="text-gray-300">{"Member (None)"}</em>
-                                  }
-                                </span>
-                              </div> */}
-                              {/* Type Agency */}
-                              <div className="flex flex-wrap">
-                                <span className={styles.formProfile}>
-                                  {
-                                    profile.user_type === "T" ? "Travel Agency"
-                                      : profile.user_type === "C" ? "Company Agency"
-                                        : profile.user_type === "I" ? "Individual Agency"
-                                          : <em className="text-gray-300">{"Agency (None)"}</em>
-                                  }
-                                </span>
-                              </div>
-                              {/* Email */}
-                              <div className="flex flex-wrap">
-                                <span className={styles.formProfile}>
-                                  {profile.user_email ? (
+                        {selectedImage&&selectPhoto ? (
+                          <Box className="flex justify-center">
+                            <button
+                              className="shadow-lg w-32 py-1 px-1 mx-auto rounded-md  bg-pink-100 text-center text-pink-900 hover:bg-pink-200 focus:outline-none focus-visible:ring focus-visible:ring-pink-500 focus-visible:ring-opacity-75"
+                              onClick={handleUpload}
+                              disabled={uploading}
+                              style={{ opacity: uploading ? ".5" : "1" }}>
+                              <p className="normal-case font-normal">{uploading ? <CloudSyncIcon /> : <CloudUploadIcon className="h-5 w-5" />}&nbsp;{"Upload"}</p>
+                            </button>
+                          </Box>
+                        ) : (
+                          <Box className="flex justify-center">
+                            <Button
+                              className="shadow-lg w-32 py-1 px-1 mx-auto rounded-md  bg-gray-100 text-center text-gray-400 hover:bg-gray-200 hover:text-gray-600 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75"
+                              disabled={true}
+                              style={{ opacity: uploading ? ".5" : "1" }}>
+                              <p className="normal-case font-normal">{uploading ? <CloudSyncIcon /> : <CloudUploadIcon className="h-5 w-5" />}&nbsp;{"Upload"}</p>
+                              </Button>
+                          </Box>
+                        )}
+                      </Box>
+                      <Box className="w-2/3">
+                        <Box className="grid">
+                          <Box className="max-w-4xl space-y-3">
+                            {/* Full Name */}
+                            <div className="flex flex-wrap">
+                              <span className={styles.formProfile}>
+                                {
+                                  profile.user_full_name ? profile.user_full_name
+                                    : <em className="text-gray-300">{"Full Name (None)"}</em>
+                                }
+                              </span>
+                            </div>
+                            {/* Memb. Name */}
+                            {/* <div className="flex flex-wrap">
+                              <span className={styles.formProfile}>
+                                {
+                                  profile.usme_memb_name === "SILVER" ? "Silver Member"
+                                    : profile.usme_memb_name === "GOLD" ? "Gold Member"
+                                      : profile.usme_memb_name === "VIP" ? "VIP Member"
+                                        : profile.usme_memb_name === "WIZARD" ? "Wizard Member"
+                                          : <em className="text-gray-300">{"Member (None)"}</em>
+                                }
+                              </span>
+                            </div> */}
+                            {/* Type Agency */}
+                            <div className="flex flex-wrap">
+                              <span className={styles.formProfile}>
+                                {
+                                  profile.user_type === "T" ? "Travel Agency"
+                                    : profile.user_type === "C" ? "Company Agency"
+                                      : profile.user_type === "I" ? "Individual Agency"
+                                        : <em className="text-gray-300">{"Agency (None)"}</em>
+                                }
+                              </span>
+                            </div>
+                            {/* Email */}
+                            <div className="flex flex-wrap">
+                              <span className={styles.formProfile}>
+                                {profile.user_email ? (
+                                  <span>
+                                    {
+                                      profile ? profile.user_email
+                                        : ""
+                                    } <label className="font-normal text-pink-900"><em>(default)</em></label>
+                                  </span>
+                                ) : (
+                                  <em className="text-gray-300">{"Email (None)"}</em>
+                                )}
+                              </span>
+                            </div>
+                            {/* Phone Number */}
+                            <div className="flex flex-wrap">
+                              <span className={styles.formProfile}>
+                                {
+                                  profile.user_phone_number ? (
                                     <span>
-                                      {
-                                        profile ? profile.user_email
-                                          : ""
-                                      } <label className="font-normal text-pink-900"><em>(default)</em></label>
+                                      {profile.user_phone_number} <label className="font-normal text-pink-900"><em>(active)</em></label>
                                     </span>
                                   ) : (
-                                    <em className="text-gray-300">{"Email (None)"}</em>
-                                  )}
-                                </span>
-                              </div>
-                              {/* Phone Number */}
-                              <div className="flex flex-wrap">
-                                <span className={styles.formProfile}>
-                                  {
-                                    profile.user_phone_number ? (
-                                      <span>
-                                        {profile.user_phone_number} <label className="font-normal text-pink-900"><em>(active)</em></label>
-                                      </span>
-                                    ) : (
-                                      <em className="text-gray-300">{"Phone (None)"}</em>
-                                    )
-                                }
-                                </span>
-                              </div>
-                            </Box>
-                            <Box className="grid place-content-end w-full pt-2 pr-12">
-                              <div className={styles.PTbuttonEditProfile}>
-                                  <button
-                                    className="shadow-lg w-32 py-1 px-0  mx-auto rounded-md  bg-pink-100 text-center text-pink-900 hover:bg-pink-200 focus:outline-none focus-visible:ring focus-visible:ring-pink-500 focus-visible:ring-opacity-75"
-                                    onClick={() => handleEdit()}
-                                  >
-                                    <p className="normal-case font-normal">{<EditIcon className="h-4 w-4 mb-1" />}&nbsp;{"Edit"}</p>
-                                  </button>
-                              </div>
-                            </Box>
-                          </Box>
-                        </Box>
-                      </Box>
-                    </Box>
-                    <Box className="w-2/5">
-                      {/* Security */}
-                      <Box className="mb-4 font-bold w-full h-fit mx-auto items-center text-pink-900 focus:outline-none focus-visible:ring focus-visible:ring-pink-500 focus-visible:ring-opacity-75">
-                        <div className={styles.textTitleInProfile}>
-                          Security
-                        </div>
-                      </Box>
-                      <hr className="h-1 bg-[#FFDFE5]"/>
-                      <Box className="pt-4 ">
-                        <Box className="w-full pb-4">
-                          <Box className="flex items-stretch">
-                            <div className="text-left font-normal text-pink-900">
-                              <div className={styles.textLabelInProfile}>
-                                Change password 
-                              </div>
+                                    <em className="text-gray-300">{"Phone (None)"}</em>
+                                  )
+                              }
+                              </span>
                             </div>
                           </Box>
-                        </Box>
-                        <Box className="flex justify-between">
-                          <Box className="w-full ">
-                            <Box className="flex pb-4 items-end bg-white h-50">
-                              <Input
-                                  disabled={true}
-                                  className="border w-full bg-gray-100 text-center text-gray-400 hover:bg-gray-200 hover:text-gray-600 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75"
-                                  size="middle"
-                                  type="text"
-                                  value="**********************"
-                                />
-                            </Box>
-                          </Box>
-                          <Box className="w-full pl-4">
-                              <button
-                                className="shadow-lg w-full py-1 px-1 mx-auto rounded-md  bg-pink-100 text-center text-pink-900 hover:bg-pink-200 focus:outline-none focus-visible:ring focus-visible:ring-pink-500 focus-visible:ring-opacity-75"
-                                onClick={() => handleEditPassword()}
-                              >
-                                <p className="normal-case font-normal">{<EditIcon className="h-4 w-4 mb-1" />}&nbsp;{"Edit"}</p>
-                              </button>
+                          <Box className="grid place-content-end w-full pt-2 pr-12">
+                            <div className={styles.PTbuttonEditProfile}>
+                                <button
+                                  className="shadow-lg w-32 py-1 px-0  mx-auto rounded-md  bg-pink-100 text-center text-pink-900 hover:bg-pink-200 focus:outline-none focus-visible:ring focus-visible:ring-pink-500 focus-visible:ring-opacity-75"
+                                  onClick={() => handleEdit()}
+                                >
+                                  <p className="normal-case font-normal">{<EditIcon className="h-4 w-4 mb-1" />}&nbsp;{"Edit"}</p>
+                                </button>
+                            </div>
                           </Box>
                         </Box>
                       </Box>
                     </Box>
                   </Box>
+                  <Box className="w-2/5">
+                    {/* Security */}
+                    <Box className="mb-4 font-bold w-full h-fit mx-auto items-center text-pink-900 focus:outline-none focus-visible:ring focus-visible:ring-pink-500 focus-visible:ring-opacity-75">
+                      <div className={styles.textTitleInProfile}>
+                        Security
+                      </div>
+                    </Box>
+                    <hr className="h-1 bg-[#FFDFE5]"/>
+                    <Box className="pt-4 ">
+                      <Box className="w-full pb-4">
+                        <Box className="flex items-stretch">
+                          <div className="text-left font-normal text-pink-900">
+                            <div className={styles.textLabelInProfile}>
+                              Change password 
+                            </div>
+                          </div>
+                        </Box>
+                      </Box>
+                      <Box className="flex justify-between">
+                        <Box className="w-full ">
+                          <Box className="flex pb-4 items-end bg-white h-50">
+                            <Input
+                                disabled={true}
+                                className="border w-full bg-gray-100 text-center text-gray-400 hover:bg-gray-200 hover:text-gray-600 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75"
+                                size="middle"
+                                type="text"
+                                value="**********************"
+                              />
+                          </Box>
+                        </Box>
+                        <Box className="w-full pl-4">
+                            <button
+                              className="shadow-lg w-full py-1 px-1 mx-auto rounded-md  bg-pink-100 text-center text-pink-900 hover:bg-pink-200 focus:outline-none focus-visible:ring focus-visible:ring-pink-500 focus-visible:ring-opacity-75"
+                              onClick={() => handleEditPassword()}
+                            >
+                              <p className="normal-case font-normal">{<EditIcon className="h-4 w-4 mb-1" />}&nbsp;{"Edit"}</p>
+                            </button>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Box>
+                </Box>
+                <Box className="w-full">
+                  {/* Points & Members */}
+                  <Box className=" mb-4 pt-8 font-bold w-full h-fit mx-auto items-center text-pink-900 focus:outline-none focus-visible:ring focus-visible:ring-pink-500 focus-visible:ring-opacity-75">
+                    <div className={styles.textTitleInProfile}>
+                      Points & Members
+                    </div>
+                </Box>
+                <hr className="h-1 bg-[#FFACBB]"/>
+                <Box className=" pt-8">
+                    <Tabs
+                      onChange={onChangeTab}
+                      type="card"
+                      tabBarGutter={8}
+                    >
+                      <Tabs.TabPane
+                        tab={
+                          <div
+                            className="font-bold  items-center text-pink-900"
+                          >
+                            Bonus Points
+                          </div>
+                        }
+                        key="1"
+                      >
+                        <Table columns={columnsBonusPoints} dataSource={dataBonusPoints} />
+                      </Tabs.TabPane>
+                      <Tabs.TabPane
+                        tab={
+                          <div
+                            className="font-bold items-center text-pink-900"
+                          >
+                            Members
+                          </div>
+                        }
+                        key="2"
+                      >
+                        <Table columns={columnsMembers} dataSource={dataMembers} />
+                      </Tabs.TabPane>
+                    </Tabs>
+                  </Box>
                 </Box>
               </Box>
-            </Box>
-            <Box style={{paddingTop:'455px'}}>
-              {/* Footer */}
-              <Footer /> 
             </Box>
             <Transition appear show={isOpenEdit} as={Fragment}>
               <Dialog as="div" className="relative z-10" onClose={closeModalEdit}>

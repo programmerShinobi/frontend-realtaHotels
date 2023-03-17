@@ -57,14 +57,14 @@ export default function userAccountReducer(state = initialState, action: any) {
 			return {
 				...state,
 				accounts: action.data.result,
-				message: action.data.message,
+				// message: action.data.message,
 				status: action.data.status,
 			};
 		case FETCH_ACCOUNT_SUCCEED:
 			return {
 				...state,
 				accounts: action.data.result,
-				message: action.data.message,
+				// message: action.data.message,
 				status: action.data.status,
 			};
 

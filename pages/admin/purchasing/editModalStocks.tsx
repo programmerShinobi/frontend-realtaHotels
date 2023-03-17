@@ -27,7 +27,6 @@ const EditModalStocks = (props:any) => {
 
     const onFinish = () =>{
         dispatch(doEditStocks(formEdit))
-        console.log(formEdit)
         handleClose(false)
     }
   return (

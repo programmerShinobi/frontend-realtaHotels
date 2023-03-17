@@ -268,7 +268,14 @@ const index = () => {
       duration: 2.5
     }).then(()=>message.success('Stock Ordered', 2))
     .then(()=>message.info('Call Manager to Check the Order',2.5))
-    console.log(stockOrder);
+    // console.log(stockOrder);
+    setTimeout(() => { setStockOrder1({
+      vendors: [],
+    subtotal: 0,
+    tax: 0,
+    total: 0,
+    }) }, 3000)
+    
   };
   //Set What To Display when Searching Product
   const dataCard = dataSearch.length > 0 ? dataSearch : stockPhotos;
