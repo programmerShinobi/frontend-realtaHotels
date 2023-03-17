@@ -34,8 +34,6 @@ const sendWAOld3 = () => {
     'pesan': pesan
   };
 
-  console.info(dataPost);
-
   axios.post(url, dataPost, {
     headers: {
       'Content-Type': 'application/json',

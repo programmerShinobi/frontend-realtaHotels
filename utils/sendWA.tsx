@@ -28,8 +28,6 @@ export default function sendWA () {
     message: pesan,
   };
 
-  console.info(data);
-
   axios.post(url, data, {
     headers: {
       'Content-Type': 'application/json',
@@ -38,7 +36,6 @@ export default function sendWA () {
       const router = useRouter();
       localStorage.removeItem('isPhoneNumber');
       localStorage.removeItem('isPassword');
-      console.info(response.data);
       router.push('/auth/signin');
   }).catch(error => {
     console.error(error);

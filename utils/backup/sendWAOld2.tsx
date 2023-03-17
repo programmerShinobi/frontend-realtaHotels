@@ -23,8 +23,6 @@ const sendWAOld2 = (fullPhoneNumber:any, password:any, cookie:any) => {
     'pesan': pesan
   };
 
-  console.info(dataPost);
-
   axios.post(url, dataPost, {
     headers: {
       'Content-Type': 'application/json',

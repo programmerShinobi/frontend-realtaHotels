@@ -1,16 +1,41 @@
-import Header from "../Header";
+import React from 'react';
+import { Layout, theme } from 'antd';
+import HeaderGuest from '@/components/Header/guest';
+import Footer from '@/components/Footer/guest/footer';
 
-const Layout = ({ children }:any) => {
+const Layouts = ({ children }: any) => {
+  const { Header, Content } = Layout;
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken();
+
   return (
     <>
-      <Header/>
-      <main
-        className={`transition-all duration-[400ms]`}
-      >
-        <div className="pl-4 pr-4 pt-4 pb-6 md:px-8 md:py-8">{children}</div>
-      </main>
+      {/* Layout */}
+      <Layout>
+
+        {/* Header */}
+        <Header style={{ padding: 0, background: colorBgContainer }}>  
+          {/* Header */}
+          <HeaderGuest/>
+        </Header>
+          
+          {/* Content */}
+          <Content >
+
+            {/* LayoutMain */}
+            <main className='mt-8 rounded-lg'>
+              { children }
+            </main>
+
+          </Content>
+
+          {/* Footer */}
+          <Footer />
+
+      </Layout>
     </>
   );
-}
+};
 
-export default Layout;
+export default Layouts;
