@@ -1,3 +1,41 @@
+.textTitle {
+    display: flex;
+    width: 281px;
+    height: 36px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 32px;
+    line-height: 32px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    padding-top: 3%;
+    padding-left:8%;
+    color: white;
+    text-shadow: 0px 0px 5px #F33C5D;
+    
+}
+
+.textTitleEmployee {
+    display: flex;
+    width: 281px;
+    height: 36px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 32px;
+    line-height: 32px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    padding-top: 4%;
+    padding-left: 1.5%;
+    color: white;
+    text-shadow: 0px 0px 5px #3C6FF3;
+
+}
+
 .textTitleInProfile {
     display: flex;
     width: 281px;
@@ -38,7 +76,7 @@
     font-family: 'Poppins';
     font-style: normal;
     font-weight: 500;
-    font-size: 16px;
+    font-size: 15px;
     line-height: 35px;
     text-align: left;
 }
@@ -66,7 +104,6 @@
 
 .PTbuttonEditProfile {
     position: relative;
-    padding-top: 60px;
 }
 
 @media (max-width: 812px) {
@@ -75,3 +112,53 @@
         padding-top: 0px;
     }
 }
+
+.cardBackground{
+    background: url('/assets/backgroundProfileGuest.png') no-repeat;
+        -webkit-background-size: contain;
+        -moz-background-size: contain;
+        -o-background-size: contain;
+        background-size: contain;
+        width: 100%;
+        height: 100%;
+        top: 0;
+}
+
+.cardBackgroundEmpolyee {
+    background: url('/assets/backgroundProfileEmployee.png') no-repeat;
+    -webkit-background-size: contain;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-size: contain;
+    width: 100%;
+    height: 100%;
+    top: 0;
+}
+
+.textInBackground {
+    position: absolute;
+    left: 100px;
+    top: 100px;
+}
+
+.textInBackgroundEmployee {
+    position: absolute;
+    left: 100px;
+    top: 100px;
+}
+
+.cardInBackground {
+    position: absolute;
+    left: 8%;
+    top: 23%;
+    width: 85%;
+}
+
+.cardInBackgroundEmployee {
+    position: absolute;
+    left: 8%;
+    top: 23%;
+    width: 85%;
+}
+
+

@@ -1,5 +1,6 @@
-import ActionType from "@/redux/Constant/Users/ActionType"
+import ActionType from "@/redux/Constant/Users/ActionType";
 
+// USERS
 export const doUsersRequest:any = ():any => {
     return {
         type: ActionType.GET_USERS
@@ -53,7 +54,6 @@ export const doAddUsersSucceed:any = (payload:any):any => {
         type: ActionType.ADD_USERS_SUCCEED,
         payload
     }
-
 }
 
 export const doAddUsersFailed:any = (payload:any):any => {
@@ -86,6 +86,7 @@ export const doUpdateUsersFailed:any = (payload:any):any => {
     }
 }
 
+// UPDATE PHOTO USER
 export const doUpdatePhotoUsers:any = (id:number, payload:any) => {
     return {
         type: ActionType.UPDATE_PHOTO_USERS,
@@ -100,7 +101,6 @@ export const doUpdatePhotoUsersSucceed:any = (payload:any):any => { // undefined
         payload
     }
 }
-
 
 export const doUpdatePhotoUsersFailed:any = (payload:any):any => {
     return {
@@ -130,6 +130,7 @@ export const doDeleteUsersFailed:any = (payload:any):any => {
     }
 }
 
+// AUTH
 export const doLogin:any = (payload:any):any=> {
     return {
         type: ActionType.LOGIN,
@@ -193,6 +194,7 @@ export const doRegisterGuestFailed:any = (payload:any):any => {
     }
 }
 
+// ROLES
 export const doRolesRequest:any = ():any => {
     return {
         type: ActionType.GET_ROLES
@@ -319,6 +321,244 @@ export const doChangePasswordSucceed: any = (payload: any): any => {
 export const doChangePasswordFailed:any = (payload:any):any => {
     return {
         type: ActionType.CHANGE_PASSWORD_FAILED,
+        payload
+    }
+}
+
+// MEMBERS
+export const doMembersRequest:any = ():any => {
+    return {
+        type: ActionType.GET_MEMBERS
+    }
+}
+
+export const doMembersRequestSucceed:any = (payload:any):any => {
+    return {
+        type: ActionType.GET_MEMBERS_SUCCEED,
+        payload
+    }
+}
+
+export const doMembersRequestFailed:any = (payload:any):any => {
+    return {
+        type: ActionType.GET_MEMBERS_SUCCEED,
+        payload
+    }
+}
+
+export const doMemberRequest:any = (payload:any):any => {
+    return {
+        type: ActionType.GET_MEMBER,
+        payload
+    }
+}
+
+export const doMemberRequestSucceed:any = (memberId:number):any => {
+    return {
+        type: ActionType.GET_MEMBER_SUCCEED,
+        payload: memberId
+    }
+}
+
+export const doMemberRequestFailed:any = (payload:any):any => {
+    return {
+        type: ActionType.GET_MEMBER_SUCCEED,
+        payload
+    }
+}
+
+export const doMembersCreate:any = (payload:any):any => {
+    return {
+        type: ActionType.ADD_MEMBERS,
+        payload
+    }
+}
+
+export const doAddMembersSucceed:any = (payload:any):any => {
+    return {
+        type: ActionType.ADD_MEMBERS_SUCCEED,
+        payload
+    }
+
+}
+
+export const doAddMembersFailed:any = (payload:any):any => {
+    return {
+        type: ActionType.ADD_MEMBERS_FAILED,
+        payload
+    }
+}
+
+export const doUpdateMembers:any = (id:number, payload:any):any => {
+    return {
+        type: ActionType.UPDATE_MEMBERS,
+        id,
+        payload
+    }
+}
+
+export const doUpdateMembersSucceed:any = (payload:any):any => {
+    return {
+        type: ActionType.UPDATE_MEMBERS_SUCCEED,
+        payload
+    }
+}
+
+
+export const doUpdateMembersFailed:any = (payload:any):any => {
+    return {
+        type: ActionType.UPDATE_MEMBERS_FAILED,
+        payload
+    }
+}
+
+export const doDeleteMembers:any = (payload:any):any => {
+    return {
+        type: ActionType.DEL_MEMBERS,
+        payload
+    }
+}
+
+export const doDeleteMembersSucceed:any = (payload:any):any => {
+    return {
+        type: ActionType.DEL_MEMBERS_SUCCEED,
+        payload
+    }
+}
+
+export const doDeleteMembersFailed:any = (payload:any):any => {
+    return {
+        type: ActionType.DEL_MEMBERS_FAILED,
+        payload
+    }
+}
+
+
+// BONUSPOINTS
+export const doBonusPointsRequest:any = ():any => {
+    return {
+        type: ActionType.GET_BONUSPOINTS
+    }
+}
+
+export const doBonusPointsRequestSucceed:any = (payload:any):any => {
+    return {
+        type: ActionType.GET_BONUSPOINTS_SUCCEED,
+        payload
+    }
+}
+
+export const doBonusPointsRequestFailed:any = (payload:any):any => {
+    return {
+        type: ActionType.GET_BONUSPOINTS_SUCCEED,
+        payload
+    }
+}
+
+export const doBonusPointRequest:any = (payload:any):any => {
+    return {
+        type: ActionType.GET_BONUSPOINT,
+        payload
+    }
+}
+
+export const doBonusPointRequestSucceed:any = (ubpoId:number):any => {
+    return {
+        type: ActionType.GET_BONUSPOINT_SUCCEED,
+        payload: ubpoId
+    }
+}
+
+export const doBonusPointRequestFailed:any = (payload:any):any => {
+    return {
+        type: ActionType.GET_BONUSPOINT_SUCCEED,
+        payload
+    }
+}
+
+export const doBonusPointsCreate:any = (payload:any):any => {
+    return {
+        type: ActionType.ADD_BONUSPOINTS,
+        payload
+    }
+}
+
+export const doAddBonusPointsSucceed:any = (payload:any):any => {
+    return {
+        type: ActionType.ADD_BONUSPOINTS_SUCCEED,
+        payload
+    }
+
+}
+
+export const doAddBonusPointsFailed:any = (payload:any):any => {
+    return {
+        type: ActionType.ADD_BONUSPOINTS_FAILED,
+        payload
+    }
+}
+
+export const doUpdateBonusPoints:any = (id:number, payload:any):any => {
+    return {
+        type: ActionType.UPDATE_BONUSPOINTS,
+        id,
+        payload
+    }
+}
+
+export const doUpdateBonusPointsSucceed:any = (payload:any):any => {
+    return {
+        type: ActionType.UPDATE_BONUSPOINTS_SUCCEED,
+        payload
+    }
+}
+
+
+export const doUpdateBonusPointsFailed:any = (payload:any):any => {
+    return {
+        type: ActionType.UPDATE_BONUSPOINTS_FAILED,
+        payload
+    }
+}
+
+export const doDeleteBonusPoints:any = (payload:any):any => {
+    return {
+        type: ActionType.DEL_BONUSPOINTS,
+        payload
+    }
+}
+
+export const doDeleteBonusPointsSucceed:any = (payload:any):any => {
+    return {
+        type: ActionType.DEL_BONUSPOINTS_SUCCEED,
+        payload
+    }
+}
+
+export const doDeleteBonusPointsFailed:any = (payload:any):any => {
+    return {
+        type: ActionType.DEL_BONUSPOINTS_FAILED,
+        payload
+    }
+}
+
+export const doForgotPassword: any = (payload: any): any => {
+    return {
+        type: ActionType.FORGOT_PASSWORD,
+        payload
+    }
+}
+
+export const doForgotPasswordSucceed: any = (payload: any): any => {
+    return {
+        type: ActionType.FORGOT_PASSWORD_SUCCEED,
+        payload
+    }
+}
+
+export const doForgotPasswordFailed:any = (payload:any):any => {
+    return {
+        type: ActionType.FORGOT_PASSWORD_FAILED,
         payload
     }
 }

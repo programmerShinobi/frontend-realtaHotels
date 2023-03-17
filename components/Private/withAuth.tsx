@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { useEffect } from 'react';
 import { NextPage } from "next";
-import LoadingIndicator from "../Indicator/LoadingIndicator";
 
-const WithAuth = <P extends object>(WrappedComponent: NextPage<P>) => {
+const PrivateWithAuth = <P extends object>(WrappedComponent: NextPage<P>) => {
   return (props: P) => {
     const router = useRouter();
     const [isToken, setIsToken] = useState(null);
@@ -12,7 +11,8 @@ const WithAuth = <P extends object>(WrappedComponent: NextPage<P>) => {
       const token: any = localStorage.getItem('token');
       if (!token) {
         setIsToken(null);
-        router.replace('/users/login');
+        router.back();
+
       }
       else {
         setIsToken(token);
@@ -22,9 +22,9 @@ const WithAuth = <P extends object>(WrappedComponent: NextPage<P>) => {
       return <WrappedComponent {...props} />;
     }
     else {
-      return (<LoadingIndicator/>);
+      return(<></>);
     }
   }
 }
 
-export default WithAuth;
+export default PrivateWithAuth;

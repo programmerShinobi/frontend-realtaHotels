@@ -2,13 +2,18 @@ import ActionType from "@/redux/Constant/Users/ActionType";
 
 const initialState = {
     users: [],
-    user: []
+    user: [],
+    members: [],
+    member: [],
+    bonusPoints: [],
+    bonusPoint:[]
+    
 };
 
 function usersReducers(state = initialState, action:any) {
 
     switch (action.type) {
-
+        // USERS
         case ActionType.GET_USERS:
             return { ...state };
         case ActionType.GET_USERS_SUCCEED:
@@ -51,6 +56,7 @@ function usersReducers(state = initialState, action:any) {
                 users: state.users.filter((users:any) => users.id !== action.payload.id)
             }
 
+        // AUTH
         case ActionType.LOGIN:
             return { ...state };
         case ActionType.LOGIN_SUCCEED:
@@ -72,6 +78,7 @@ function usersReducers(state = initialState, action:any) {
         case ActionType.REGISTER_GUEST_FAILED:
             return { ...state, users: action.payload };
         
+        // ROLES
         case ActionType.GET_ROLES:
             return { ...state };
         case ActionType.GET_ROLES_SUCCEED:
@@ -107,6 +114,7 @@ function usersReducers(state = initialState, action:any) {
                 users: state.users.filter((users:any) => users.id !== action.payload.id)
             }
 
+        // CHANGE PASSWORD
         case ActionType.CHANGE_PASSWORD:
             return { ...state };
         case ActionType.CHANGE_PASSWORD_SUCCEED:
@@ -114,11 +122,93 @@ function usersReducers(state = initialState, action:any) {
         case ActionType.CHANGE_PASSWORD_FAILED:
             return applyChangePassword(state, action);
         
+        // MEMBERS
+        case ActionType.GET_MEMBERS:
+            return { ...state };
+        case ActionType.GET_MEMBERS_SUCCEED:
+            return { ...state, members: action.payload };
+
+        case ActionType.GET_MEMBER:
+            return { ...state };
+        case ActionType.GET_MEMBER_SUCCEED:
+            return {
+                ...state,
+                user: action.payload
+            }
+
+        case ActionType.ADD_MEMBERS:
+            return { ...state };
+        case ActionType.ADD_MEMBERS_SUCCEED:
+            return { ...state, members: [...state.members, action.payload] };
+        case ActionType.ADD_MEMBERS_FAILED:
+            return { ...state, members: action.payload };
+
+        case ActionType.UPDATE_MEMBERS:
+            return { ...state };
+        case ActionType.UPDATE_MEMBERS_SUCCEED:
+            return applyUpdateMembers(state, action);
+        case ActionType.UPDATE_MEMBERS_FAILED:
+            return applyUpdateMembers(state, action);
+
+        case ActionType.DEL_MEMBERS:
+            return { ...state };
+        case ActionType.DEL_MEMBERS_SUCCEED:
+            return {
+                ...state,
+                members: state.members.filter((members:any) => members.id !== action.payload.id)
+            }
+        
+        // BONUSPOINTS
+        case ActionType.GET_BONUSPOINTS:
+            return { ...state };
+        case ActionType.GET_BONUSPOINTS_SUCCEED:
+            return { ...state, bonusPoints: action.payload };
+
+        case ActionType.GET_BONUSPOINT:
+            return { ...state };
+        case ActionType.GET_BONUSPOINT_SUCCEED:
+            return {
+                ...state,
+                user: action.payload
+            }
+
+        case ActionType.ADD_BONUSPOINTS:
+            return { ...state };
+        case ActionType.ADD_BONUSPOINTS_SUCCEED:
+            return { ...state, bonusPoints: [...state.bonusPoints, action.payload] };
+        case ActionType.ADD_BONUSPOINTS_FAILED:
+            return { ...state, bonusPoints: action.payload };
+
+        case ActionType.UPDATE_BONUSPOINTS:
+            return { ...state };
+        case ActionType.UPDATE_BONUSPOINTS_SUCCEED:
+            return applyUpdateBonusPoints(state, action);
+        case ActionType.UPDATE_BONUSPOINTS_FAILED:
+            return applyUpdateBonusPoints(state, action);
+
+        case ActionType.DEL_BONUSPOINTS:
+            return { ...state };
+        case ActionType.DEL_BONUSPOINTS_SUCCEED:
+            return {
+                ...state,
+                bonusPoints: state.bonusPoints.filter((bonusPoints: any) => bonusPoints.id !== action.payload.id)
+            }
+        
+        // FORGOT PASSWORD
+        case ActionType.FORGOT_PASSWORD:
+            return { ...state };
+        case ActionType.FORGOT_PASSWORD_SUCCEED:
+            return applyForgotPassword(state, action);
+        case ActionType.FORGOT_PASSWORD_FAILED:
+            return applyForgotPassword(state, action);
+        
+        // DEFAULT
         default:
-            return { ...state, users: action.payload }
+            return state
     }
 }
 
+// UPDATE USERS
 const applyUpdateUsers = (state: any, action: any) => {
     return state.user.results.map((user:any) => {
         if (user.user_id === state.user.results.user_id) {
@@ -132,6 +222,7 @@ const applyUpdateUsers = (state: any, action: any) => {
     });
 }
 
+// UPDATE PHOTO USER
 const applyUpdatePhotoUsers = (state: any, action: any) => {
     return state.user.results.map((user:any) => {
         if (user.usproId === action.payload.data.results.usproId) {
@@ -145,6 +236,7 @@ const applyUpdatePhotoUsers = (state: any, action: any) => {
     });
 }
 
+// UPDATE ROLES
 const applyUpdateRoles = (state:any, action:any) => {
     return state.users.results.map((users: any) => {
         if (users.roleId == state.user.results.roleId) {
@@ -158,6 +250,7 @@ const applyUpdateRoles = (state:any, action:any) => {
     });
 }
 
+// UPDATE CHANGE PASSWORD
 const applyChangePassword = (state:any, action:any) => {
     return state.user.results.map((user: any) => {
         if (user.user_id === state.user.results.user_id) {
@@ -170,5 +263,46 @@ const applyChangePassword = (state:any, action:any) => {
         }
     });
 }
+
+// UPDATE MEMBERS
+const applyUpdateMembers = (state: any, action: any) => {
+    return state.members.results.map((member:any) => {
+        if (member.usmeId === state.members.results.usmeId) {
+            return {
+                ...state,
+                ...state.member.results
+            }
+        } else {
+            return state
+        }
+    });
+}
+
+// UPDATE BONUSPOINTS
+const applyUpdateBonusPoints = (state: any, action: any) => {
+    return state.bonusPoints.results.map((bonusPoint: any) => {
+        if (bonusPoint.ubpoId === state.bonusPoints.results.ubpoId) {
+            return {
+                ...state,
+                ...state.bonusPoints.results
+            }
+        } else {
+            return state
+        }
+    });
+}
+
+// UPDATE FORGOT PASSWORD
+const applyForgotPassword = (state: any, action: any) => {
+    if (action.payload.data.results) {
+        return {
+            ...action,
+            ...action.payload.data.results
+        }
+    }
+
+    return action;
+}
+
 
 export default usersReducers

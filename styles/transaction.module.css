@@ -1,0 +1,8 @@
+.balance_info__card_header {
+    padding: 0.5rem;
+}
+
+.balance_info__card_body {
+    text-align: center;
+    justify-content: center;
+}

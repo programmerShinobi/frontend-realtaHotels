@@ -1,57 +1,55 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SessionProvider } from 'next-auth/react'
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app';
 import { Provider } from 'react-redux';
 import store from "@/redux/Store";
-import LoadingIndicator from "@/components/Indicator/LoadingIndicator";
-import NProgress from 'nprogress';
+import 'react-toastify/dist/ReactToastify.css';
+import ToastIndicator from "@/components/Indicator/toast";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Cookies from 'js-cookie';
 
 const App: React.FC<AppProps> = ({ Component, pageProps, router }) => {
-  const [loading, setLoading] = React.useState(false);
-  const routeChangeStart = () => setLoading(true);
-  const routeChangeComplete = () => {
-    setLoading(false);
-    if (typeof window !== 'undefined' && NProgress.isStarted()) {
-      NProgress.remove();
+  const [isToken, setIsToken]: any = useState(false);
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsToken(true);
     }
-  };
-  const routeChangeError = () => {
-    setLoading(false);
-    if (typeof window !== 'undefined' && NProgress.isStarted()) {
-      NProgress.remove();
-    }
-  };
+  });
 
-  React.useEffect(() => {
-    router.events.on('routeChangeStart', routeChangeStart);
-    router.events.on('routeChangeComplete', routeChangeComplete);
-    router.events.on('routeChangeError', routeChangeError);
-
-    return () => {
-      router.events.off('routeChangeStart', routeChangeStart);
-      router.events.off('routeChangeComplete', routeChangeComplete);
-      router.events.off('routeChangeError', routeChangeError);
-    };
-  }, []);
+  if (isToken) {
+    setTimeout(async () => {
+    await localStorage.removeItem('token');
+      await localStorage.removeItem('roleId');
+      await localStorage.removeItem('userId');
+      await localStorage.removeItem('userFullName');
+      await localStorage.removeItem('profilePhotoMe');
+      await localStorage.removeItem('userFullNameNew');
+      await localStorage.removeItem('userPhoto');
+      await localStorage.removeItem('Email');
+      await localStorage.removeItem('UserType');
+      await localStorage.removeItem('PhoneNumber');
+      await Cookies.remove('userId');
+      await setIsToken(false);
+    }, 3600000); // 3600 detik = 1 jam
+  }
 
   return (
     <SessionProvider session={pageProps.session}>
       <ToastContainer
         position="bottom-right"
-        autoClose={5000}
+        autoClose={1000}
         hideProgressBar={false}
         newestOnTop
         closeOnClick
         rtl={false}
-        pauseOnFocusLoss
         draggable
         pauseOnHover
         theme="light"
         />
-      {loading && <LoadingIndicator />}
+      
       <Provider store={store}>
         <Component {...pageProps} />
       </Provider>

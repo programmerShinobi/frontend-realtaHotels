@@ -184,6 +184,141 @@ const changePassword = async (data:any) => {
     }
 }
 
+const getAllMembers = async () => {
+    try {
+        const result:any = await axios.get("/usermembers/join-all-usermembers");
+        if (!result) {
+            throw new Error("Axios get problem");
+        }
+        return result;
+    } catch (error:any) {
+        return error.message;
+    }
+}
+
+const getIdMember = async (id:number) => {
+    try {
+        const result:any = await axios.get(`/usermembers/${id}`);
+        if (!result) {
+            throw new Error("Axios get problem");
+        }
+        return result;
+    } catch (error:any) {
+        return error.message;
+    }
+}
+
+const createMember = async (data: any) => {
+    try {
+        const result:any = await axios.post("/usermembers", data);
+        if (!result) {
+            throw new Error("Axios post problem");
+        }
+        return result;
+    } catch (error:any) {
+        return error.message;
+    }
+}
+
+const updateMember = async (data:any) => {
+    const id = parseInt(data.usmeId);
+    try {
+        const result:any = await axios.put(`/usermembers/${id}`, data);
+        if (!result) {
+            throw new Error("Axios put problem");
+        }
+        return result;
+    } catch (error:any) {
+        return error.message;
+    }
+}
+
+const removeMember = async (id:number) => {
+    try {
+        const result:any = await axios.delete(`/usermembers/${id}`);
+        if (!result) {
+            throw new Error("Axios delete problem");
+        }
+        return result;
+    } catch (error:any) {
+        return error.message;
+    }
+}
+
+// BONUSPOINTS
+const getAllBonusPoints = async () => {
+    try {
+        const result:any = await axios.get("/userbonuspoints/join-all-userbonuspoints");
+        if (!result) {
+            throw new Error("Axios get problem");
+        }
+        return result;
+    } catch (error:any) {
+        return error.message;
+    }
+}
+
+const getIdBonusPoint = async (id:number) => {
+    try {
+        const result:any = await axios.get(`/userbonuspoints/${id}`);
+        if (!result) {
+            throw new Error("Axios get problem");
+        }
+        return result;
+    } catch (error:any) {
+        return error.message;
+    }
+}
+
+const createBonusPoint = async (data: any) => {
+    try {
+        const result:any = await axios.post("/userbonuspoints", data);
+        if (!result) {
+            throw new Error("Axios post problem");
+        }
+        return result;
+    } catch (error:any) {
+        return error.message;
+    }
+}
+
+const updateBonusPoint = async (data:any) => {
+    const id = parseInt(data.ubpoId);
+    try {
+        const result:any = await axios.put(`/userbonuspoints/${id}`, data);
+        if (!result) {
+            throw new Error("Axios put problem");
+        }
+        return result;
+    } catch (error:any) {
+        return error.message;
+    }
+}
+
+const removeBonusPoint = async (id:number) => {
+    try {
+        const result:any = await axios.delete(`/userbonuspoints/${id}`);
+        if (!result) {
+            throw new Error("Axios delete problem");
+        }
+        return result;
+    } catch (error:any) {
+        return error.message;
+    }
+}
+
+const forgotPassword = async (data: any) => {
+    try {
+        const result:any = await axios.put(`/auth/forgotPassword`, data);
+        if (!result) {
+            throw new Error("Axios put problem");
+        }
+        return result;
+    } catch (error:any) {
+        return error.message;
+    }
+}
+
 const ReduceService:any = {
     getAll,
     getId,
@@ -199,7 +334,18 @@ const ReduceService:any = {
     createRole,
     updateRole,
     removeRole,
-    changePassword
+    changePassword,
+    getAllMembers,
+    getIdMember,
+    createMember,
+    updateMember,
+    removeMember,
+    getAllBonusPoints,
+    getIdBonusPoint,
+    createBonusPoint,
+    updateBonusPoint,
+    removeBonusPoint,
+    forgotPassword
 }
 
 export default ReduceService;

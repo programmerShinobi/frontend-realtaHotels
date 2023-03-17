@@ -4,10 +4,81 @@
 @tailwind components;
 @tailwind utilities;
 
+
 body {
   @apply bg-gray-100
 }
 
-.rounded-full {
-  border-radius: 50%;
+
+:where(.css-dev-only-do-not-override-j0nf2s).ant-menu-light .ant-menu-item-selected{
+  background: rgba(243, 60, 93, 0.1);
+}
+
+:where(.css-dev-only-do-not-override-j0nf2s) .ant-menu-title {
+  background: rgba(243, 60, 93, 0.1);
+}
+
+:where(.css-dev-only-do-not-override-j0nf2s).ant-menu-title-content .ant-menu-item-selected {
+  color: #3C6FF3;
+}
+
+:where(.css-dev-only-do-not-override-j0nf2s).ant-menu-light>.ant-menu-title {
+  color: #3C6FF3;
+}
+
+:where(.css-dev-only-do-not-override-j0nf2s).ant-menu-light .ant-menu-submenu-selected>.ant-menu-submenu-title {
+  color: #3C6FF3;
+}
+
+/* :where(.css-dev-only-do-not-override-1me4733).ant-layout .ant-layout-sider-trigger{
+  color: #3C6FF3;
+} */
+:where(.css-dev-only-do-not-override-1me4733).ant-layout .ant-layout-sider-trigger {
+  background-color: #3C6FF3;
+  fill: white;
+
+}
+
+:where(.css-dev-only-do-not-override-1me4733).ant-layout .ant-layout-sider-trigger {
+  background-color: #3C6FF3;
+  fill: white;
+}
+:where(.css-dev-only-do-not-override-j0nf2s).ant-layout .ant-layout-sider-trigger {
+  position: fixed;
+  bottom: 0;
+  z-index: 1;
+  height: 48px;
+  color: #fff;
+  line-height: 48px;
+  text-align: center;
+  background: rgb(251, 229, 233);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+/* svg {
+  color: #F33C5D;
+} */
+
+.text-pink-600 {
+  --tw-text-opacity: 1;
+  color: #3C6FF3;
+}
+
+:where(.css-dev-only-do-not-override-j0nf2s).ant-menu-light .ant-menu-item-selected {
+  color: #3C6FF3;
+  background-color: #3C6FF3 !important;
+}
+
+span.hidden.md\:block.font-medium.text-pink-600 {
+  color: #3C6FF3;
+}
+
+.ant-btn-primary {
+  background-color: #1677ff !important;
+}
+
+.ant-menu-submenu-active .ant-menu-submenu-title {
+  background-color: #3C6FF3 !important;
+  color: #fff !important;
 }
