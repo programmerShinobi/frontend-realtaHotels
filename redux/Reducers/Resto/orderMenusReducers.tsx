@@ -20,7 +20,7 @@ function orderMenusReducers(state = initialState, action: any) {
       return { ...state, orderMenus: action.payload };
 
     default:
-      return { ...state, orderMenus: action.payload };
+      return state;
   }
 }
 

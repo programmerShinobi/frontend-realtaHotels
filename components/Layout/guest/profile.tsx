@@ -4,8 +4,7 @@ import PrivateWithAuth from "@/components/Private/withAuth";
 import { useRouter } from 'next/router';
 import HeaderGuest from '@/components/Header/guest';
 import styles from "@/styles/ContentProfile.module.css";
-import Footer from '@/components/Footer/guest/footer';
-import FooterGuest from '@/components/Footer/guest';
+import FooterGuest from '@/components/Footer/guest/footer';
 const LayoutGuestProfile = ({ children }: any) => {
   const { Header, Content, Footer } = Layout;
   const {
@@ -26,8 +25,11 @@ const LayoutGuestProfile = ({ children }: any) => {
         {/* LayoutSite */}
         <Layout className="site-layout">
 
-        {/* Header */}
-        <HeaderGuest/>
+          {/* Header */}
+          <Header style={{ padding: 0, background: colorBgContainer }}>
+            {/* Header */}
+            <HeaderGuest/>
+          </Header>
           
           {/* Content */}
           <Content>
@@ -43,9 +45,11 @@ const LayoutGuestProfile = ({ children }: any) => {
             </main>
 
           </Content>        
-
         </Layout>
-
+          <Footer className="bg-[#131828] dark:bg-gray-900">
+              {/* Footer */}
+              <FooterGuest /> 
+          </Footer>
       </Layout>
     </>
   );

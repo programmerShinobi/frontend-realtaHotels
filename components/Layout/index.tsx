@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layout, theme } from 'antd';
-import HeaderGuest from '@/components/Header/guest';
+import HeaderGuest from '@/components/Header/guest/';
 import Footer from '@/components/Footer/guest/footer';
 
 const Layouts = ({ children }: any) => {

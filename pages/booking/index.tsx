@@ -33,12 +33,12 @@ export default function Booking(){
     
     useEffect(() => {
         if (provices !== undefined) {
-          let card3 = card1.filter((items: any) => items.provices.toLowerCase() === provices);
+          let card3 = card1?.filter((items: any) => items.provices.toLowerCase() === provices);
           if (card3.length > 0) {
             SetMapHotel(card3);
             SetMapHotel2(card3);
           } else {
-            let card4 = card1.filter((items: any) => items.city.toLowerCase() === provices);
+            let card4 = card1?.filter((items: any) => items.city.toLowerCase() === provices);
             SetMapHotel(card4);
             SetMapHotel2(card4);
           }
@@ -286,7 +286,7 @@ export default function Booking(){
                                                         </div>
                                                     </div>
                                                     <div className="flex items-center space-x-2">
-                                                        <button className="font-semibold text-sm px-3 py-2 border rounded-lg hover:border-rose-500 hover:text-rose-500" onClick={()=>viewDetail(card.hotel_id)}>Restaurant</button>
+                                                        <button className="font-semibold text-sm px-3 py-2 border rounded-lg hover:border-rose-500 hover:text-rose-500" onClick={()=>viewDetail(card.hotel_id)}>View Details</button>
                                                         <button className="font-semibold shadow-lg text-sm px-3 py-2 border text-white bg-rose-500 rounded-lg hover:border-rose-500 hover:text-rose-800" onClick={()=>bookingNow(card.hotel_id)} >Booking Now</button>
                                                     </div>
                                                 </div>

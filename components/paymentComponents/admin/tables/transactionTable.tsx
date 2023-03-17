@@ -1,9 +1,7 @@
-import { Container, FormElement, Table, Text, Input, Spacer, Dropdown, Row, Pagination } from "@nextui-org/react";
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
+import { FormElement, Table, Input, Spacer, Dropdown, Row, Pagination } from "@nextui-org/react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { transactionColumns } from "@/lib/columns";
 import { PaginationOptions, Transaction } from "@/lib/interfaces";
-import { useDispatch } from "react-redux";
-import { fetchTransactions } from "@/redux/Actions/payment/transaction";
 
 export default function TransactionTable({ data, totalPage, paginationOptions, setPaginationOptions }: {
     data: Transaction[],
@@ -51,6 +49,7 @@ export default function TransactionTable({ data, totalPage, paginationOptions, s
 
     return (
         <div className="w-[100%]">
+            <Spacer/>
             <Row justify="space-between">
                 <Input
                     bordered

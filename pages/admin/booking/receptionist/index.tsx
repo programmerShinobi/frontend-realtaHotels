@@ -14,11 +14,10 @@ export default function BookingReceptionist() {
   const dispatch = useDispatch();
 
   const [BoNumber,setBoNumber]=useState({
-    BoorNumber:'BO#01012022-0001'
+    BoorNumber:''
   });
   const [dataBookingOrder,SetDataBo]=useState([])
 
-  console.log('bo',BoNumber);
   
   const handleFilterChange = (event:any) => {
     const { name, value } = event.target;
@@ -26,10 +25,12 @@ export default function BookingReceptionist() {
   };
 
   const Invoice = useSelector((state:any)=> state.GetInvoiceReducer.invoice)
-  console.log(Invoice,'data',dataBookingOrder);
+  const Number = Invoice?.length > 0 ? Invoice.boor_status:'';
   
   const[open,setOpen]=useState(false)
+  
   useEffect(()=>{
+    let dataBo:any
     if (BoNumber.BoorNumber !== ''){
       dataBo=Invoice.filter((item:any)=> item.boor_order_number == BoNumber.BoorNumber)
       SetDataBo(dataBo)
@@ -37,19 +38,24 @@ export default function BookingReceptionist() {
       dataBo=Invoice
       SetDataBo(dataBo)
     }
-  },[BoNumber])
+  },[Number,BoNumber])
 
   useEffect(()=>{
     dispatch(getInvoice())
   },[open])
+  useEffect(()=>{
+    SetDataBo(Invoice)
+  },[Invoice])
 
-  let dataBo:any
+  const[dataUpdate,setDataUpdate]=useState({
+    boorId:0,
+    boorStatus:''
+  })
+console.log('datada',dataUpdate);
+
+
 
   const columns = [
-    {
-      title: 'NO',
-      dataIndex: 'name',
-    },
     {
       title: 'Order Number',
       dataIndex: 'boor_order_number',
@@ -93,11 +99,12 @@ export default function BookingReceptionist() {
       title: 'Status',
       render: (_:any, record:any) => (
         <div>
-          <button onClick={()=>OpenModalUpdate(record.boor_id)} className="hover:text-rose-500">{record.boor_status}</button>
+          <button onClick={()=>OpenModalUpdate(record.boor_id,record.boor_status)} className="hover:text-rose-500">{record.boor_status}</button>
           <Modal footer={null} open={open} onCancel={()=>setOpen(false)}>
           <div className="flex justify-center space-x-5">
             <div  className="flex justify-center">
               <Select
+              value={dataUpdate.boorStatus}
               style={{ width: 250 }}
               onChange={handleChange}
               options={[
@@ -109,7 +116,7 @@ export default function BookingReceptionist() {
               />
             </div>
             <div className="flex justify-center space-x-3">
-              <button className="py-1 px-2 bg-rose-500 hover:bg-rose-600 text-white text-[12px] font-semibold rounded">Cancel</button>
+              <button onClick={()=>setOpen(false)} className="py-1 px-2 bg-rose-500 hover:bg-rose-600 text-white text-[12px] font-semibold rounded">Cancel</button>
               <button onClick={UpdateStatusBooking} className="py-1 px-2 bg-rose-500 hover:bg-rose-600 text-white rounded text-[12px] font-semibold">Update</button> 
             </div>
           </div>
@@ -118,11 +125,6 @@ export default function BookingReceptionist() {
       ),
     },
   ];
-
-  const[dataUpdate,setDataUpdate]=useState({
-    boorId:0,
-    boorStatus:''
-  })
 
   const UpdateStatusBooking=(e:any)=>{
     e.preventDefault();
@@ -133,11 +135,10 @@ export default function BookingReceptionist() {
   const handleChange = (value: string) => {
     setDataUpdate({...dataUpdate, boorStatus:value})
   };
-  console.log(dataUpdate);
   
-  const OpenModalUpdate =(id:number)=>{
+  const OpenModalUpdate =(id:number, status:string)=>{
     setOpen(true)
-    setDataUpdate({...dataUpdate,boorId:id})
+    setDataUpdate({...dataUpdate,boorId:id,boorStatus:status})
   }
 
   return (

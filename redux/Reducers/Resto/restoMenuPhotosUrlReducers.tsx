@@ -14,7 +14,7 @@ function restoMenusPhotosUrlReducers(state = initialState, action: any): any {
     case ActionTypeResto.GET_URL_PHOTOS_FAILED:
       return { ...state, orderMenusPhotosUrl: action.payload };
     default:
-      return { ...state, orderMenusPhotosUrl: action.payload };
+      return state;
   }
 }
 

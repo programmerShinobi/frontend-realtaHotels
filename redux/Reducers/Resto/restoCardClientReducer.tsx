@@ -14,7 +14,7 @@ function restoCardClientReducers(state = initialState, action: any) {
     case ActionTypeResto.GET_CARDRESTOMENUS_FAILED:
       return { ...state, restoCardClient: action.payload };
     default:
-      return { ...state };
+      return state;
   }
 }
 

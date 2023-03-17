@@ -528,12 +528,12 @@ export default function Faci() {
   };
   // handler fapho
   const showFapho = (id: any) => {
-    router.push("fapho/" + id);
+    router.push("/admin/hotels/hotel/facility/fapho/" + id);
   };
   // end
   // handler fph
   const showFPH = (id: any) => {
-    router.push("faciPriceHistory/" + id);
+    router.push("/admin/hotels/hotel/facility/faciPriceHistory/" + id);
   };
   // end
   // search faci name

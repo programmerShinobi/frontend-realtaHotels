@@ -44,8 +44,6 @@ export default function HREmployee() {
     (state: any) => state.usersReducers
   );
 
-  // console.log("Users: ", users)
-  // console.log("Employee: ", employee)
   // variable untuk data table
   const [filteredDataSearch, setFilteredDataSearch] = useState([]);
   const [filteredDataSelect, setFilteredDataSelect] = useState([]);
@@ -56,9 +54,6 @@ export default function HREmployee() {
 
 
 
-  // console.log("data select:",filteredDataSelect)
-  // console.log("data tableData:", tableData)
-  // console.log("data search:",filteredDataSearch)
 
   //  dispatch API GET employee
   const dispatch = useDispatch();
@@ -181,7 +176,7 @@ export default function HREmployee() {
         const emp_photo = (record.emp_photo)
         let url = "";
         
-        if (emp_photo == 'default.png'){
+        if (emp_photo == 'user.png'){
           url = "/images/user.png";
         }else{
           url = emp_photo;

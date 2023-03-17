@@ -222,13 +222,12 @@ export default function room() {
     let rating3 = oneHore.length > 0 ? oneHore?.filter((item: any) => item.hore_rating == 3).length : 0;
     let rating4 = oneHore.length > 0 ? oneHore?.filter((item: any) => item.hore_rating == 4).length : 0;
     let rating5 = oneHore.length > 0 ? oneHore?.filter((item: any) => item.hore_rating == 5).length : 0;
-    let jumlahreview =  oneHore.length
-    
-    
-    let jumlahrating = oneHore.length > 0 ? oneHore?.reduce((acc: any, curr: any) => acc + curr.hore_rating, 0) : 0 ;
-    let averageRating =  oneHore.length > 0 ? jumlahrating / jumlahreview :0;
+    let jumlahreview = oneHore.length
+
+
+    let jumlahrating = oneHore.length > 0 ? oneHore?.reduce((acc: any, curr: any) => acc + curr.hore_rating, 0) : 0;
+    let averageRating = oneHore.length > 0 ? jumlahrating / jumlahreview : 0;
     let rating = averageRating.toFixed(1);
-    console.log('rating', rating1,'rrr',jumlahrating  ,'dasd',averageRating,'tt',jumlahreview );
 
     let ratingClass = '';
     if (Number(rating) >= 4.5) {
@@ -237,9 +236,9 @@ export default function room() {
         ratingClass = 'Good';
     } else if (Number(rating) >= 3) {
         ratingClass = 'Enough';
-    } else if (Number(rating) >= 1){
+    } else if (Number(rating) >= 1) {
         ratingClass = 'Bad';
-    }else {
+    } else {
         ratingClass = '';
     }
     //end Rating
@@ -483,6 +482,7 @@ export default function room() {
     });
 
 
+
     //check in check out
     const disabledDateStart = (current: any, checkInDate: any) => {
         if (checkInDate) {
@@ -542,13 +542,10 @@ export default function room() {
         // Create booking transaction when payment method Cash is selected
         if (dataBooking.boor_pay_type == "C") {
             // Create booking order
-            dispatch(bookingOrderCreate(dataBooking));
-            const next = async () => {
-                dispatch(boexCreate(dataBoex1))
-            }
-            next()
+            await dispatch(bookingOrderCreate(dataBooking));
+            
             // Create transaction
-            dispatch(createTransaction(transactionData))
+            await dispatch(createTransaction(transactionData))
             root.push({ pathname: '/booking/room/invois', search: `?id=${dataBooking.boor_order_number}` })
         }
 
@@ -660,50 +657,44 @@ export default function room() {
                     <Col span={22} className="flex justify-center ">
                         <div className='w-full'>
                             <Carousel slidesToShow={3} autoplay autoplaySpeed={3000} dots={true} arrows={true} nextArrow={<FcNext />} prevArrow={<FcPrevious />} >
-                                { faciroom && faciroom.length > 0 && faciroom?.map((faciroom: any) => {
+                                {faciroom && faciroom.length > 0 && faciroom?.map((faciroom: any) => {
                                     let urlSlider = faciroom?.fapho_url
-                                    console.log('gambar',urlSlider);
-                                    let Gambar = urlSlider.split(',')
-                                    
-                                    console.log('ssds',Gambar,'dfsdfds',Gambar[0]);
-                                    
-                                    return (
-                                
-                                                        <div className='w-2/6 border-2'>
-                                                        <img width={500} height={100} src={Gambar[0]} alt="gambar1" />
-                                                        </div>
-                                                
-        
-                                            )
-                                        })}
-                                 { faciroom && faciroom.length > 0 && faciroom?.map((faciroom: any) => {
-                                    let urlSlider = faciroom?.fapho_url
-                                    console.log('gambar',urlSlider);
                                     let Gambar = urlSlider.split(',')
                                     return (
-                                
-                                                        <div className='w-2/6 border-2'>
-                                                        <img width={500} height={100} src={Gambar[1]} alt="gambar1" />
-                                                        </div>
-                                                
-                                
-                                            )
-                                        })}
-                                     { faciroom && faciroom.length > 0 && faciroom?.map((faciroom: any) => {
+
+                                        <div className='w-2/6 border-2'>
+                                            <img width={500} height={100} src={Gambar[0]} alt="gambar1" />
+                                        </div>
+
+
+                                    )
+                                })}
+                                {faciroom && faciroom.length > 0 && faciroom?.map((faciroom: any) => {
                                     let urlSlider = faciroom?.fapho_url
-                                    console.log('gambar',urlSlider);
                                     let Gambar = urlSlider.split(',')
                                     return (
-                                
-                                                        <div className='w-2/6 border-2'>
-                                                        <img width={500} height={100} src={Gambar[2]} alt="gambar1" />
-                                                        </div>
-                                                
-                                
-                                            )
-                                        })}
-                                </Carousel>
-                            </div>
+
+                                        <div className='w-2/6 border-2'>
+                                            <img width={500} height={100} src={Gambar[1]} alt="gambar1" />
+                                        </div>
+
+
+                                    )
+                                })}
+                                {faciroom && faciroom.length > 0 && faciroom?.map((faciroom: any) => {
+                                    let urlSlider = faciroom?.fapho_url
+                                    let Gambar = urlSlider.split(',')
+                                    return (
+
+                                        <div className='w-2/6 border-2'>
+                                            <img width={500} height={100} src={Gambar[2]} alt="gambar1" />
+                                        </div>
+
+
+                                    )
+                                })}
+                            </Carousel>
+                        </div>
                     </Col>
                 </Row>
                 <Row gutter={22} className='justify-center flex lg:flex space-x-2 pb-5'>
@@ -818,7 +809,7 @@ export default function room() {
                                                             />
                                                         </div>
                                                         <div className='w-full'>
-                                                            <Progress format={() => <span style={{ color: "#000" }}>{Math.round((rating5 / jumlahreview)*100)}%</span>} percent={Math.round((rating5 / jumlahreview) * 100)} />
+                                                            <Progress format={() => <span style={{ color: "#000" }}>{Math.round((rating5 / jumlahreview) * 100)}%</span>} percent={Math.round((rating5 / jumlahreview) * 100)} />
                                                         </div>
                                                     </span>
                                                     <span className='flex items-center w-4/5 space-x-2'>
@@ -831,7 +822,7 @@ export default function room() {
                                                             />
                                                         </div>
                                                         <div className='w-full'>
-                                                            <Progress format={() => <span style={{ color: "#000" }}>{Math.round((rating4 / jumlahreview)*100)}%</span>} percent={Math.round((rating4 / jumlahreview) * 100)} />
+                                                            <Progress format={() => <span style={{ color: "#000" }}>{Math.round((rating4 / jumlahreview) * 100)}%</span>} percent={Math.round((rating4 / jumlahreview) * 100)} />
                                                         </div>
                                                     </span>
                                                     <span className='flex items-center w-4/5 space-x-2'>
@@ -844,7 +835,7 @@ export default function room() {
                                                             />
                                                         </div>
                                                         <div className='w-full'>
-                                                            <Progress format={() => <span style={{ color: "#000" }}>{oneHore.length > 0 ? Math.round((rating3 / jumlahreview)*100):0}%</span>} percent={oneHore.length > 0 ? Math.round((rating3 / jumlahreview) * 100):0} />
+                                                            <Progress format={() => <span style={{ color: "#000" }}>{oneHore.length > 0 ? Math.round((rating3 / jumlahreview) * 100) : 0}%</span>} percent={oneHore.length > 0 ? Math.round((rating3 / jumlahreview) * 100) : 0} />
                                                         </div>
                                                     </span>
                                                     <span className='flex items-center w-4/5 space-x-2'>
@@ -857,7 +848,7 @@ export default function room() {
                                                             />
                                                         </div>
                                                         <div className='w-full'>
-                                                            <Progress format={() => <span style={{ color: "#000" }}>{Math.round((rating2 / jumlahreview)*100)}%</span>} percent={Math.round((rating2 / jumlahreview) * 100)} />
+                                                            <Progress format={() => <span style={{ color: "#000" }}>{Math.round((rating2 / jumlahreview) * 100)}%</span>} percent={Math.round((rating2 / jumlahreview) * 100)} />
                                                         </div>
                                                     </span>
                                                     <span className='flex items-center w-4/5 space-x-2'>
@@ -870,7 +861,7 @@ export default function room() {
                                                             />
                                                         </div>
                                                         <div className='w-full'>
-                                                            <Progress format={() => <span style={{ color: "#000" }}>{Math.round((rating1 / jumlahreview)*100)}%</span>} percent={Math.round((rating1 / jumlahreview) * 100)} />
+                                                            <Progress format={() => <span style={{ color: "#000" }}>{Math.round((rating1 / jumlahreview) * 100)}%</span>} percent={Math.round((rating1 / jumlahreview) * 100)} />
                                                         </div>
                                                     </span>
                                                 </div>

@@ -38,7 +38,6 @@ export default function HRDepartment() {
     (state: any) => state.departmentReducer
   );
 
-  console.log(department);
 
   const [filteredData, setFilteredData] = useState([]);
   const tableData = filteredData.length > 0 ? filteredData : department.data;

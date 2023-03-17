@@ -8,7 +8,7 @@ import {
 } from 'redux/Actions/Masters/reduceActions';
 import React, { useState, useEffect, Fragment } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import {EyeTwoTone} from '@ant-design/icons';
+import { EyeTwoTone } from '@ant-design/icons';
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { Layout, theme, Form, Input, message, Button, Popover, Popconfirm, Modal, Divider, Radio, Table } from "antd";
 const { Header, Content, Footer, Sider } = Layout;
@@ -47,7 +47,7 @@ export default function MasterPolicy() {
     poliName: '',
     poliDescription: '',
   });
-console.log("ValuesAddPolicy:",addData)
+  console.log("ValuesAddPolicy:", addData)
 
   const TextArea = Input
   // mengubah nilai input pada form tambah data policy
@@ -60,7 +60,7 @@ console.log("ValuesAddPolicy:",addData)
   };
 
   // menambahkan data policy
-  const handleAdd = async ():any => {
+  const handleAdd = async (): any => {
     try {
       await addForm.validateFields();
       await dispatchAddPolicy(doPolicyCreate(addData));
@@ -72,7 +72,7 @@ console.log("ValuesAddPolicy:",addData)
         poliName: '',
         poliDescription: '',
       });
-      console.log('DataPolicy:',addData)
+      console.log('DataPolicy:', addData)
       message.success('Data berhasil ditambahkan');
     } catch (error) {
       if (error instanceof Error) {
@@ -84,27 +84,29 @@ console.log("ValuesAddPolicy:",addData)
   };
 
   //state untuk menyimpan nilai input pada form edit data policy
-      const [editData, setEditData] = useState(
-       { poliId: 0,
-        poliName: '',
-        poliDescription: 'string'}
-      );
-      console.log("dataValueEdit:",editData)
+  const [editData, setEditData] = useState(
+    {
+      poliId: 0,
+      poliName: '',
+      poliDescription: 'string'
+    }
+  );
+  console.log("dataValueEdit:", editData)
 
-      // modal edit data policy
-        const [openEditModal, setOpenEditModal] = useState(false);
-        const handleOpenEditModal = (data: any) => {
-          setEditData(data);
-          setOpenEditModal(true);
-        };
-        const handleCloseEditModal = () => {
-          setEditData({
-            poliId: 0,
-            poliName: '',
-            poliDescription: ''
-          });
-          setOpenEditModal(false);
-        }
+  // modal edit data policy
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const handleOpenEditModal = (data: any) => {
+    setEditData(data);
+    setOpenEditModal(true);
+  };
+  const handleCloseEditModal = () => {
+    setEditData({
+      poliId: 0,
+      poliName: '',
+      poliDescription: ''
+    });
+    setOpenEditModal(false);
+  }
 
 
   // mengubah nilai input pada form edit data policy
@@ -117,40 +119,40 @@ console.log("ValuesAddPolicy:",addData)
   };
 
 
-    // mengambil data policy yang akan diedit dan mengisi nilai pada form edit data policy
-    
-    const handleEditData = (poliId: any) => {
-      console.log(poliId)
-      
-      const filterPoli =  mPolice?.find(
-        (temp: any) => temp.poliId === poliId
-        )
-        console.log('FindDataRegion:',filterPoli)
-        handleOpenEditModal(filterPoli);
-          setEditData(filterPoli)
-        }
-    
-    console.log("editData:",editData)
+  // mengambil data policy yang akan diedit dan mengisi nilai pada form edit data policy
+
+  const handleEditData = (poliId: any) => {
+    console.log(poliId)
+
+    const filterPoli = mPolice?.find(
+      (temp: any) => temp.poliId === poliId
+    )
+    console.log('FindDataRegion:', filterPoli)
+    handleOpenEditModal(filterPoli);
+    setEditData(filterPoli)
+  }
+
+  console.log("editData:", editData)
 
 
-   // usestate hook pop up untuk CagroDescription
-   const [open, setOpen] = useState(false);
-   // const [idPopUp,setIdPopUp] =useState(mCate);
- 
-   const hide = () => {
-     setOpen(false);
-   };
-   
-   const handleOpenChange = (newOpen: boolean) => {
-     setOpen(newOpen);
- 
-   };
-   
-   const handleClick = (poliId: any) => {
-     setOpen(true);
-     console.log("hadir",poliId)
-     
-   };
+  // usestate hook pop up untuk CagroDescription
+  const [open, setOpen] = useState(false);
+  // const [idPopUp,setIdPopUp] =useState(mCate);
+
+  const hide = () => {
+    setOpen(false);
+  };
+
+  const handleOpenChange = (newOpen: boolean) => {
+    setOpen(newOpen);
+
+  };
+
+  const handleClick = (poliId: any) => {
+    setOpen(true);
+    console.log("hadir", poliId)
+
+  };
   // datagrid Policy 
   const columns = [
     {
@@ -166,33 +168,33 @@ console.log("ValuesAddPolicy:",addData)
     {
       // title: 'Popover Column',
       dataIndex: 'poliDescription',
-      render: (_:any, record:{poliId:any}) => (
+      render: (_: any, record: { poliId: any }) => (
         <span>
-          <Button type="primary"  onClick={() => handleClick(record.poliId)}>
-          <Popover
-            content={record.poliDescription}
-            title="Poli Description"
-            trigger="click"
-          >
+          <Button type="primary" onClick={() => handleClick(record.poliId)}>
+            <Popover
+              content={record.poliDescription}
+              title="Poli Description"
+              trigger="click"
+            >
               <EyeTwoTone />
-          </Popover>
+            </Popover>
           </Button>
-          </span>
+        </span>
       ),
     },
     {
-      render: (_:any, record:{poliId:any}) => (
+      render: (_: any, record: { poliId: any }) => (
         <span className="flex">
           <Button type="button" onClick={() => handleEditData(record.poliId)}>Edit</Button>
-              <Popconfirm
-              title="Are you sure to delete this policy?"
-              onConfirm={() => handleDelete(record.poliId)}
-              okText="Yes"
-              cancelText="No"
-              >
-              <Button type="link" danger>Delete</Button>
-            </Popconfirm>
-              </span>
+          <Popconfirm
+            title="Are you sure to delete this policy?"
+            onConfirm={() => handleDelete(record.poliId)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button type="link" danger>Delete</Button>
+          </Popconfirm>
+        </span>
       )
     },
     {
@@ -218,7 +220,7 @@ console.log("ValuesAddPolicy:",addData)
   // edit data policy
   const [editForm] = Form.useForm();
   // menyimpan perubahan data policy
-  const handleEdit = async (poliId:any):any => {
+  const handleEdit = async (poliId: any): any => {
     console.log(editData)
     try {
       await editForm.validateFields();
@@ -231,7 +233,6 @@ console.log("ValuesAddPolicy:",addData)
         poliDescription: '',
       });
       // setIdPolicy(poliId);
-
       message.success('Data berhasil di edit');
       window.location.reload()
     } catch (error) {
@@ -244,11 +245,11 @@ console.log("ValuesAddPolicy:",addData)
   };
 
   // delete data policy
-  const handleDelete = async (poliId: any):any => {
+  const handleDelete = async (poliId: any): any => {
     try {
       await dispatchDeletePolicy(doDeletePolicy(poliId));
       await dispatch(doPolicyRequest(poliId));
-      // window.location.reload();
+      window.location.reload();
       console.log('idDelete:', poliId);
       message.success('Data berhasil dihapus');
     } catch (error) {
@@ -263,98 +264,98 @@ console.log("ValuesAddPolicy:",addData)
         <title>Master/Policy</title>
       </Head>
       <LayoutAdmin>
-         <div>
-                  <Modal
-                    title="Add Policy"
-                    open={openAddModal}
-                    onOk={handleAdd}
-                    onCancel={handleCloseAddModal}
-                  >
-                    <Form form={addForm} layout="vertical" onFinish={handleAdd}>
-                      <Form.Item
-                        label="Policy Name"
-                        name="poliName"
-                        rules={[
-                          {
-                            required: true,
-                            message: 'Please input Policy Name',
-                          },
-                        ]}
-                      >
-                        <Input name="poliName" value={addData.poliName} onChange={handleAddInputChange} />
-                      </Form.Item>
-                      <Form.Item
-                        label="Policy Description"
-                        name="poliDescription"
-                        rules={[
-                          {
-                            required: true,
-                            message: 'Please input Policy Description',
-                          },
-                        ]}
-                      >
-                        <Input.TextArea name="poliDescription" value={addData.poliDescription} onChange={handleAddInputChange} placeholder="isi deskripsi" />
-                      </Form.Item>
-                    </Form>
-                  </Modal>
-                  <Modal
-                    title="Edit Policy"
-                    visible={openEditModal}
-                    onOk={handleEdit}
-                    onCancel={handleCloseEditModal}
-                  >
-                    <Form form={editForm} layout="vertical" onFinish={handleEdit}>
-                      <Form.Item
-                       
-                      >
-                        <Input  value={editData?.poliId} onChange={handleEditInputChange} />
-                      </Form.Item>
-                      <Form.Item
-                        label="Policy Name"
-                        name="poliName"
-                        rules={[
-                          {
-                            required: true,
-                            message: 'Please input Policy Name',
-                          },
-                        ]}
-                      >
-                        <Input  name="poliName" value={editData?.poliName} onChange={handleEditInputChange} />
-                      </Form.Item>
-                      <Form.Item
-                        label="Policy Description"
-                        name="poliDescription"
-                        rules={[
-                          {
-                            required: true,
-                            message: 'Please input Policy Description',
-                          },
-                        ]}
-                      >
-                        <Input.TextArea name="poliDescription" value={editData?.poliDescription} onChange={handleEditInputChange} />
-                      </Form.Item>
-                    </Form>
-                  </Modal>
-                </div>
+        <div>
+          <Modal
+            title="Add Policy"
+            open={openAddModal}
+            onOk={handleAdd}
+            onCancel={handleCloseAddModal}
+          >
+            <Form form={addForm} layout="vertical" onFinish={handleAdd}>
+              <Form.Item
+                label="Policy Name"
+                name="poliName"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input Policy Name',
+                  },
+                ]}
+              >
+                <Input name="poliName" value={addData.poliName} onChange={handleAddInputChange} />
+              </Form.Item>
+              <Form.Item
+                label="Policy Description"
+                name="poliDescription"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input Policy Description',
+                  },
+                ]}
+              >
+                <Input.TextArea name="poliDescription" value={addData.poliDescription} onChange={handleAddInputChange} placeholder="isi deskripsi" />
+              </Form.Item>
+            </Form>
+          </Modal>
+          <Modal
+            title="Edit Policy"
+            visible={openEditModal}
+            onOk={handleEdit}
+            onCancel={handleCloseEditModal}
+          >
+            <Form form={editForm} layout="vertical" onFinish={handleEdit}>
+              <Form.Item
 
-                <div>
-                  <h2 className="bg-gray-300">
-                    Policy
-                  </h2>
-                </div>
-                <Divider />
-                <Radio.Group>
+              >
+                <Input value={editData?.poliId} name="poliId" onChange={handleEditInputChange} hidden />
+              </Form.Item>
+              <Form.Item
+                label="Policy Name"
+                name="poliName"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input Policy Name',
+                  },
+                ]}
+              >
+                <Input  value={editData?.poliName} name="poliName" onChange={handleEditInputChange} />
+              </Form.Item>
+              <Form.Item
+                label="Policy Description"
+                name="poliDescription"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input Policy Description',
+                  },
+                ]}
+              >
+                <Input.TextArea  value={editData?.poliDescription} name="poliDescription" onChange={handleEditInputChange} />
+              </Form.Item>
+            </Form>
+          </Modal>
+        </div>
 
-                  <Table
-                    // rowSelection={{
-                    //     type: selectionType,
-                    //     ...rowSelection,
-                    // }}
-                    columns={columns}
-                    dataSource={mPolice}
-                    style={{ margin: '0 auto', width: '90%' }}
-                  />
-                </Radio.Group>
+        <div>
+          <h2 className="bg-gray-300">
+            Policy
+          </h2>
+        </div>
+        <Divider />
+        <Radio.Group>
+
+          <Table
+            // rowSelection={{
+            //     type: selectionType,
+            //     ...rowSelection,
+            // }}
+            columns={columns}
+            dataSource={mPolice}
+            style={{ margin: '0 auto', width: '90%' }}
+          />
+        </Radio.Group>
 
       </LayoutAdmin>
     </>

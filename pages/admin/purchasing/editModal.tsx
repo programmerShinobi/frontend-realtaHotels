@@ -1,5 +1,5 @@
 import { updateVendor } from '@/redux/Actions/Purchasing/vendorActions'
-import { Modal, Button, Form, Row, Col, Input, DatePicker, Select, DatePickerProps } from 'antd'
+import { Modal, Button, Form, Row, Col, Input, DatePicker, Select, DatePickerProps, message } from 'antd'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
@@ -20,6 +20,7 @@ export default function EditModals  (props:any)  {
             vendorWeburl: detail.vendorWeburl
         }
     )
+    const[messageApi, contextHolder] = message.useMessage()
     
     const eventHandler = (input:any) => (event:any)=>{
         setFormValues({...formsValues,[input]:event.target.value})
@@ -27,7 +28,13 @@ export default function EditModals  (props:any)  {
 
     const onFinish = () =>{
         dispatch(updateVendor(formsValues))
-        handleClose(false)
+        messageApi.open({
+          type:'loading',
+          content:'Action in Progress...',
+          duration: 2.5
+        }).then(()=>message.success('Vendor Updated', 2))
+        setTimeout(() => { handleClose(false) }, 2100)
+        
     }
     const vendorPriorities = [
         {
@@ -52,7 +59,6 @@ export default function EditModals  (props:any)  {
 
       const onChangeSelect = (values: string) => {
         eventHandler('vendorActive')
-        console.log(values);
       };
 
       const onchangePriorities = (values:string) =>{
@@ -60,6 +66,7 @@ export default function EditModals  (props:any)  {
       }
   return (
     <>
+    {contextHolder}
     <Modal
         title="New/Edit Vendor"
         open={props.show}
@@ -69,19 +76,19 @@ export default function EditModals  (props:any)  {
         <Form layout="vertical" onFinish={onFinish} initialValues={formsValues}>
           <Row gutter={[32, 32]}>
             <Col>
-              <Form.Item label="Vendor Name" name="vendorName">
+              <Form.Item label="Vendor Name" name="vendorName" rules={[{required:true}]}>
                 <Input onChange={eventHandler('vendorName')}/>
               </Form.Item>
             </Col>
             <Col>
-              <Form.Item label="Register Date" name="vendorRegisterDate">
+              <Form.Item label="Register Date" name="vendorRegisterDate" rules={[{required:true}]}>
               <Input type='date' onChange={eventHandler('vendorRegisterDate')}/>
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={[32, 32]}>
             <Col>
-              <Form.Item name="vendorPriority" label="Priority">
+              <Form.Item name="vendorPriority" label="Priority" rules={[{required:true}]}>
                 <Select
                   style={{ width: 120 }}
                   placeholder=''
@@ -91,7 +98,7 @@ export default function EditModals  (props:any)  {
               </Form.Item>
             </Col>
             <Col>
-              <Form.Item name="vendorActive" label="Status">
+              <Form.Item name="vendorActive" label="Status" rules={[{required:true}]}>
                 <Select
                   style={{ width: 120 }}
                   placeholder=''
@@ -102,7 +109,7 @@ export default function EditModals  (props:any)  {
             </Col>
           </Row>
           <Row>
-            <Form.Item name="vendorWeburl" label="Vendor URL">
+            <Form.Item name="vendorWeburl" label="Vendor URL" rules={[{required:true}]}>
               <Input onChange={eventHandler('vendorWeburl')}/>
             </Form.Item>
           </Row>

@@ -166,8 +166,11 @@ export default function BillOrder() {
         })}
       </div>
       <div className='flex justify-center'>
-        <a className=' print:hidden text-blue-700 underline text-sm font-thin' href='javascript:window.print()'>
+        <a className=' print:hidden text-blue-700 underline text-sm font-thin mx-2' href='javascript:window.print()'>
           Print
+        </a>
+        <a className=' print:hidden text-blue-700 underline text-sm font-thin mx-2' href='../'>
+          Back
         </a>
       </div>
     </div>

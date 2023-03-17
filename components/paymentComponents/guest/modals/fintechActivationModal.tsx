@@ -50,11 +50,11 @@ export default function FintechActivationModal({ modalOpen, setModalOpen, setFin
                 blur
                 closeButton>
                 <Modal.Header >
-                    <Text>
+                    <Text size={14}>
                         Set your {type} PIN number! :)
                     </Text>
                 </Modal.Header>
-                <Modal.Body className="h-20">
+                <Modal.Body className="h-max">
                     {type == 'GoTo' ?
                         (<Input
                             label="Balance"
@@ -65,7 +65,7 @@ export default function FintechActivationModal({ modalOpen, setModalOpen, setFin
                     <SetPinNumber setValidInput={handlePinValid} />
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button className="bg-black" onPress={activate}> Set PIN </Button>
+                    <Button color="error" onPress={activate}> Set PIN </Button>
                 </Modal.Footer>
             </Modal>
         </>

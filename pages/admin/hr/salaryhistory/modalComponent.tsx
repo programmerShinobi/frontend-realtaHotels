@@ -29,7 +29,6 @@ export default function ModalComponent(props: any){
   const onFinish = (values: any) => {
     values = { ...values, page: page, ephiEmp: ephiEmp }
 
-    console.log(values)
     if(props.typeModal == "Add"){
       dispatch(doEmployeePayHistoryCreate(values));
     }else if (props.typeModal == "Edit") {

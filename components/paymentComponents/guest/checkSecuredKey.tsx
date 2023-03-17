@@ -45,7 +45,8 @@ export default function CheckSecuredKey({ data, setData, modalOpen, setModalOpen
                 placeholder={type == "Fintech" ? "PIN" : "CVV"}
             />
             <Button
-                className="bg-black my-4 mt-5"
+                color={"error"}
+                className="my-4 mt-5"
                 onClick={() => {
                     dispatch(checkSecuredKey(data)),
                         onValidationSucceed(message)

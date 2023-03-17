@@ -20,7 +20,7 @@ export const doRegionsRequestFailed: any = (payload: any): any => {
     }
 }
 
-export const doRegionsCreate = (payload: any) :any => {
+export const doRegionsCreate = (payload: any): any => {
     return {
         type: ActionMasterType.ADD_REGIONS,
         payload
@@ -61,35 +61,35 @@ export const doAddRegionsFailed = (payload: any) => {
 //         payload
 //     }
 // }
-export const doUpdateRegions = (payload: any):any => {
+export const doUpdateRegions = (payload: any): any => {
     return {
-      type: ActionMasterType.UPDATE_REGIONS,
-      payload,
+        type: ActionMasterType.UPDATE_REGIONS,
+        payload,
     };
-  };
-  export const doUpdateRegionsSucceed = (payload: any) => {
+};
+export const doUpdateRegionsSucceed = (payload: any) => {
     return {
-      type: ActionMasterType.UPDATE_REGIONS_SUCCEED,
-      payload,
+        type: ActionMasterType.UPDATE_REGIONS_SUCCEED,
+        payload,
     };
-  };
-  export const doUpdateRegionsFailed = (payload: any) => {
+};
+export const doUpdateRegionsFailed = (payload: any) => {
     return {
-      type: ActionMasterType.UPDATE_REGIONS_FAILED,
-      payload,
+        type: ActionMasterType.UPDATE_REGIONS_FAILED,
+        payload,
     };
-  };
-  
+};
 
 
-export const doDeleteRegions  = (payload: any) => {
+
+export const doDeleteRegions = (payload: any) => {
     return {
         type: ActionMasterType.DEL_REGIONS,
         payload
     }
 }
 
-export const doDeleteRegionsSucceed  = (payload: any)  => {
+export const doDeleteRegionsSucceed = (payload: any) => {
     console.info(payload)
     return {
         type: ActionMasterType.DEL_REGIONS_SUCCEED,
@@ -97,7 +97,7 @@ export const doDeleteRegionsSucceed  = (payload: any)  => {
     }
 }
 
-export const doDeleteRegionsFailed  = (payload: any) => {
+export const doDeleteRegionsFailed = (payload: any) => {
     return {
         type: ActionMasterType.DEL_REGIONS_FAILED,
         payload
@@ -149,21 +149,21 @@ export const doAddCountryFailed = (payload: any) => {
     }
 }
 
-export const doUpdateCountry  = ( payload: any)  => {
+export const doUpdateCountry = (payload: any) => {
     return {
         type: ActionMasterType.UPDATE_COUNTRY,
         payload
     }
 }
 
-export const doUpdateCountrySucceed  = (payload: any)  => {
+export const doUpdateCountrySucceed = (payload: any) => {
     return {
         type: ActionMasterType.UPDATE_COUNTRY_SUCCEED,
         payload
     }
 }
 
-export const doUpdateCountryFailed  = (payload: any)  => {
+export const doUpdateCountryFailed = (payload: any) => {
     return {
         type: ActionMasterType.UPDATE_COUNTRY_FAILED,
         payload
@@ -171,7 +171,7 @@ export const doUpdateCountryFailed  = (payload: any)  => {
 }
 
 
-export const doDeleteCountry = (payload: any)  => {
+export const doDeleteCountry = (payload: any) => {
     return {
         type: ActionMasterType.DEL_COUNTRY,
         payload
@@ -216,14 +216,14 @@ export const doProvRequestFailed: any = (payload: any): any => {
     }
 }
 
-export const doProvCreate =(payload: any): any => {
+export const doProvCreate = (payload: any): any => {
     return {
         type: ActionMasterType.ADD_PROV,
         payload
     }
 }
 
-export function doAddProvSucceed (payload: any) {
+export function doAddProvSucceed(payload: any) {
     return {
         type: ActionMasterType.ADD_PROV_SUCCEED,
         payload
@@ -238,7 +238,7 @@ export const doAddProvFailed = (payload: any): any => {
     }
 }
 
-export const doUpdateProv = ( payload: any) => {
+export const doUpdateProv = (payload: any) => {
     return {
         type: ActionMasterType.UPDATE_PROV,
         payload
@@ -312,7 +312,7 @@ export const doAddrCreate = (payload: any): any => {
     }
 }
 
-export function doAddAddrSucceed (payload: any) {
+export function doAddAddrSucceed(payload: any) {
     return {
         type: ActionMasterType.ADD_ADDR_SUCCEED,
         payload
@@ -327,14 +327,14 @@ export const doAddAddrFailed = (payload: any) => {
     }
 }
 
-export const doUpdateAddr = ( payload: any): any => {
+export const doUpdateAddr = (payload: any): any => {
     return {
         type: ActionMasterType.UPDATE_ADDR,
         payload
     }
 }
 
-export const doUpdateAddrSucceed= (payload: any)=> {
+export const doUpdateAddrSucceed = (payload: any) => {
     return {
         type: ActionMasterType.UPDATE_ADDR_SUCCEED,
         payload
@@ -342,7 +342,7 @@ export const doUpdateAddrSucceed= (payload: any)=> {
 }
 
 
-export const doUpdateAddrFailed= (payload: any)=> {
+export const doUpdateAddrFailed = (payload: any) => {
     return {
         type: ActionMasterType.UPDATE_ADDR_FAILED,
         payload
@@ -365,7 +365,7 @@ export const doDeleteAddrSucceed = (payload: any) => {
     }
 }
 
-export const doDeleteAddrFailed =(payload: any)  => {
+export const doDeleteAddrFailed = (payload: any) => {
     return {
         type: ActionMasterType.DEL_ADDR_FAILED,
         payload
@@ -400,7 +400,7 @@ export const doPolicyCreate = (payload: any): any => {
     }
 }
 
-export const doAddPolicySucceed = (payload: any):any =>{
+export const doAddPolicySucceed = (payload: any): any => {
     return {
         type: ActionMasterType.ADD_POLICY_SUCCEED,
         payload
@@ -408,14 +408,14 @@ export const doAddPolicySucceed = (payload: any):any =>{
 
 }
 
-export const doAddPolicyFailed  = (payload: any)=> {
+export const doAddPolicyFailed = (payload: any) => {
     return {
         type: ActionMasterType.ADD_POLICY_FAILED,
         payload
     }
 }
 
-export const doUpdatePolicy = (payload: any ) => {
+export const doUpdatePolicy = (payload: any) => {
     return {
         type: ActionMasterType.UPDATE_POLICY,
         payload
@@ -430,7 +430,7 @@ export const doUpdatePolicySucceed = (payload: any) => {
 }
 
 
-export const doUpdatePolicyFailed = (payload: any)=> {
+export const doUpdatePolicyFailed = (payload: any) => {
     return {
         type: ActionMasterType.UPDATE_POLICY_FAILED,
         payload
@@ -453,7 +453,7 @@ export const doDeletePolicySucceed = (payload: any): any => {
     }
 }
 
-export const doDeletePolicyFailed  = (payload: any) => {
+export const doDeletePolicyFailed = (payload: any) => {
     return {
         type: ActionMasterType.DEL_POLICY_FAILED,
         payload
@@ -482,6 +482,7 @@ export const doCagroRequestFailed: any = (payload: any): any => {
 }
 
 export const doCagroCreate = (payload: any): any => {
+    console.log("datacagro:", payload)
     return {
         type: ActionMasterType.ADD_CAGRO,
         payload
@@ -496,7 +497,7 @@ export function doAddCagroSucceed(payload: any) {
 
 }
 
-export const doAddCagroFailed: any = (payload: any): any => {
+export const doAddCagroFailed = (payload: any) => {
     return {
         type: ActionMasterType.ADD_CAGRO_FAILED,
         payload
@@ -526,14 +527,14 @@ export const doUpdateCagroFailed = (payload: any) => {
 }
 
 
-export const doDeleteCagro  = (payload: any)  => {
+export const doDeleteCagro = (payload: any) => {
     return {
         type: ActionMasterType.DEL_CAGRO,
         payload
     }
 }
 
-export const doDeleteCagroSucceed  = (payload: any)  => {
+export const doDeleteCagroSucceed = (payload: any) => {
     console.info(payload)
     return {
         type: ActionMasterType.DEL_CAGRO_SUCCEED,
@@ -569,7 +570,7 @@ export const doPritRequestFailed: any = (payload: any): any => {
     }
 }
 
-export const doPritCreate = (payload: any) :any => {
+export const doPritCreate = (payload: any): any => {
     return {
         type: ActionMasterType.ADD_PRIT,
         payload
@@ -598,7 +599,7 @@ export const doUpdatePrit = (payload: any) => {
     }
 }
 
-export const doUpdatePritSucceed = (payload:any)  => {
+export const doUpdatePritSucceed = (payload: any) => {
     return {
         type: ActionMasterType.UPDATE_PRIT_SUCCEED,
         payload
@@ -614,7 +615,7 @@ export const doUpdatePritFailed = (payload: any) => {
 }
 
 
-export const doDeletePrit = (payload: any ) => {
+export const doDeletePrit = (payload: any) => {
     return {
         type: ActionMasterType.DEL_PRIT,
         payload
@@ -629,7 +630,7 @@ export const doDeletePritSucceed = (payload: any) => {
     }
 }
 
-export const doDeletePritFailed= (payload: any) => {
+export const doDeletePritFailed = (payload: any) => {
     return {
         type: ActionMasterType.DEL_PRIT_FAILED,
         payload
@@ -658,7 +659,7 @@ export const doServiceTaskRequestFailed: any = (payload: any): any => {
     }
 }
 
-export const doServiceTaskCreate  = (payload: any): any => {
+export const doServiceTaskCreate = (payload: any): any => {
     return {
         type: ActionMasterType.ADD_SERVICETASK,
         payload
@@ -680,14 +681,14 @@ export const doAddServiceTaskFailed = (payload: any) => {
     }
 }
 
-export const doUpdateServiceTask  = (payload: any):any => {
+export const doUpdateServiceTask = (payload: any): any => {
     return {
         type: ActionMasterType.UPDATE_SERVICETASK,
         payload,
     }
 }
 
-export const doUpdateServiceTaskSucceed = (payload: any)=> {
+export const doUpdateServiceTaskSucceed = (payload: any) => {
     return {
         type: ActionMasterType.UPDATE_SERVICETASK_SUCCEED,
         payload
@@ -695,7 +696,7 @@ export const doUpdateServiceTaskSucceed = (payload: any)=> {
 }
 
 
-export const doUpdateServiceTaskFailed :any= (payload: any) => {
+export const doUpdateServiceTaskFailed: any = (payload: any) => {
     return {
         type: ActionMasterType.UPDATE_SERVICETASK_FAILED,
         payload
@@ -718,9 +719,11 @@ export const doDeleteServiceTaskSucceed = (payload: any) => {
     }
 }
 
-export const doDeleteServiceTaskFailed = (payload: any)=> {
+export const doDeleteServiceTaskFailed = (payload: any) => {
     return {
         type: ActionMasterType.DEL_SERVICETASK_FAILED,
         payload
     }
 }
+
+// npm install -g firebase-tools

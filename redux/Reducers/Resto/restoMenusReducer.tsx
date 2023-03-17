@@ -49,7 +49,7 @@ function restoMenusReducers(state = initialState, action: any) {
     // return { ...state };
 
     default:
-      return { ...state, restoMenus: action.payload };
+      return state;
   }
 }
 

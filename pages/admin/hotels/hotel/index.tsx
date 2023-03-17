@@ -64,9 +64,7 @@ export default function index() {
           message.success("delete data success");
         }
       },
-      onCancel() {
-        console.log("calcle");
-      },
+      onCancel() {},
     });
   };
 
@@ -78,7 +76,7 @@ export default function index() {
   };
 
   const showFaci = (id: any) => {
-    router.push("hotel/facility/" + id);
+    router.push("/admin/hotels/hotel/facility/" + id);
   };
 
   // dropdown
@@ -373,7 +371,7 @@ export default function index() {
                   style={{ width: 200 }}
                   placeholder="Search to Select"
                   optionFilterProp="children"
-                  filterOption={(input, option) =>
+                  filterOption={(input: any, option: any) =>
                     (option?.label ?? "")
                       .toLowerCase()
                       .includes(input.toLowerCase())

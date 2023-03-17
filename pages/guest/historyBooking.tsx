@@ -34,7 +34,6 @@ const GuestBooking = () => {
 
   const Invoice1 = useSelector((state:any)=> state.GetInvoiceReducer.invoice)
   const Invoice = Invoice1?.filter((item: any) => item.user_id == userId)
-  console.log(Invoice);
   
   const [Cancel,setCancel]=useState(false) 
 
@@ -47,7 +46,6 @@ const GuestBooking = () => {
     boorStatus:'CANCELLED'
   })
 
-  console.log('status',status);
   
 
   const UpdateStatusBooking=(e:any)=>{
@@ -82,8 +80,7 @@ const GuestBooking = () => {
             }     
             const invoice =()=>{
               root.push({pathname : '/booking/room/invois' ,search: `?id=${invo.boor_order_number}`})
-            }       
-            console.log('hari',dayjs());
+            }      
             
             return(
             <Row className="flex rounded bg-rose-100 mb-5 shadow-lg">

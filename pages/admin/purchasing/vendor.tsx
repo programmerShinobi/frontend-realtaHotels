@@ -16,6 +16,7 @@ import {
   Modal,
   Row,
   Space,
+  message,
 } from "antd";
 import { Dropdown, Select, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
@@ -24,7 +25,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import EditModals from "./editModal";
-import LayoutAdmin from '@/components/Layout/admin/'
+import LayoutAdmin from '@/components/Layout/admin/index'
 interface Vendors {
   vendorEntityId: number;
   vendorName: string;
@@ -47,6 +48,7 @@ const Vendor = () => {
   const [idVendor, setIdVendor] = useState(0);
   const [dataSearched, setDataSearched] = useState([]);
   const [modalDelete, setModalDelete] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage()
 
   const closeModalDelete = () => {
     setModalDelete(false);
@@ -76,14 +78,14 @@ const Vendor = () => {
   const dataTable = dataSearched.length > 0 ? dataSearched : vendors;
 
   const editModal = (id: number) => {
-    console.log(id);
+    // console.log(id);
     setDisplayModalEdit(true);
     setIdVendor(id);
   };
 
   useEffect(() => {
     dispatch(getVendorRequest());
-  }, []);
+  }, [vendors]);
 
   const onChangeSelect = (values: string) => {
     console.log(values);
@@ -96,7 +98,13 @@ const Vendor = () => {
     };
     console.log(value);
     dispatch(createVendor(value));
-    setDisplayModal(false);
+    messageApi.open({
+      type:'loading',
+      content:'Action in Progress...',
+      duration: 2.5
+    }).then(()=>message.success('Vendor Added', 2))
+    setTimeout(() => {setDisplayModal(false)}, 2100)
+    ;
   };
 
   const onChangeDate: DatePickerProps["onChange"] = (date, dateString) => {
@@ -223,6 +231,7 @@ const Vendor = () => {
 
   return (
     <LayoutAdmin>
+      {contextHolder}
       <h5 className="font-bold text-center">Vendor List</h5>
       <div className="flex justify-between m-8">
         <button
@@ -247,19 +256,19 @@ const Vendor = () => {
         <Form layout="vertical" onFinish={onFinish}>
           <Row gutter={[32, 32]}>
             <Col>
-              <Form.Item label="Vendor Name" name="vendorName">
+              <Form.Item label="Vendor Name" name="vendorName" rules={[{required:true}]}>
                 <Input />
               </Form.Item>
             </Col>
             <Col>
-              <Form.Item name="vendorRegisterDate" label="Register Date">
+              <Form.Item name="vendorRegisterDate" label="Register Date" rules={[{required:true}]}>
                 <DatePicker onChange={onChangeDate} format={customFormat} />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={[32, 32]}>
             <Col>
-              <Form.Item name="vendorPriority" label="Priority">
+              <Form.Item name="vendorPriority" label="Priority" rules={[{required:true}]}>
                 <Select
                   style={{ width: 120 }}
                   placeholder=""
@@ -269,7 +278,7 @@ const Vendor = () => {
               </Form.Item>
             </Col>
             <Col>
-              <Form.Item name="vendorActive" label="Status">
+              <Form.Item name="vendorActive" label="Status" rules={[{required:true}]}>
                 <Select
                   style={{ width: 120 }}
                   placeholder=""

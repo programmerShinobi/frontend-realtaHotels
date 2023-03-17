@@ -10,7 +10,7 @@ export default function AddCard({ userid, bankdata, cardData, onCardDataChange }
 }) {
 
     return (
-        <Grid.Container gap={1} justify="space-between" aria-label="grid container of modal contents">
+        <Grid.Container gap={1} justify="space-evenly" aria-label="grid container of modal contents">
             <Grid aria-label="grid section: choose account type">
                 <Text aria-label="text: account type"> Account type </Text>
                 <Dropdown>
@@ -42,7 +42,7 @@ export default function AddCard({ userid, bankdata, cardData, onCardDataChange }
                 <Text aria-label="text: bank name"> Bank name </Text>
                 <Dropdown>
                     <Dropdown.Button aria-label="dropdown: single selection to choose bank name"
-                        flat color="error" className="bg-black w-40" >
+                        flat color="error">
                         {cardData?.paymentName == "Dompet Realta" ? "PT Bank" : cardData?.paymentName}
                     </Dropdown.Button>
                     <Dropdown.Menu
@@ -63,13 +63,13 @@ export default function AddCard({ userid, bankdata, cardData, onCardDataChange }
 
             <Grid aria-label="grid section: input card number">
                 <Text aria-label="text: card number"> Card number </Text>
-                <Input shadow={false} width="136px" aria-label="input field for card number"
+                <Input shadow={false} width="160px" aria-label="input field for card number"
                     onChange={(e: ChangeEvent<FormElement>) => onCardDataChange({ ...cardData, accountNumber: e.target.value })} />
             </Grid>
 
             <Grid aria-label="grid section: input card holder name">
                 <Text aria-label="text: card holder name"> Card holder name </Text>
-                <Input shadow={false} width="136px" aria-label="input field for card holder name"
+                <Input shadow={false} width="160px" aria-label="input field for card holder name"
                     onChange={(e: ChangeEvent<FormElement>) => onCardDataChange({ ...cardData, cardHolderName: e.target.value })} />
             </Grid>
 
@@ -86,13 +86,13 @@ export default function AddCard({ userid, bankdata, cardData, onCardDataChange }
 
             <Grid aria-label="grid section: card CVV">
                 <Text aria-label="text: card cvv"> CVV </Text>
-                <Input shadow={false} type="number" width="136px" aria-label="input field for card CVV"
+                <Input shadow={false} type="number" width="64px" aria-label="input field for card CVV"
                     onChange={(e: ChangeEvent<FormElement>) => onCardDataChange({ ...cardData, securedKey: e.target.value })} />
             </Grid>
 
             <Grid aria-label="grid section: card balance">
                 <Text aria-label="text: balance"> Balance </Text>
-                <Input shadow={false} type="number" width="136px" aria-label="input field for card balance"
+                <Input shadow={false} type="number" width="160px" aria-label="input field for card balance"
                     onChange={(e: ChangeEvent<FormElement>) => onCardDataChange({ ...cardData, balance: +e.target.value })} />
             </Grid>
         </Grid.Container>

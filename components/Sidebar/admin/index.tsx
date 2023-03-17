@@ -57,8 +57,8 @@ const SidebarAdmin = () => {
       getItem('Work Orders','/admin/hr/workorders'),
     ]),
     getItem('Purchasing', 4,<ShoppingCartOutlined/>,[
-      getItem('Stock','/admin/purchasing/stocks'),
       getItem('Vendor','/admin/purchasing/vendor'),
+      getItem('Stock','/admin/purchasing/stocks'),
       getItem('Stock Carts','/admin/purchasing'),
     ]),
     getItem('Payment',5, <CreditCardOutlined/>, [
@@ -67,7 +67,7 @@ const SidebarAdmin = () => {
       getItem('Transaction','/admin/payment/transaction'),
     ]),
     getItem('Hotels', '/admin/hotels/hotel', <IdcardOutlined/>),
-    getItem('Resto', '/admin/resto/menus', <BookOutlined />),
+    getItem('Resto', '/admin/resto', <BookOutlined />),
     getItem('Booking', '/admin/booking/receptionist', <ReconciliationOutlined />)
   ]
   const [collapsed, setCollapsed] = useState(false);

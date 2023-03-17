@@ -47,10 +47,6 @@ export default function HRWorkOrder() {
   const tableData = Array.isArray(dataWorkorder) ? dataWorkorder.length > 0 ? dataWorkorder : workorder.data : workorder.data;
 
   const countedData = workorder.count;
-
-  console.log("data workorder ", dataWorkorder)
-  console.log("workorder.data", workorder.data)
-  console.log("tableData", tableData)
   /* counting data and assign to table */
 
   //  dispatch API GET workorder then assign to dataWorkorder

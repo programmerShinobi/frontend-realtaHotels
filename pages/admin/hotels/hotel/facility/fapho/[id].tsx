@@ -254,14 +254,12 @@ export default function Fapho() {
       body: formData,
     })
       .then((res) => {
-        console.log(res);
         setFileList([]);
         // window.location.reload();
         message.success("upload successfully.");
       })
       .catch((e: any) => {
         message.error("upload failed.");
-        console.log("upload failed");
       })
       .finally(() => {
         setUploading(false);

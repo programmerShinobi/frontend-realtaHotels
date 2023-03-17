@@ -47,17 +47,14 @@ export default function ModalComponentAdd({...props} : any) {
   /* end mapping data jobrole */
   
   /* mapping data users */
-  // console.log(dataUsers)
 
   let optionValUsers : any = [{ value: "", label: "Please choose"}]
   dataUsers && dataUsers.map((res : any, index : any) => {
     optionValUsers = [...optionValUsers, { value: res.userId, label: res.userFullName }]
   })
-  // console.log("dataUsers ",dataUsers)
   /* end mapping data users */
 
 
-  // console.log(formValues)
 
   /* handle form */
   const onFinish = (values: any) => {
@@ -146,7 +143,7 @@ export default function ModalComponentAdd({...props} : any) {
         okText="Submit"
         onCancel={props.handleCancel}
         onOk={form.submit}
-        width={1000}
+        width={1300}
       >
         <Form
           name="basic"
@@ -166,15 +163,20 @@ export default function ModalComponentAdd({...props} : any) {
                   <Form.Item
                     label="National Id"
                     name="emp_national_id" 
+
                     rules={[
                       { required: true, message: "Please input national id!" },
                     ]}
+                    validateTrigger="onBlur"
                   >
                     <InputNumber
                       style={{ width: '100%', marginLeft: '10px' }}
                       min={0}
+
                       placeholder="Input national id"
-                    />
+                      autoFocus={true}
+                    />  
+                 
                   </Form.Item>
 
                   <Form.Item
@@ -405,8 +407,13 @@ export default function ModalComponentAdd({...props} : any) {
                   ]}
                 >
                   <Select
+                    showSearch
                     placeholder="Please choose"
                     style={{ width: '100%', marginLeft: '10px' }}
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                      (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                    }
                     options={optionValDept}
                   />
                 </Form.Item>
@@ -448,10 +455,15 @@ export default function ModalComponentAdd({...props} : any) {
                   ]}
                 >
                   <Select
+                    showSearch
                     placeholder="Please choose"
-                    onChange={handleOnchangeShift}
                     style={{ width: '100%', marginLeft: '10px' }}
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                      (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                    }
                     options={optionValShift}
+                    onChange={handleOnchangeShift}
                   />
                 </Form.Item>
               </Col>

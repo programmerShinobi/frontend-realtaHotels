@@ -10,14 +10,10 @@ function vendorReducers(state = initialState, action: any) {
       return { ...state };
     case purchasingTypes.GET_VENDORS_SUCCEED:
       return { ...state, vendors: action.payload };
-    // case purchasingTypes.GET_VENDPRO:
-    //   return { ...state };
-    // case purchasingTypes.GET_VENDPRO_SUCCEED:
-    //   return { ...state, vendors: action.payload };
     case purchasingTypes.ADD_VENDOR:
       return { ...state };
     case purchasingTypes.ADD_VENDOR_SUCCEED:
-      return { ...state, vendors: action.payload };
+      return { ...state, vendors: action.payload.result };
     case purchasingTypes.UPDATE_VENDOR:
       return { ...state };
     case purchasingTypes.UPDATE_VENDOR_SUCCEED:

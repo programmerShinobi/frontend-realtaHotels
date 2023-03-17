@@ -996,47 +996,47 @@ const StaffProfile: NextPage<Props> = ({ dirs }) => {
                       </Box>
                     </Box>
                   </Box>
-                    <Box className="w-full">
-                      {/* Points & Members */}
-                      <Box className=" mb-4 pt-8 font-bold w-full h-fit mx-auto items-center text-blue-900 focus:outline-none focus-visible:ring focus-visible:ring-blue-500 focus-visible:ring-opacity-75">
-                        <div className={styles.textTitleInProfile}>
-                          Points & Members
-                        </div>
-                    </Box>
-                    <hr className="h-1 bg-[#7FA3FF]"/>
-                    <Box className=" pt-8">
-                        <Tabs
-                          onChange={onChangeTab}
-                          type="card"
-                          tabBarGutter={8}
+                  <Box className="w-full">
+                    {/* Points & Members */}
+                    <Box className=" mb-4 pt-8 font-bold w-full h-fit mx-auto items-center text-blue-900 focus:outline-none focus-visible:ring focus-visible:ring-blue-500 focus-visible:ring-opacity-75">
+                      <div className={styles.textTitleInProfile}>
+                        Points & Members
+                      </div>
+                  </Box>
+                  <hr className="h-1 bg-[#7FA3FF]"/>
+                  <Box className=" pt-8">
+                      <Tabs
+                        onChange={onChangeTab}
+                        type="card"
+                        tabBarGutter={8}
+                      >
+                        <Tabs.TabPane
+                          tab={
+                            <div
+                              className="font-bold  items-center text-blue-900"
+                            >
+                              Bonus Points
+                            </div>
+                          }
+                          key="1"
                         >
-                          <Tabs.TabPane
-                            tab={
-                              <div
-                                className="font-bold  items-center text-blue-900"
-                              >
-                                Bonus Points
-                              </div>
-                            }
-                            key="1"
-                          >
-                            <Table columns={columnsBonusPoints} dataSource={dataBonusPoints} />
-                          </Tabs.TabPane>
-                          <Tabs.TabPane
-                            tab={
-                              <div
-                                className="font-bold items-center text-blue-900"
-                              >
-                                Members
-                              </div>
-                            }
-                            key="2"
-                          >
-                            <Table columns={columnsMembers} dataSource={dataMembers} />
-                          </Tabs.TabPane>
-                        </Tabs>
-                      </Box>
+                          <Table columns={columnsBonusPoints} dataSource={dataBonusPoints} />
+                        </Tabs.TabPane>
+                        <Tabs.TabPane
+                          tab={
+                            <div
+                              className="font-bold items-center text-blue-900"
+                            >
+                              Members
+                            </div>
+                          }
+                          key="2"
+                        >
+                          <Table columns={columnsMembers} dataSource={dataMembers} />
+                        </Tabs.TabPane>
+                      </Tabs>
                     </Box>
+                  </Box>
                 </Box>
               </Box>
             </Box> 

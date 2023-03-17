@@ -16,11 +16,10 @@ export default function index() {
     const dispatch = useDispatch();
 
     const Boex = useSelector((state:any)=> state.bookingHistoryReducer.booking_history)
-    console.log(Boex);
     
 
-    const Invoice1 = useSelector((state:any)=> state.GetInvoiceReducer.invoice)
-    const Invoice = Invoice1?.filter((item: any) => item.boor_order_number == id)
+    const Invoice3 = useSelector((state:any)=> state.GetInvoiceReducer.invoice)
+    const Invoice = Invoice3.filter((item: any) => item.boor_order_number == id)
     const boor_order_number = Invoice?.length > 0 ? Invoice[0].boor_order_number:'';
     const boor_order_date = Invoice?.length > 0 ? Invoice[0].boor_order_date:'';
     const boor_is_paid = Invoice?.length > 0 ? Invoice[0].boor_is_paid:''; 
@@ -70,8 +69,6 @@ export default function index() {
         boex_price : '',
         boex_subtotal :'',
     })
-
-    console.log('ivoice',Invoiceview);
     
     useEffect(()=>{
         dispatch(getInvoice())
@@ -102,7 +99,7 @@ export default function index() {
             boex_price : boex_price,
             boex_subtotal :boex_subtotal,      
         })
-    },[boor_order_number])
+    },[borde_id])
     
     
     //Array Object untuk title and field
